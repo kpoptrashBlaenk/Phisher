@@ -4,7 +4,7 @@ const generateEmailTemplate = require("../templates/email-template")
 
 const router = express.Router()
 
-const users = [{ id: 1, name: "Aldin", email: "aldinmusik@gmail.com" }]
+const users = [{ name: "Aldin", email: "aldinmusik@gmail.com" }]
 
 router.get("/send", async (req, res) => {
   for (const user of users) {
@@ -12,7 +12,7 @@ router.get("/send", async (req, res) => {
       from: process.env.SMTP_USER,
       to: user.email,
       subject: "Phishing Simulation Text",
-      html: generateEmailTemplate(user.id),
+      html: generateEmailTemplate(user),
     }
 
     try {
