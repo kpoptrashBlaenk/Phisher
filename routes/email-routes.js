@@ -25,3 +25,5 @@ router.get("/send", async (req, res) => {
 
   res.send("Emails sent!")
 })
+
+module.exports = router
