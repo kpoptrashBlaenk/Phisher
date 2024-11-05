@@ -1,6 +1,6 @@
 const express = require("express")
 const transporter = require("../config/email-config")
-const generateEmailTemplate = require("../templates/emailTemplate")
+const generateEmailTemplate = require("../templates/email-template")
 
 const router = express.Router()
 
