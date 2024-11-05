@@ -4,6 +4,8 @@ const trackingRoutes = require("./routes/tracking-routes")
 
 const app = express()
 
+app.use(express.static("public"))
+
 app.use("/email", emailRoutes)
 app.use("/track", trackingRoutes)
 
