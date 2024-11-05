@@ -1,4 +1,5 @@
 const express = require("express")
+const path = require("path")
 const { trackingLog } = require("../utils/logger")
 const router = express.Router()
 
@@ -9,9 +10,7 @@ router.get("/click", (req, res) => {
     console.log(`User ${userId} clicked the button!`)
     trackingLog(userId)
 
-    res.send(
-      `<h1>Thank you for clicking!</h1><p>Your action has been recorded.</p>`
-    )
+    res.sendFile(path.join(__dirname, "../views/thank-you-page.html"))
   } else {
     res.status(400).send("User ID missing!")
   }
