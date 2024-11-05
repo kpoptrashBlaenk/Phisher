@@ -1,0 +1,6 @@
+- [ ] Localhost DB connection
+- [ ] Add Users Interface
+- [ ] Use DB Users instead of hardcoded
+- [ ] See DB Interface
+- [ ] Main Menu Interface
+- [ ] Login Interface
