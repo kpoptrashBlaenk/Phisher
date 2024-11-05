@@ -18,7 +18,7 @@ router.get("/send", async (req, res) => {
     try {
       await transporter.sendMail(mailOptions)
       console.log(`Email sent to ${user.email}`)
-    } catch {
+    } catch (error) {
       console.error(`Error sending email to ${user.email}:`, error)
     }
   }
