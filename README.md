@@ -3,6 +3,7 @@ Dependencies:
 Express: Web Server
 Nodemailer: Mailer
 Dotenv: .env files
+PG: PostgreSQL
 
 ### SMTP Server
 #### Gmail:

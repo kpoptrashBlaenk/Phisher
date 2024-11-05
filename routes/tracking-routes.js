@@ -3,12 +3,11 @@ const path = require("path")
 const { trackingLog } = require("../utils/logger")
 const router = express.Router()
 
-router.get("/click", (req, res) => {
-  const { userEmail } = req.query
+router.get("/click", async (req, res) => {
+  const { userId } = req.query
 
-  if (userEmail) {
-    console.log(`User ${userEmail} clicked the button!`)
-    trackingLog(userEmail)
+  if (userId) {
+    await trackingLog(userId)
 
     res.sendFile(path.join(__dirname, "../views/thank-you-page.html"))
   } else {
