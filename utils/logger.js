@@ -1,4 +1,4 @@
-const pool = require("../config/databse-config")
+const pool = require("../config/database-config")
 
 const trackingLog = async (userId) => {
   const timestamp = new Date().toISOString()
