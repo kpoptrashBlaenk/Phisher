@@ -1,10 +1,9 @@
 const express = require("express")
-const pool = require("../config/database-config")
-
+const pool = require("../../config/database-config")
 const router = express.Router()
 
 // Get all users
-router.get("/users", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const query = "SELECT id, name, email FROM users"
     const result = await pool.query(query)
@@ -17,7 +16,7 @@ router.get("/users", async (req, res) => {
 })
 
 // Add User POST
-router.post("/add-user", async (req, res) => {
+router.post("/", async (req, res) => {
   const { name, email } = req.body
   if (!name || !email) {
     return res.status(400).json({ error: "Name and email are required" })
@@ -36,7 +35,7 @@ router.post("/add-user", async (req, res) => {
 })
 
 // Delete User POST
-router.delete("/users/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params
 
   try {

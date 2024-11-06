@@ -70,18 +70,25 @@ document
 const addUser = async (name, email) => {
   try {
     // POST Request
-    const response = await fetch("/api/add-user", {
+    const response = await fetch("/api/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ name, email }),
     })
-    const result = await response.json()
+
+    // If response => Fetch Users
+    if (response.ok) {
+      console.log("User added")
+      fetchUsers()
+    } else {
+      const result = await response.json()
+      document.getElementById("message").textContent =
+        result.message || "Failed to add user"
+    }
 
     // Create Message
-    document.getElementById("message").textContent =
-      result.message || result.error
   } catch (error) {
     console.error("Error adding user:", error)
     document.getElementById("message").textContent =

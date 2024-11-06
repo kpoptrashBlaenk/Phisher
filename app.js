@@ -2,7 +2,7 @@ const express = require("express")
 const emailRoutes = require("./routes/email-routes")
 const trackingRoutes = require("./routes/tracking-routes")
 const interfaceRoutes = require("./routes/interface-routes")
-const apiRoutes = require("./routes/api-routes")
+const apiRoutes = require("./routes/api/api-routes")
 
 const app = express()
 
