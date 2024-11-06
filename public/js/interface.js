@@ -64,23 +64,27 @@ document
     const name = document.getElementById("name").value
     const email = document.getElementById("email").value
 
-    try {
-      // POST Request
-      const response = await fetch("/add-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, email }),
-      })
-      const result = await response.json()
-
-      // Create Message
-      document.getElementById("message").textContent =
-        result.message || result.error
-    } catch (error) {
-      console.error("Error adding user:", error)
-      document.getElementById("message").textContent =
-        "An error occurred while adding the user."
-    }
+    addUser(name, email)
   })
+
+const addUser = async (name, email) => {
+  try {
+    // POST Request
+    const response = await fetch("/api/add-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name, email }),
+    })
+    const result = await response.json()
+
+    // Create Message
+    document.getElementById("message").textContent =
+      result.message || result.error
+  } catch (error) {
+    console.error("Error adding user:", error)
+    document.getElementById("message").textContent =
+      "An error occurred while adding the user."
+  }
+}

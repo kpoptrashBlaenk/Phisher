@@ -16,6 +16,25 @@ router.get("/users", async (req, res) => {
   }
 })
 
+// Add User POST
+router.post("/add-user", async (req, res) => {
+  const { name, email } = req.body
+  if (!name || !email) {
+    return res.status(400).json({ error: "Name and email are required" })
+  }
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *",
+      [name, email]
+    )
+    res.json({ message: "User added successfully", user: result.rows[0] })
+  } catch (error) {
+    console.error("Error adding user:", error)
+    res.status(500).json({ error: "Internal server error" })
+  }
+})
+
 // Delete User POST
 router.delete("/users/:id", async (req, res) => {
   const { id } = req.params
