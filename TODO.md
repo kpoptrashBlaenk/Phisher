@@ -1,4 +1,4 @@
-- [ ] Localhost DB connection
+- [x] Localhost DB connection
 - [ ] Add Users Interface
 - [ ] Use DB Users instead of hardcoded
 - [ ] See DB Interface
