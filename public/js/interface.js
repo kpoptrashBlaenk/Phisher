@@ -1,3 +1,27 @@
+// User List
+const fetchUsers = async () => {
+  try {
+    const response = await fetch("/api/users")
+    if (!response) {
+      throw new Error("Failed to fetch users")
+    }
+    const users = await response.json()
+
+    const userList = document.getElementById("userList")
+    userList.innerHTML = ""
+
+    users.forEach((user) => {
+      const listItem = document.createElement("li")
+      listItem.textContent = `${user.name} (${user.email})`
+      userList.appendChild(listItem)
+    })
+  } catch (error) {
+    console.error("Error fetching users:", error)
+  }
+}
+fetchUsers()
+
+// Add User
 document
   .getElementById("userForm")
   .addEventListener("submit", async (event) => {
