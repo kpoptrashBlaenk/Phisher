@@ -4,6 +4,7 @@ Express: Web Server
 Nodemailer: Mailer
 Dotenv: .env files
 PG: PostgreSQL
+Axios: Fetching
 
 ### SMTP Server
 #### Gmail:
