@@ -16,4 +16,23 @@ router.get("/users", async (req, res) => {
   }
 })
 
+// Delete User POST
+router.delete("/users/:id", async (req, res) => {
+  const { id } = req.params
+
+  try {
+    const query = "DELETE FROM users WHERE id = $1"
+    const result = await pool.query(query, [id])
+
+    if (result.rowCount > 0) {
+      res.status(200).json({ message: "User deleted successfully" })
+    } else {
+      res.status(404).json({ message: "User not found" })
+    }
+  } catch (error) {
+    console.error("Error deleting user:", error)
+    res.status(500).json({ error: "Failed to delete user" })
+  }
+})
+
 module.exports = router
