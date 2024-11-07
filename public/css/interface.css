@@ -1,15 +1,7 @@
-.btn {
-  --bs-btn-font-size: 0.9rem;
-}
-
 .fs-7 {
   font-size: 0.9rem !important;
 }
 
 .fs-8 {
   font-size: 0.8rem !important;
-}
-
-.card {
-    height: 204.32px;
 }
