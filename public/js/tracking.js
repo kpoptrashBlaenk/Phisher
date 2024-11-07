@@ -9,7 +9,7 @@ const fetchLogs = async () => {
     const logs = await response.json()
 
     // Get tracking log list
-    const trackList = document.getElementById("trackingLog")
+    const trackList = document.querySelector("#trackingLogList")
     trackList.innerHTML = ""
 
     // Create tracking log list items
@@ -25,11 +25,28 @@ const fetchLogs = async () => {
       })
 
       // Create Item
-      const listItem = document.createElement("li")
-      listItem.textContent = `${log.name} (${log.email}) (${formattedDate})`
+      const label = document.createElement("label")
+      label.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2")
+
+      const spanStart = document.createElement("span")
+      spanStart.innerText = log.name
+      const smallStart = document.createElement("small")
+      smallStart.classList.add("d-block", "text-body-secondary")
+      smallStart.innerText = log.email
+
+      const spanEnd = document.createElement("span")
+      spanEnd.classList.add("ms-auto", "text-end")
+      spanEnd.innerText = formattedDate
+      const smallEnd = document.createElement("small")
+      smallEnd.classList.add("d-block", "text-body-secondary")
+      smallEnd.innerText = "Counter"
 
       // Append
-      trackList.appendChild(listItem)
+      spanStart.appendChild(smallStart)
+      spanEnd.appendChild(smallEnd)
+      label.appendChild(spanStart)
+      label.appendChild(spanEnd)
+      trackList.appendChild(label)
     })
   } catch (error) {
     console.error("Error fetching tracking log:", error)

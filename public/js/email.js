@@ -1,4 +1,4 @@
-document.getElementById("sendEmails").addEventListener("click", async () => {
+document.querySelector("#sendEmailsButton").addEventListener("click", async () => {
   sendEmails()
 })
 
@@ -9,20 +9,21 @@ const sendEmails = async () => {
 
     const message = await response.text()
     // If response => Message
+    const messageBox = document.querySelector("#sendEmailsMessage")
     if (response.ok) {
       console.log("Emails sent")
-      document.getElementById("sendEmailResponse").textContent = message
+      messageBox.innerText = message
+      messageBox.classList.add("text-success")
     } else {
       console.error("Error sending emails:", message)
-      document.getElementById(
-        "sendEmailResponse"
-      ).textContent = `Failed to send some emails: ${message}`
+      messageBox.innerText = `Failed to send some emails: ${message}`
+      messageBox.classList.add("text-danger")
     }
 
     // Error Message
   } catch (error) {
     console.error("Error sending emails:", error)
-    document.getElementById("sendEmailResponse").textContent =
-      "An error occurred while sending the emails."
+    messageBox.innerText = "An error occurred while sending the emails."
+    messageBox.classList.add("text-danger")
   }
 }

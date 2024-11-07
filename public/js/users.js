@@ -9,23 +9,33 @@ const fetchUsers = async () => {
     const users = await response.json()
 
     // Get User List
-    const userList = document.getElementById("userList")
+    const userList = document.querySelector("#usersList")
     userList.innerHTML = ""
 
     // Create User List Items
     users.forEach((user) => {
-      // Create Item
-      const listItem = document.createElement("li")
-      listItem.textContent = `${user.name} (${user.email})`
+      const label = document.createElement("label")
+      label.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2")
 
-      // Create Delete Button
-      const deleteButton = document.createElement("button")
-      deleteButton.textContent = "Delete"
-      deleteButton.onclick = () => deleteUser(user.id)
+      const spanStart = document.createElement("span")
+      spanStart.innerText = user.name
+      const smallStart = document.createElement("small")
+      smallStart.classList.add("d-block", "text-body-secondary")
+      smallStart.innerText = user.email
+
+      const spanEnd = document.createElement("span")
+      spanEnd.classList.add("ms-auto", "text-end")
+      spanEnd.innerText = "UO"
+      const smallEnd = document.createElement("small")
+      smallEnd.classList.add("d-block", "text-body-secondary")
+      smallEnd.innerText = "Équipe"
 
       // Append
-      listItem.appendChild(deleteButton)
-      userList.appendChild(listItem)
+      spanStart.appendChild(smallStart)
+      spanEnd.appendChild(smallEnd)
+      label.appendChild(spanStart)
+      label.appendChild(spanEnd)
+      userList.appendChild(label)
     })
   } catch (error) {
     console.error("Error fetching users:", error)
@@ -55,17 +65,15 @@ const deleteUser = async (userId) => {
 }
 
 // Add User
-document
-  .getElementById("userForm")
-  .addEventListener("submit", async (event) => {
-    event.preventDefault()
+document.querySelector("#addUserForm").addEventListener("submit", async (event) => {
+  event.preventDefault()
 
-    // Get Values
-    const name = document.getElementById("name").value
-    const email = document.getElementById("email").value
+  // Get Values
+  const name = document.getElementById("name").value
+  const email = document.getElementById("email").value
 
-    addUser(name, email)
-  })
+  addUser(name, email)
+})
 
 const addUser = async (name, email) => {
   try {
@@ -84,14 +92,12 @@ const addUser = async (name, email) => {
       fetchUsers()
     } else {
       const result = await response.json()
-      document.getElementById("message").textContent =
-        result.message || "Failed to add user"
+      document.getElementById("message").innerText = result.message || "Failed to add user"
     }
 
     // Create Message
   } catch (error) {
     console.error("Error adding user:", error)
-    document.getElementById("message").textContent =
-      "An error occurred while adding the user."
+    document.getElementById("message").innerText = "An error occurred while adding the user."
   }
 }
