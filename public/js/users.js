@@ -69,10 +69,11 @@ document.querySelector("#addUserForm").addEventListener("submit", async (event) 
   event.preventDefault()
 
   // Get Values
-  const name = document.getElementById("name").value
-  const email = document.getElementById("email").value
+  const nameF = document.querySelector("#nameF").value
+  const nameL = document.querySelector("#nameL").value
+  const email = document.querySelector("#email").value
 
-  addUser(name, email)
+  addUser(`${nameF} ${nameL}`, email)
 })
 
 const addUser = async (name, email) => {
@@ -92,12 +93,12 @@ const addUser = async (name, email) => {
       fetchUsers()
     } else {
       const result = await response.json()
-      document.getElementById("message").innerText = result.message || "Failed to add user"
+      document.querySelector("#newUserMessage").innerText = result.message || "Failed to add user"
     }
 
     // Create Message
   } catch (error) {
     console.error("Error adding user:", error)
-    document.getElementById("message").innerText = "An error occurred while adding the user."
+    document.querySelector("#newUserMessage").innerText = "An error occurred while adding the user."
   }
 }

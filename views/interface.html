@@ -13,8 +13,8 @@
 
   <body class="bg-secondary-subtle">
     <!-- Header -->
-    <div class="container">
-      <header class="border-bottom py-3">
+    <div class="container mb-3">
+      <header class="border-bottom border-black py-3">
         <h1 class="text-center text-body-emphasis">Phishing Simulator</h1>
       </header>
     </div>
@@ -25,20 +25,29 @@
         <!-- Center -->
         <div class="d-flex flex-column justify-content-start col-xs-12 col-md-6 order-md-2">
           <!-- Add User Card -->
-          <div class="card mb-4">
+          <div class="card shadow shadow-lg mb-4">
             <h6 class="card-header text-center">Ajouter une personne</h6>
             <div class="card-body p-1 pt-2 px-4">
               <form id="addUserForm">
                 <div class="mb-2 row">
                   <label for="addUserLastName" class="col-form-label-sm col-3">Nom:</label>
+                  <input
+                    id="nameL"
+                    type="text"
+                    class="col-form-control-sm col-9"
+                    id="addUserLastName"
+                  />
+                </div>
+                <div class="mb-2 row">
+                  <label id="nameF" for="addUserLastName" class="col-form-label-sm col-3"
+                    >Prénom:</label
+                  >
                   <input type="text" class="col-form-control-sm col-9" id="addUserLastName" />
                 </div>
                 <div class="mb-2 row">
-                  <label for="addUserLastName" class="col-form-label-sm col-3">Prénom:</label>
-                  <input type="text" class="col-form-control-sm col-9" id="addUserLastName" />
-                </div>
-                <div class="mb-2 row">
-                  <label for="addUserLastName" class="col-form-label-sm col-3">Email:</label>
+                  <label id="email" for="addUserLastName" class="col-form-label-sm col-3"
+                    >Email:</label
+                  >
                   <input type="email" class="col-form-control-sm col-9" id="addUserLastName" />
                 </div>
                 <div class="row">
@@ -56,20 +65,22 @@
           </div>
 
           <!-- Send Emails -->
-          <div class="card mb-4">
+          <div class="card shadow shadow-lg mb-4">
             <h6 class="card-header text-center">Envoyer mails</h6>
             <div class="card-body">
               <div class="d-flex justify-content-center">
-                <button id="sendEmailsButton" type="submit" class="btn btn-lg btn-primary py-0">Envoyer</button>
+                <button id="sendEmailsButton" type="submit" class="btn btn-lg btn-primary py-0">
+                  Envoyer
+                </button>
               </div>
-              <div id="sendEmailsMessage" class="text-center p-0 pt-2">hello</div>
+              <div id="sendEmailsMessage" class="text-center p-0 pt-2"></div>
             </div>
           </div>
         </div>
 
         <!-- Users -->
         <div id="usersColumn" class="col-12 col-md-1 order-md-3 mb-4">
-          <div class="card">
+          <div class="card shadow shadow-lg">
             <h6 class="card-header text-center p-1">
               <button id="usersButton" class="btn btn-close-white btn-sm fw-bold">Agents</button>
             </h6>
@@ -81,7 +92,7 @@
 
         <!-- Tracking Log -->
         <div id="trackingLogColumn" class="col-12 col-md-5 order-md-1 mb-4">
-          <div class="card">
+          <div class="card shadow shadow-lg">
             <h6 class="card-header text-center p-1">
               <button id="trackingLogButton" class="btn btn-close-white fw-bold btn-sm">Log</button>
             </h6>
