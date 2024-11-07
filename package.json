@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "axios": "^1.7.7",
+    "bootstrap": "^5.3.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "nodemailer": "^6.9.16",
@@ -19,5 +20,13 @@
   },
   "prettier": {
     "semi": false
+  },
+  "devDependencies": {
+    "@types/axios": "^0.9.36",
+    "@types/bootstrap": "^5.2.10",
+    "@types/dotenv": "^6.1.1",
+    "@types/express": "^5.0.0",
+    "@types/nodemailer": "^6.4.16",
+    "@types/pg": "^8.11.10"
   }
 }

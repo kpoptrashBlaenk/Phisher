@@ -5,6 +5,7 @@ Nodemailer: Mailer
 Dotenv: .env files
 PG: PostgreSQL
 Axios: Fetching
+Bootstrap: CSS
 
 ### SMTP Server
 #### Gmail:
