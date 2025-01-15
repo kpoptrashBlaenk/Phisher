@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   try {
     // Fetch Users
     const response = await axios.get(
-      `${process.env.HOST || "http://localhost:3000"}/api/users`
+      `${process.env.HOST || `http://localhost${process.env.PORT}`}/api/users`
     )
     const users = response.data
 
@@ -42,9 +42,7 @@ router.get("/", async (req, res) => {
     await Promise.all(emailPromises)
 
     if (errors.length > 0) {
-      res
-        .status(500)
-        .send(`Some emails failed to send. Errors: ${errors.join(", ")}`)
+      res.status(500).send(`Some emails failed to send. Errors: ${errors.join(", ")}`)
     } else {
       res.send(`${users.length} Emails sent to users!`)
     }
