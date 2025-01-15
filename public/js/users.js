@@ -30,11 +30,21 @@ const fetchUsers = async () => {
       smallEnd.classList.add("d-block", "text-body-secondary")
       smallEnd.innerText = "Équipe"
 
+      const deleteButton = document.createElement("button")
+      deleteButton.classList.add("btn", "btn-danger", "btn-sm")
+      deleteButton.innerText = "Supprimer"
+      deleteButton.onclick = () => {
+        if (confirm(`Êtes-vous sûr(e) de vouloir supprimer ${user.name}?`)) {
+          deleteUser(user.id)
+        }
+      }
+
       // Append
       spanStart.appendChild(smallStart)
       spanEnd.appendChild(smallEnd)
       label.appendChild(spanStart)
       label.appendChild(spanEnd)
+      label.appendChild(deleteButton)
       userList.appendChild(label)
     })
   } catch (error) {
