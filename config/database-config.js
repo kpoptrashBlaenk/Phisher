@@ -29,12 +29,23 @@ const initializeTables = async () => {
     );
   `
 
+  const createAdminsTableQuery = `
+  CREATE TABLE IF NOT EXISTS admins (
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL UNIQUE
+  );
+`
+
   try {
     await pool.query(createUsersTableQuery)
     console.log("Users Table: Done")
 
     await pool.query(createTrackingLogTableQuery)
     console.log("Tracking Log Table: Done")
+
+    await pool.query(createAdminsTableQuery)
+    console.log("Admins Table: Done")
   } catch (error) {
     console.error("Error initializing tables:", error)
   }
