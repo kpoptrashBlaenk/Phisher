@@ -6,4 +6,5 @@
 - [x] Add Users not working?
 - [x] Make Lists scrollable within
 - [ ] Login Interface
+- [ ] Email Route -> Email API
 - [ ] Better Email Template

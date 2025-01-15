@@ -3,9 +3,8 @@ const path = require("path")
 
 const router = express.Router()
 
-// Main Interface
-router.get("/", async (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/interface.html"))
+// Registration
+router.get("/sign", async (req, res) => {
+  res.sendFile(path.join(__dirname, "../views/sign.html"))
 })
-
 module.exports = router
