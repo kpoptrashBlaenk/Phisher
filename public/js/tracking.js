@@ -13,7 +13,7 @@ const fetchLogs = async () => {
     trackList.innerHTML = ""
 
     // Create tracking log list items
-    logs.forEach((log) => {
+    logs.forEach(async (log) => {
       // Format Date
       const date = new Date(log.timestamp)
       const formattedDate = date.toLocaleString("fr-FR", {
@@ -23,6 +23,10 @@ const fetchLogs = async () => {
         hour: "2-digit",
         minute: "2-digit",
       })
+
+      const response = await fetch(`/api/tracking/count/${log.user_id}`)
+      const result = await response.json()
+      const counter = result.count
 
       // Create Item
       const label = document.createElement("label")
@@ -39,7 +43,7 @@ const fetchLogs = async () => {
       spanEnd.innerText = formattedDate
       const smallEnd = document.createElement("small")
       smallEnd.classList.add("d-block", "text-body-secondary")
-      smallEnd.innerText = "Counter"
+      smallEnd.innerText = `Total: ${counter}`
 
       // Append
       spanStart.appendChild(smallStart)
