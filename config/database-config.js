@@ -12,4 +12,34 @@ const pool = new Pool({
   },
 })
 
+const initializeTables = async () => {
+  const createUsersTableQuery = `
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name VARCHAR(255) NOT NULL,
+      email VARCHAR(255) NOT NULL UNIQUE
+    );
+  `
+
+  const createTrackingLogTableQuery = `
+    CREATE TABLE IF NOT EXISTS tracking_log (
+      user_id INTEGER NOT NULL,
+      timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users (id)
+    );
+  `
+
+  try {
+    await pool.query(createUsersTableQuery)
+    console.log("Users Table: Done")
+
+    await pool.query(createTrackingLogTableQuery)
+    console.log("Tracking Log Table: Done")
+  } catch (error) {
+    console.error("Error initializing tables:", error)
+  }
+}
+
+initializeTables()
+
 module.exports = pool
