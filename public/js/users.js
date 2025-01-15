@@ -69,9 +69,9 @@ document.querySelector("#addUserForm").addEventListener("submit", async (event) 
   event.preventDefault()
 
   // Get Values
-  const nameF = document.querySelector("#nameF").value
-  const nameL = document.querySelector("#nameL").value
-  const email = document.querySelector("#email").value
+  const nameF = document.querySelector("#addUserFirstName").value
+  const nameL = document.querySelector("#addUserLastName").value
+  const email = document.querySelector("#addUserEmail").value
 
   addUser(`${nameF} ${nameL}`, email)
 })

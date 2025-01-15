@@ -3,7 +3,7 @@
 - [x] Use DB Users instead of hardcoded
 - [x] See DB Interface
 - [x] Main Menu Interface
-- [ ] Add Users not working?
+- [x] Add Users not working?
 - [ ] Make Lists scrollable within
 - [ ] Login Interface
 - [ ] Better Email Template
