@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
   try {
     // Fetch Users
     const response = await axios.get(
-      `${process.env.HOST || `http://localhost${process.env.PORT}`}/api/users`
+      `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/users`
     )
     const users = response.data
 
