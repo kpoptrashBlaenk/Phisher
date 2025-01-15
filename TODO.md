@@ -4,6 +4,6 @@
 - [x] See DB Interface
 - [x] Main Menu Interface
 - [x] Add Users not working?
-- [ ] Make Lists scrollable within
+- [x] Make Lists scrollable within
 - [ ] Login Interface
 - [ ] Better Email Template
