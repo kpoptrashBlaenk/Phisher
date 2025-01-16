@@ -39,7 +39,11 @@ app.use("/email", isAuthenticated, emailRoutes)
 app.use("/track", isAuthenticated, trackingRoutes)
 app.use("/", isAuthenticated, interfaceRoutes)
 app.use("/api", isAuthenticated, apiRoutes)
-
 app.use("/authentication", authenticationRoutes)
+
+// Redirect to the main menu if route not found
+app.use((req, res) => {
+  res.redirect("/")
+})
 
 module.exports = app
