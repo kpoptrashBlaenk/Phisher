@@ -24,7 +24,7 @@ const initializeTables = async () => {
     CREATE TABLE IF NOT EXISTS tracking_log (
       user_id INTEGER NOT NULL,
       timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id)
+      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
     );
   `
 

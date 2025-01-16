@@ -6,7 +6,7 @@ const router = express.Router()
 router.get("/", async (req, res) => {
   try {
     const query = `
-      SELECT tracking_log.user_id, tracking_log.timestamp, users.name, users.email
+      SELECT tracking_log.user_id, tracking_log.timestamp, users.email
       FROM tracking_log
       JOIN users ON tracking_log.user_id = users.id
       ORDER BY tracking_log.timestamp DESC

@@ -31,7 +31,7 @@ const fetchUsers = async () => {
       deleteButton.classList.add("btn", "btn-danger", "btn-sm")
       deleteButton.innerText = "Supprimer"
       deleteButton.onclick = () => {
-        if (confirm(`Êtes-vous sûr(e) de vouloir supprimer ${user.name}?`)) {
+        if (confirm(`Êtes-vous sûr(e) de vouloir supprimer ${user.email}?`)) {
           deleteUser(user.id)
         }
       }

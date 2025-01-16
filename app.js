@@ -35,11 +35,12 @@ const isAuthenticated = (req, res, next) => {
   next()
 }
 
-app.use("/email", isAuthenticated, emailRoutes)
-app.use("/track", isAuthenticated, trackingRoutes)
-app.use("/", isAuthenticated, interfaceRoutes)
-app.use("/api", isAuthenticated, apiRoutes)
+app.use("/track", trackingRoutes)
+app.use("/api", apiRoutes)
 app.use("/authentication", authenticationRoutes)
+
+app.use("/email", isAuthenticated, emailRoutes)
+app.use("/", isAuthenticated, interfaceRoutes)
 
 // Redirect to the main menu if route not found
 app.use((req, res) => {

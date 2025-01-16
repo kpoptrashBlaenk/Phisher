@@ -32,9 +32,7 @@ const fetchLogs = async () => {
       const label = document.createElement("label")
       label.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2")
 
-      const spanStart = document.createElement("span")
-      spanStart.innerText = log.name
-      const smallStart = document.createElement("small")
+      const smallStart = document.createElement("span")
       smallStart.classList.add("d-block", "text-body-secondary")
       smallStart.innerText = log.email
 
@@ -46,9 +44,7 @@ const fetchLogs = async () => {
       smallEnd.innerText = `Total: ${counter}`
 
       // Append
-      spanStart.appendChild(smallStart)
-      spanEnd.appendChild(smallEnd)
-      label.appendChild(spanStart)
+      label.appendChild(smallStart)
       label.appendChild(spanEnd)
       trackList.appendChild(label)
     })

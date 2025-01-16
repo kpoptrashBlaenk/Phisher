@@ -14,9 +14,11 @@ const sendEmails = async () => {
       console.log("Emails sent")
       messageBox.innerText = message
       messageBox.classList.add("text-success")
+      messageBox.classList.remove("text-danger")
     } else {
       console.error("Error sending emails:", message)
       messageBox.innerText = `Failed to send some emails: ${message}`
+      messageBox.classList.remove("text-success")
       messageBox.classList.add("text-danger")
     }
 
