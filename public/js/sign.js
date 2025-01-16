@@ -10,8 +10,28 @@ registerForm.addEventListener("submit", async (event) => {
   const email = registerEmail.value + registerEmailEnd.innerText
   const password = registerPassword.value
 
+  const checkResult = (result) => {
+    registerError.innerText = result.message || "Failed to register"
+    registerError.classList.remove("opacity-0")
+
+    switch (result.context) {
+      case "both":
+        registerEmail.classList.add("is-invalid")
+        registerPassword.classList.add("is-invalid")
+        break
+      case "email":
+        registerEmail.classList.add("is-invalid")
+        registerPassword.classList.remove("is-invalid")
+        break
+      case "password":
+        registerEmail.classList.remove("is-invalid")
+        registerPassword.classList.add("is-invalid")
+        break
+    }
+  }
+
   try {
-    // GET Request
+    // POST Request register
     const response = await fetch("/api/authentication/register", {
       method: "POST",
       headers: {
@@ -23,24 +43,23 @@ registerForm.addEventListener("submit", async (event) => {
     const result = await response.json()
 
     if (!response.ok) {
-      registerError.innerText = result.message || "Failed to register"
-      registerError.classList.remove("opacity-0")
+      checkResult(result)
+      return
+    }
 
-      switch (result.context) {
-        case "both":
-          registerEmail.classList.add("is-invalid")
-          registerPassword.classList.add("is-invalid")
-          break
-        case "email":
-          registerEmail.classList.add("is-invalid")
-          registerPassword.classList.remove("is-invalid")
-          break
-        case "password":
-          registerEmail.classList.remove("is-invalid")
-          registerPassword.classList.add("is-invalid")
-          break
-      }
+    // POST Request login
+    const loginResponse = await fetch("/api/authentication/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
 
+    const loginResult = await response.json()
+
+    if (!loginResponse.ok) {
+      checkResult(loginResult)
       return
     }
 
@@ -67,7 +86,7 @@ loginForm.addEventListener("submit", async (event) => {
   const password = loginPassword.value
 
   try {
-    // GET Request
+    // POST Request login
     const response = await fetch("/api/authentication/login", {
       method: "POST",
       headers: {

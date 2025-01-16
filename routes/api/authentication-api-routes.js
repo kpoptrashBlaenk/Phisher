@@ -1,6 +1,7 @@
 const express = require("express")
 const passwordValidator = require("password-validator")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 const pool = require("../../config/database-config")
 const router = express.Router()
 
@@ -69,7 +70,7 @@ router.post("/register", async (req, res) => {
     const insertResult = await pool.query(insertAdminQuery, [email, hashedPassword])
 
     if (insertResult.rowCount > 0) {
-      return res.status(201).send({ redirect: "/" })
+      return res.status(201)
     }
 
     return res.status(500).send("Error adding the admin.")
@@ -104,11 +105,23 @@ router.post("/login", async (req, res) => {
       return res.status(400).send({ context: "password", message: "The password is wrong." })
     }
 
+    // Cookies
+    const secretKey =
+      "nxX23sKMGYjZfdb9aTcpVZuv86suwTwmJEBt1i5l4eNqpDBd1dbgolI2O4LGLz9mOiQA6QcABAItCqIqDMn93g=="
+    const token = jwt.sign("", secretKey, { expiresIn: "24h" })
+
+    res.cookie("phisher", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // only https in production (need ssl/tls in prod)
+      maxAge: 1000 * 60 * 60 * 24, // 24 hours
+      sameSite: "strict",
+    })
+
     // Login
     return res.status(201).send({ redirect: "/" })
   } catch (error) {
     console.error("Error during login:", error)
-    return res.status(500).send("Error adding the admin.")
+    return res.status(500).send("Error logging in the admin.")
   }
 })
 
