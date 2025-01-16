@@ -43,6 +43,12 @@ const initializeTables = async () => {
     );
     `
 
+  const addMyMailAsAdmin = `
+    INSERT INTO admins_access (email)
+    VALUES ($1)
+    ON CONFLICT (email) DO NOTHING
+    `
+
   try {
     await pool.query(createUsersTableQuery)
     console.log("Users Table: Done")
@@ -55,6 +61,9 @@ const initializeTables = async () => {
 
     await pool.query(createAdminsAccessTableQuery)
     console.log("Admins Access Table: Done")
+
+    await pool.query(addMyMailAsAdmin, [process.env.ADMIN_ACCESS_EMAIL])
+    console.log("Self Access: Done")
   } catch (error) {
     console.error("Error initializing tables:", error)
   }

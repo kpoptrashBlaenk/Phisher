@@ -1,8 +1,8 @@
 require("dotenv").config()
 const express = require("express")
 const axios = require("axios")
-const transporter = require("../config/email-config")
-const generateEmailTemplate = require("../templates/email-template")
+const transporter = require("../../config/email-config")
+const generateEmailTemplate = require("../../templates/email-template")
 const router = express.Router()
 
 router.get("/", async (req, res) => {

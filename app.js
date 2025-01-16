@@ -1,5 +1,4 @@
 const express = require("express")
-const emailRoutes = require("./routes/email-routes")
 const trackingRoutes = require("./routes/tracking-routes")
 const interfaceRoutes = require("./routes/interface-routes")
 const authenticationRoutes = require("./routes/authentication-routes")
@@ -39,7 +38,6 @@ app.use("/track", trackingRoutes)
 app.use("/api", apiRoutes)
 app.use("/authentication", authenticationRoutes)
 
-app.use("/email", isAuthenticated, emailRoutes)
 app.use("/", isAuthenticated, interfaceRoutes)
 
 // Redirect to the main menu if route not found

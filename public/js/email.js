@@ -5,7 +5,7 @@ document.querySelector("#sendEmailsButton").addEventListener("click", async () =
 const sendEmails = async () => {
   try {
     // GET Request to send emails
-    const response = await fetch("/email")
+    const response = await fetch("/api/email")
 
     const message = await response.text()
     // If response => Message

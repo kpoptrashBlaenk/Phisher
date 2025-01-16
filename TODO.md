@@ -6,6 +6,6 @@
 - [x] Add Users not working?
 - [x] Make Lists scrollable within
 - [x] Login Interface
-- [ ] Email Route -> Email API
+- [x] Email Route -> Email API
 - [ ] Better Email Template
-- [ ] Response for when user added
+- [x] Response for when user added
