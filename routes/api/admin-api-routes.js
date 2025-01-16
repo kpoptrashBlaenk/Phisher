@@ -10,10 +10,12 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const result = await pool.query("INSERT INTO users (email) VALUES ($1) RETURNING *", [email])
-    res.json({ message: "Admin added successfully" })
+    const result = await pool.query("INSERT INTO admins_access (email) VALUES ($1) RETURNING *", [
+      email,
+    ])
+    res.json({ message: "Admin access added successfully" })
   } catch (error) {
-    console.error("Error adding admin:", error)
+    console.error("Error adding admin access:", error)
     res.status(500).json({ message: "Internal server error" })
   }
 })

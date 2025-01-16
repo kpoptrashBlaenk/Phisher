@@ -5,10 +5,10 @@ document.querySelector("#addAdminForm").addEventListener("submit", async (event)
   // Get Values
   const email = document.querySelector("#addAdminEmail").value
 
-  addUser(email)
+  addAdmin(email)
 })
 
-const addUser = async (email) => {
+const addAdmin = async (email) => {
   const errorText = document.querySelector("#newAdminMessage")
 
   try {
