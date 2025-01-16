@@ -5,7 +5,7 @@ const router = express.Router()
 // Get all users
 router.get("/", async (req, res) => {
   try {
-    const query = "SELECT id, name, email FROM users"
+    const query = "SELECT id, email FROM users"
     const result = await pool.query(query)
 
     res.json(result.rows)
@@ -17,20 +17,17 @@ router.get("/", async (req, res) => {
 
 // Add User POST
 router.post("/", async (req, res) => {
-  const { name, email } = req.body
-  if (!name || !email) {
-    return res.status(400).json({ error: "Name and email are required" })
+  const { email } = req.body
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" })
   }
 
   try {
-    const result = await pool.query("INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *", [
-      name,
-      email,
-    ])
-    res.json({ message: "User added successfully", user: result.rows[0] })
+    const result = await pool.query("INSERT INTO users (email) VALUES ($1) RETURNING *", [email])
+    res.json({ message: "User added successfully" })
   } catch (error) {
     console.error("Error adding user:", error)
-    res.status(500).json({ error: "Internal server error" })
+    res.status(500).json({ message: "Internal server error" })
   }
 })
 

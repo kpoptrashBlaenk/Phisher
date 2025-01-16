@@ -21,61 +21,71 @@
 
     <!-- Main -->
     <main class="container p-3 p-sm-0">
+      <!-- Users -->
       <div class="row mb-4">
-        <!-- Center -->
-        <div class="d-flex flex-column justify-content-start col-xs-12 col-md-6 order-md-2">
-          <!-- Add User Card -->
-          <div class="card shadow shadow-lg mb-4">
-            <h6 class="card-header text-center">Ajouter une personne</h6>
+        <!-- Add User Card -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card shadow shadow-lg">
+            <h6 class="card-header text-center">Ajouter un agent</h6>
             <div class="card-body p-1 pt-2 px-4">
               <form id="addUserForm">
-                <div class="mb-2 row">
-                  <label for="addUserLastName" class="col-form-label-sm col-3">Nom:</label>
-                  <input type="text" class="col-form-control-sm col-9" id="addUserLastName" />
-                </div>
-                <div class="mb-2 row">
-                  <label for="addUserFirstName" class="col-form-label-sm col-3">Prénom:</label>
-                  <input type="text" class="col-form-control-sm col-9" id="addUserFirstName" />
-                </div>
-                <div class="mb-2 row">
+                <div class="row">
                   <label for="addUserEmail" class="col-form-label-sm col-3">Email:</label>
                   <input type="email" class="col-form-control-sm col-9" id="addUserEmail" />
                 </div>
+
+                <div class="row">
+                  <div class="fs-8 my-1 col-3 opacity-0">.</div>
+                  <p id="newUserMessage" class="fs-8 my-1 col-7"></p>
+                </div>
+
                 <div class="row">
                   <div class="col-3"></div>
                   <div class="d-flex justify-content-center col-9">
-                    <button type="submit" class="btn btn-primary fs-7 py-0">Ajouter</button>
+                    <button type="submit" class="btn btn-primary fs-7 py-0 mb-2">Ajouter</button>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-3"></div>
-                  <p id="newUserMessage" class="text-center fs-8 my-1 col-9"></p>
                 </div>
               </form>
             </div>
           </div>
-
-          <!-- Send Emails -->
-          <div class="card shadow shadow-lg mb-4">
-            <h6 class="card-header text-center">Envoyer mails</h6>
-            <div class="card-body">
-              <div class="d-flex justify-content-center">
-                <button id="sendEmailsButton" type="submit" class="btn btn-lg btn-primary py-0">
-                  Envoyer
-                </button>
-              </div>
-              <div id="sendEmailsMessage" class="text-center p-0 pt-2"></div>
-            </div>
-          </div>
         </div>
 
+        <!-- Add Admin Card -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card shadow shadow-lg">
+            <h6 class="card-header text-center">Ajouter un administrateur</h6>
+            <div class="card-body p-1 pt-2 px-4">
+              <form id="addAdminForm">
+                <div class="row">
+                  <label for="addAdminEmail" class="col-form-label-sm col-3">Email:</label>
+                  <input type="email" class="col-form-control-sm col-9" id="addAdminEmail" />
+                </div>
+
+                <div class="row">
+                  <div class="fs-8 my-1 col-3 opacity-0">.</div>
+                  <p id="newAdminMessage" class="fs-8 my-1 col-7"></p>
+                </div>
+
+                <div class="row">
+                  <div class="col-3"></div>
+                  <div class="d-flex justify-content-center col-9">
+                    <button type="submit" class="btn btn-primary fs-7 py-0 mb-2">Ajouter</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+
+      <!-- Lists -->
+      <div class="row mb-4">
         <!-- Users -->
-        <div id="usersColumn" class="col-12 col-md-1 order-md-3 mb-4">
+        <div id="usersColumn" class="col-12 col-md-6 mb-4">
           <div class="card shadow shadow-lg">
             <h6 class="card-header text-center p-1">
               <button id="usersButton" class="btn btn-close-white btn-sm fw-bold">Agents</button>
             </h6>
-            <div id="usersCardBody" class="card-body p-0 d-none">
+            <div id="usersCardBody" class="card-body p-0">
               <div
                 id="usersList"
                 class="list-group overflow-y-scroll"
@@ -86,7 +96,7 @@
         </div>
 
         <!-- Tracking Log -->
-        <div id="trackingLogColumn" class="col-12 col-md-5 order-md-1 mb-4">
+        <div id="trackingLogColumn" class="col-12 col-md-6 mb-4">
           <div class="card shadow shadow-lg">
             <h6 class="card-header text-center p-1">
               <button id="trackingLogButton" class="btn btn-close-white fw-bold btn-sm">Log</button>
@@ -101,12 +111,29 @@
           </div>
         </div>
       </div>
+
+      <!-- Emails -->
+      <div class="row mb-4">
+        <!-- Send Emails -->
+        <div class="col-12 col-md-6 mb-4">
+          <div class="card shadow shadow-lg">
+            <h6 class="card-header text-center">Envoyer mails</h6>
+            <div class="card-body">
+              <div class="d-flex justify-content-center">
+                <button id="sendEmailsButton" type="submit" class="btn btn-lg btn-primary py-0">
+                  Envoyer
+                </button>
+              </div>
+              <div id="sendEmailsMessage" class="text-center p-0 pt-2"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer></footer>
   </body>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="/js/interface.js"></script>
   <script src="/js/users.js"></script>
   <script src="/js/tracking.js"></script>
   <script src="/js/email.js"></script>

@@ -5,6 +5,7 @@
 - [x] Main Menu Interface
 - [x] Add Users not working?
 - [x] Make Lists scrollable within
-- [ ] Login Interface
+- [x] Login Interface
 - [ ] Email Route -> Email API
 - [ ] Better Email Template
+- [ ] Response for when user added
