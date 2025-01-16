@@ -1,5 +1,6 @@
 const express = require("express")
 const passwordValidator = require("password-validator")
+const bcrypt = require("bcrypt")
 const pool = require("../../config/database-config")
 const router = express.Router()
 
@@ -57,7 +58,6 @@ router.post("/register", async (req, res) => {
     }
 
     // Register
-    const bcrypt = require("bcrypt")
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const insertAdminQuery = `
@@ -75,6 +75,39 @@ router.post("/register", async (req, res) => {
     return res.status(500).send("Error adding the admin.")
   } catch (error) {
     console.error("Error during registration:", error)
+    return res.status(500).send("Error adding the admin.")
+  }
+})
+
+// Login POST
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body
+
+  // Try login
+  try {
+    // Check for email
+    const findAdminQuery = `
+        SELECT  *
+        FROM admins
+        WHERE admins.email = $1
+        `
+
+    const result = await pool.query(findAdminQuery, [email])
+
+    if (!result.rowCount > 0) {
+      return res.status(400).send({ context: "email", message: "No user with this email." })
+    }
+
+    // Check for password
+    const passwordMatch = bcrypt.compare(password, result.rows[0].password)
+    if (!passwordMatch) {
+      return res.status(400).send({ context: "password", message: "The password is wrong." })
+    }
+
+    // Login
+    return res.status(201).send({ redirect: "/" })
+  } catch (error) {
+    console.error("Error during login:", error)
     return res.status(500).send("Error adding the admin.")
   }
 })

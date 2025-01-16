@@ -13,6 +13,7 @@
 
   <body class="bg-secondary-subtle">
     <main class="container p-3 p-sm-0 d-flex justify-content-around">
+      <!-- Registration -->
       <div class="form-signin text-center col-5">
         <form id="registerForm">
           <h1 class="mt-5">Registration</h1>
@@ -42,6 +43,35 @@
       </div>
 
       <div class="vertical-line"></div>
+
+      <!-- Login -->
+      <div class="form-signin text-center col-5">
+        <form id="loginForm">
+          <h1 class="mt-5">Login</h1>
+          <div>
+            <div class="input-group has-validation mt-3">
+              <input
+                type="text"
+                class="form-control"
+                id="loginEmail"
+                class="form-control"
+                placeholder="Email Address"
+              />
+              <span id="loginEmailEnd" class="input-group-text">@reseau.sncf.fr</span>
+            </div>
+
+            <input
+              type="password"
+              id="loginPassword"
+              class="form-control mt-2"
+              placeholder="Password"
+            />
+
+            <div id="loginErrorText" class="text-danger opacity-0">.</div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-4">Login</button>
+        </form>
+      </div>
     </main>
 
     <footer></footer>

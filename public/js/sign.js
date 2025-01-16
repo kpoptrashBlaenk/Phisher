@@ -53,3 +53,59 @@ registerForm.addEventListener("submit", async (event) => {
     registerError.classList.remove("opacity-0")
   }
 })
+
+// Login
+const loginForm = document.querySelector("#loginForm")
+const loginEmail = document.querySelector("#loginEmail")
+const loginEmailEnd = document.querySelector("#loginEmailEnd")
+const loginPassword = document.querySelector("#loginPassword")
+const loginError = document.querySelector("#loginErrorText")
+
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault()
+  const email = loginEmail.value + loginEmailEnd.innerText
+  const password = loginPassword.value
+
+  try {
+    // GET Request
+    const response = await fetch("/api/authentication/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+
+    const result = await response.json()
+
+    if (!response.ok) {
+      loginError.innerText = result.message || "Failed to login"
+      loginError.classList.remove("opacity-0")
+
+      switch (result.context) {
+        case "both":
+          loginEmail.classList.add("is-invalid")
+          loginPassword.classList.add("is-invalid")
+          break
+        case "email":
+          loginEmail.classList.add("is-invalid")
+          loginPassword.classList.remove("is-invalid")
+          break
+        case "password":
+          loginEmail.classList.remove("is-invalid")
+          loginPassword.classList.add("is-invalid")
+          break
+      }
+
+      return
+    }
+
+    window.location.href = result.redirect
+
+    // Create Message
+  } catch (error) {
+    console.error("Error logging in admin:", error)
+    registerError.innerText = "An error occurred while logging in the admin."
+    registerError.classList.remove("opacity-0")
+  }
+})
