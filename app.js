@@ -13,13 +13,18 @@ app.use(express.static("public")) // To use static files from public
 app.use(cookieParser()) // To handle cookies
 
 const isAuthenticated = (req, res, next) => {
-  if (req.path !== "/authentication/sign") {
-    if (req.cookies.email) {
-      return next()
-    }
+  // if (req.path !== "/authentication/sign") {
+  //   if (req.cookies.email) {
+  //     return next()
+  //   }
 
-    return res.redirect("/authentication/sign")
-  }
+  //   // Skip redirect if api (/api/authentication... always becomes /authentication for some reason)
+  //   if (req.path.startsWith("/api") || req.path.startsWith("/authentication")) {
+  //     return next()
+  //   }
+
+  //   return res.redirect("/authentication/sign")
+  // }
 
   next()
 }
