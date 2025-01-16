@@ -26,6 +26,12 @@ const isAuthenticated = (req, res, next) => {
     return res.redirect("/authentication/sign")
   }
 
+  if (req.path === "/authentication/sign") {
+    if (req.cookies.phisher) {
+      return res.redirect("/")
+    }
+  }
+
   next()
 }
 
