@@ -45,6 +45,18 @@ router.post("/register", async (req, res) => {
 
   // Try register
   try {
+    // Check if admins access
+    const findAccessQuery = `
+      SELECT *
+      FROM admins_access
+      WHERE admins_access.email = $1
+      `
+    const accessResult = await pool.query(findAccessQuery, [email])
+
+    if (!accessResult.rowCount > 0) {
+      return res.status(400).send({message: "You don't have this right."})
+    }
+
     // Check already account
     const findAdminQuery = `
         SELECT  *
@@ -55,7 +67,7 @@ router.post("/register", async (req, res) => {
     const result = await pool.query(findAdminQuery, [email])
 
     if (result.rowCount > 0) {
-      return res.status(400).send("User already exists.")
+      return res.status(400).send({message: "User already exists."})
     }
 
     // Register
@@ -70,7 +82,7 @@ router.post("/register", async (req, res) => {
     const insertResult = await pool.query(insertAdminQuery, [email, hashedPassword])
 
     if (insertResult.rowCount > 0) {
-      return res.status(201)
+      return res.status(201).send()
     }
 
     return res.status(500).send("Error adding the admin.")

@@ -40,9 +40,8 @@ registerForm.addEventListener("submit", async (event) => {
       body: JSON.stringify({ email, password }),
     })
 
-    const result = await response.json()
-
     if (!response.ok) {
+      const result = await response.json()
       checkResult(result)
       return
     }
@@ -56,14 +55,14 @@ registerForm.addEventListener("submit", async (event) => {
       body: JSON.stringify({ email, password }),
     })
 
-    const loginResult = await response.json()
+    const loginResult = await loginResponse.json()
 
     if (!loginResponse.ok) {
       checkResult(loginResult)
       return
     }
 
-    window.location.href = result.redirect
+    window.location.href = loginResult.redirect
 
     // Create Message
   } catch (error) {
