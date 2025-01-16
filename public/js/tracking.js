@@ -34,14 +34,11 @@ const fetchLogs = async () => {
 
       const smallStart = document.createElement("span")
       smallStart.classList.add("d-block", "text-body-secondary")
-      smallStart.innerText = log.email
+      smallStart.innerText = `${log.email} | Total: ${counter}`
 
       const spanEnd = document.createElement("span")
       spanEnd.classList.add("ms-auto", "text-end")
       spanEnd.innerText = formattedDate
-      const smallEnd = document.createElement("small")
-      smallEnd.classList.add("d-block", "text-body-secondary")
-      smallEnd.innerText = `Total: ${counter}`
 
       // Append
       label.appendChild(smallStart)
