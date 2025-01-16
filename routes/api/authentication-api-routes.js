@@ -108,7 +108,7 @@ router.post("/login", async (req, res) => {
     // Cookies
     const secretKey =
       "nxX23sKMGYjZfdb9aTcpVZuv86suwTwmJEBt1i5l4eNqpDBd1dbgolI2O4LGLz9mOiQA6QcABAItCqIqDMn93g=="
-    const token = jwt.sign("", secretKey, { expiresIn: "24h" })
+    const token = jwt.sign({ email }, secretKey, { expiresIn: "24h" })
 
     res.cookie("phisher", token, {
       httpOnly: true,

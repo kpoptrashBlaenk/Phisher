@@ -14,7 +14,7 @@ const fetchUsers = async () => {
 
     // Create User List Items
     users.forEach((user) => {
-      const label = document.createElement("label")
+      const label = document.createElement("div")
       label.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2")
 
       const spanStart = document.createElement("span")
