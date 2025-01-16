@@ -18,7 +18,7 @@ const initializeTables = async () => {
       id SERIAL PRIMARY KEY,
       email VARCHAR(255) NOT NULL UNIQUE
     );
-  `
+   `
 
   const createTrackingLogTableQuery = `
     CREATE TABLE IF NOT EXISTS tracking_log (
@@ -26,15 +26,22 @@ const initializeTables = async () => {
       timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
     );
-  `
+    `
 
   const createAdminsTableQuery = `
-  CREATE TABLE IF NOT EXISTS admins (
-    id SERIAL PRIMARY KEY,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL UNIQUE
-  );
-`
+    CREATE TABLE IF NOT EXISTS admins (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) NOT NULL,
+      password VARCHAR(255) NOT NULL UNIQUE
+    );
+    `
+
+  const createAdminsAccessTableQuery = `
+    CREATE TABLE IF NOT EXISTS admins_access (
+      id SERIAL PRIMARY KEY,
+      email VARCHAR(255) NOT NULL
+    );
+    `
 
   try {
     await pool.query(createUsersTableQuery)
@@ -45,6 +52,9 @@ const initializeTables = async () => {
 
     await pool.query(createAdminsTableQuery)
     console.log("Admins Table: Done")
+
+    await pool.query(createAdminsAccessTableQuery)
+    console.log("Admins Access Table: Done")
   } catch (error) {
     console.error("Error initializing tables:", error)
   }
