@@ -73,9 +73,9 @@ document.querySelector("#addUserForm").addEventListener("submit", async (event) 
   event.preventDefault()
 
   // Get Values
-  const email = document.querySelector("#addUserEmail").value
+  const emailField = document.querySelector("#addUserEmail")
 
-  addUser(email)
+  addUser(emailField.value)
 })
 
 const addUser = async (email) => {
@@ -104,6 +104,7 @@ const addUser = async (email) => {
     errorText.innerText = result.message
     errorText.classList.remove("text-danger")
     errorText.classList.add("text-success")
+    document.querySelector("#addUserEmail").value = ""
     fetchUsers()
 
     // Create Message
