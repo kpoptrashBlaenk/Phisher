@@ -1,11 +1,25 @@
 document.querySelector("#sendEmailsButton").addEventListener("click", async () => {
-  sendEmails()
+  const usersList = document.querySelector("#usersList")
+  const checkedInputs = usersList.querySelectorAll('input[type="checkbox"]:checked')
+
+  let emails = []
+  checkedInputs.forEach((input) => {
+    emails.push(input.nextElementSibling.innerText)
+  })
+
+  sendEmails(emails)
 })
 
-const sendEmails = async () => {
+const sendEmails = async (emails) => {
   try {
     // GET Request to send emails
-    const response = await fetch("/api/email")
+    const response = await fetch("/api/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ emails }),
+    })
 
     const message = await response.text()
     // If response => Message

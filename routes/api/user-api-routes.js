@@ -15,6 +15,27 @@ router.get("/", async (req, res) => {
   }
 })
 
+// Get some users
+router.post("/get", async (req, res) => {
+  const { emails } = req.body
+
+  if (!emails || emails.length < 1) {
+    return res.status(400).json({ message: "No emails provided" })
+  }
+
+  // Get users that include from emails
+  try {
+    const query = "SELECT id, email FROM users WHERE users.email = ANY($1)"
+
+    const result = await pool.query(query, [emails])
+
+    return res.json(result.rows)
+  } catch (error) {
+    console.error("Error fetching users", error)
+    return res.status(500).json({ error: "Failed to fetch users" })
+  }
+})
+
 // Add User POST
 router.post("/", async (req, res) => {
   const { email } = req.body

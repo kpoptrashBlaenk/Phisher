@@ -14,8 +14,8 @@ const fetchUsers = async () => {
 
     // Create User List Items
     users.forEach((user) => {
-      const label = document.createElement("div")
-      label.classList.add(
+      const div = document.createElement("div")
+      div.classList.add(
         "list-group-item",
         "d-flex",
         "align-items-center",
@@ -23,9 +23,12 @@ const fetchUsers = async () => {
         "justify-content-between"
       )
 
-      const smallStart = document.createElement("span")
-      smallStart.classList.add("d-block", "text-body-secondary", "fw-bold")
-      smallStart.innerText = user.email
+      const checkButton = document.createElement("input")
+      checkButton.type = "checkbox"
+
+      const userMail = document.createElement("span")
+      userMail.classList.add("d-block", "text-body-secondary", "fw-bold")
+      userMail.innerText = user.email
 
       const deleteButton = document.createElement("button")
       deleteButton.classList.add("btn", "btn-danger", "btn-sm")
@@ -37,15 +40,20 @@ const fetchUsers = async () => {
       }
 
       // Append
-      label.appendChild(smallStart)
-      label.appendChild(deleteButton)
-      userList.appendChild(label)
+      div.appendChild(checkButton)
+      div.appendChild(userMail)
+      div.appendChild(deleteButton)
+      userList.appendChild(div)
     })
   } catch (error) {
     console.error("Error fetching users:", error)
   }
 }
 fetchUsers()
+
+{
+  /* <input type="checkbox" class="form-check-input" id="exampleCheck1"> */
+}
 
 // Delete User
 const deleteUser = async (userId) => {

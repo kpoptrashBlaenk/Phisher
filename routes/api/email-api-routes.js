@@ -5,11 +5,18 @@ const transporter = require("../../config/email-config")
 const generateEmailTemplate = require("../../templates/email-template")
 const router = express.Router()
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
+  const { emails } = req.body
+
+  if (!emails || emails.length < 1) {
+    return res.status(400).json({ message: "No users selected" }) //
+  }
+
   try {
     // Fetch Users
-    const response = await axios.get(
-      `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/users`
+    const response = await axios.post(
+      `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/users/get`,
+      { emails: emails }
     )
     const users = response.data
 
