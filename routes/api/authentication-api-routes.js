@@ -115,12 +115,12 @@ router.post("/login", async (req, res) => {
     // Cookies
     const secretKey =
       "nxX23sKMGYjZfdb9aTcpVZuv86suwTwmJEBt1i5l4eNqpDBd1dbgolI2O4LGLz9mOiQA6QcABAItCqIqDMn93g=="
-    const token = jwt.sign({ email }, secretKey, { expiresIn: "24h" })
+    const token = jwt.sign({ email }, secretKey, { expiresIn: "30d" })
 
     res.cookie("phisher", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // only https in production (need ssl/tls in prod)
-      maxAge: 1000 * 60 * 60 * 24, // 24 hours
+      maxAge: 1000 * 60 * 60 * 24 * 30 , // 30 days
       sameSite: "strict",
     })
 
