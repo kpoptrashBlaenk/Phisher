@@ -48,8 +48,8 @@ router.post("/register", async (req, res) => {
     // Check if admins access
     const findAccessQuery = `
       SELECT *
-      FROM admins_access
-      WHERE admins_access.email = $1
+      FROM admins
+      WHERE admins.email = $1 AND admins.password IS NULL
       `
     const accessResult = await pool.query(findAccessQuery, [email])
 
@@ -61,7 +61,7 @@ router.post("/register", async (req, res) => {
     const findAdminQuery = `
         SELECT  *
         FROM admins
-        WHERE admins.email = $1
+        WHERE admins.email = $1 AND admins.password IS NOT NULL
         `
 
     const result = await pool.query(findAdminQuery, [email])
@@ -73,15 +73,10 @@ router.post("/register", async (req, res) => {
     // Register
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const insertAdminQuery = `
-        INSERT INTO admins (email, password)
-        VALUES ($1, $2)
-        RETURNING id
-        `
+    const updateAdminQuery = `UPDATE admins SET password = $2 WHERE email = $1 RETURNING *`
+    const updateResult = await pool.query(updateAdminQuery, [email, hashedPassword])
 
-    const insertResult = await pool.query(insertAdminQuery, [email, hashedPassword])
-
-    if (insertResult.rowCount > 0) {
+    if (updateResult.rowCount > 0) {
       return res.status(201).send()
     }
 

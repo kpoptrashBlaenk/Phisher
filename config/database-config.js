@@ -31,20 +31,13 @@ const initializeTables = async () => {
   const createAdminsTableQuery = `
     CREATE TABLE IF NOT EXISTS admins (
       id SERIAL PRIMARY KEY,
-      email VARCHAR(255) NOT NULL,
-      password VARCHAR(255) NOT NULL
-    );
-    `
-
-  const createAdminsAccessTableQuery = `
-    CREATE TABLE IF NOT EXISTS admins_access (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) NOT NULL UNIQUE
+      email VARCHAR(255) NOT NULL UNIQUE,
+      password VARCHAR(255)
     );
     `
 
   const addMyMailAsAdmin = `
-    INSERT INTO admins_access (email)
+    INSERT INTO admins (email)
     VALUES ($1)
     ON CONFLICT (email) DO NOTHING
     `
@@ -58,9 +51,6 @@ const initializeTables = async () => {
 
     await pool.query(createAdminsTableQuery)
     console.log("Admins Table: Done")
-
-    await pool.query(createAdminsAccessTableQuery)
-    console.log("Admins Access Table: Done")
 
     await pool.query(addMyMailAsAdmin, [process.env.ADMIN_ACCESS_EMAIL])
     console.log("Self Access: Done")

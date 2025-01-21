@@ -9,3 +9,4 @@
 - [x] Email Route -> Email API
 - [ ] Better Email Template
 - [x] Response for when user added
+- [x] Connect admins and admin_access to cascade on deletion
