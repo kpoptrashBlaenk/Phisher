@@ -124,6 +124,14 @@ router.post("/login", async (req, res) => {
       sameSite: "strict",
     })
 
+    try {
+      const query = "UPDATE admins SET cookies = $2 WHERE email = $1"
+      const result = await pool.query(query, [email, token])
+    } catch (error) {
+      console.error("Error during cookies saving:", error)
+      return res.status(500).send("Error saving cookies.")
+    }
+
     // Login
     return res.status(201).send({ redirect: "/" })
   } catch (error) {

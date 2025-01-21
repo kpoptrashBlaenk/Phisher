@@ -3,6 +3,7 @@ const trackingRoutes = require("./routes/tracking-routes")
 const interfaceRoutes = require("./routes/interface-routes")
 const authenticationRoutes = require("./routes/authentication-routes")
 const apiRoutes = require("./routes/api/api-routes")
+const pool = require("./config/database-config")
 const cookieParser = require("cookie-parser")
 
 const app = express()
@@ -11,9 +12,17 @@ app.use(express.json()) // To use JSON
 app.use(express.static("public")) // To use static files from public
 app.use(cookieParser()) // To handle cookies
 
-const isAuthenticated = (req, res, next) => {
+const isAuthenticated = async (req, res, next) => {
+  const cookiesQuery = "SELECT * FROM admins WHERE admins.cookies = $1"
+  const cookiesResult = await pool.query(cookiesQuery, [req.cookies.phisher])
+
+  const hasCookies =
+    req.cookies.phisher && cookiesResult.rows[0].cookies
+      ? cookiesResult.rows[0].cookies === req.cookies.phisher
+      : false
+
   if (req.path !== "/authentication/sign") {
-    if (req.cookies.phisher) {
+    if (hasCookies) {
       return next()
     }
 
@@ -26,7 +35,7 @@ const isAuthenticated = (req, res, next) => {
   }
 
   if (req.path === "/authentication/sign") {
-    if (req.cookies.phisher) {
+    if (hasCookies) {
       return res.redirect("/")
     }
   }
