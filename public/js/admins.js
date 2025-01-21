@@ -34,6 +34,7 @@ const addAdmin = async (email) => {
     errorText.innerText = result.message
     errorText.classList.remove("text-danger")
     errorText.classList.add("text-success")
+    document.querySelector("#addAdminEmail").value = ""
     fetchUsers()
 
     // Create Message
