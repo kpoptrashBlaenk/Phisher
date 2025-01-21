@@ -54,7 +54,7 @@ router.post("/register", async (req, res) => {
     const accessResult = await pool.query(findAccessQuery, [email])
 
     if (!accessResult.rowCount > 0) {
-      return res.status(400).send({message: "You don't have this right."})
+      return res.status(400).send({ message: "You don't have this right." })
     }
 
     // Check already account
@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
     const result = await pool.query(findAdminQuery, [email])
 
     if (result.rowCount > 0) {
-      return res.status(400).send({message: "User already exists."})
+      return res.status(400).send({ message: "User already exists." })
     }
 
     // Register
@@ -112,7 +112,7 @@ router.post("/login", async (req, res) => {
     }
 
     // Check for password
-    const passwordMatch = bcrypt.compare(password, result.rows[0].password)
+    const passwordMatch = await bcrypt.compare(password, result.rows[0].password)
     if (!passwordMatch) {
       return res.status(400).send({ context: "password", message: "The password is wrong." })
     }
