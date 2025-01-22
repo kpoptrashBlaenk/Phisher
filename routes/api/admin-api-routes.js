@@ -23,6 +23,13 @@ router.post("/", async (req, res) => {
   }
 
   try {
+    const findQuery = "SELECT * FROM admins WHERE admins.email = $1"
+    const findResult = await pool.query(findQuery, [email])
+
+    if (findResult.rowCount > 0) {
+      return res.status(400).json({ message: "Admin already exists" })
+    }
+
     const query = "INSERT INTO admins (email) VALUES ($1) RETURNING *"
     const result = await pool.query(query, [email])
 
