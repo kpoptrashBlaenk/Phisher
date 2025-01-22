@@ -1,3 +1,8 @@
+const lastNameElement = document.querySelector("#addUserLastName")
+const firstNameElement = document.querySelector("#addUserFirstName")
+const emailElement = document.querySelector("#addUserEmail")
+const teamElement = document.querySelector("#addUserTeam")
+
 // User List
 const fetchUsers = async () => {
   try {
@@ -15,20 +20,24 @@ const fetchUsers = async () => {
     // Create User List Items
     users.forEach((user) => {
       const div = document.createElement("div")
-      div.classList.add(
-        "list-group-item",
+      div.classList.add("list-group-item", "align-items-center", "d-flex", "flex-column")
+
+      // Row 1
+      const row1 = document.createElement("div")
+      row1.classList.add(
         "d-flex",
         "align-items-center",
         "gap-2",
-        "justify-content-between"
+        "justify-content-between",
+        "w-100"
       )
 
       const checkButton = document.createElement("input")
       checkButton.type = "checkbox"
 
-      const userMail = document.createElement("span")
-      userMail.classList.add("d-block", "text-body-secondary", "fw-bold")
-      userMail.innerText = user.email
+      const userName = document.createElement("span")
+      userName.classList.add("d-block", "text-body-secondary", "fw-bold")
+      userName.innerText = `${user.name_last} ${user.name_first}`
 
       const deleteButton = document.createElement("button")
       deleteButton.classList.add("btn", "btn-danger", "btn-sm")
@@ -39,10 +48,48 @@ const fetchUsers = async () => {
         }
       }
 
+      const border = document.createElement("div")
+      border.classList.add("border", "border-bottom", "w-75", "mt-2")
+
+      // Row 2
+      const row2 = document.createElement("div")
+      row2.classList.add(
+        "d-flex",
+        "align-items-center",
+        "gap-2",
+        "justify-content-between",
+        "mt-1",
+        "w-100"
+      )
+
+      const userMail = document.createElement("span")
+      userMail.classList.add("d-block", "text-body-secondary")
+      userMail.innerText = user.email
+
+      const userTeamOU = document.createElement("div")
+      userTeamOU.classList.add("d-flex", "flex-column", "text-end")
+
+      const userOU = document.createElement("span")
+      userOU.classList.add("d-block", "text-body-secondary")
+      userOU.innerText = user.ou
+
+      const userTeam = document.createElement("small")
+      userTeam.classList.add("d-block", "text-body-secondary")
+      userTeam.innerText = user.team
+
       // Append
-      div.appendChild(checkButton)
-      div.appendChild(userMail)
-      div.appendChild(deleteButton)
+      row1.appendChild(checkButton)
+      row1.appendChild(userName)
+      row1.appendChild(deleteButton)
+
+      userTeamOU.appendChild(userOU)
+      userTeamOU.appendChild(userTeam)
+      row2.appendChild(userMail)
+      row2.appendChild(userTeamOU)
+
+      div.appendChild(row1)
+      div.appendChild(border)
+      div.appendChild(row2)
       userList.appendChild(div)
     })
   } catch (error) {
@@ -50,10 +97,6 @@ const fetchUsers = async () => {
   }
 }
 fetchUsers()
-
-{
-  /* <input type="checkbox" class="form-check-input" id="exampleCheck1"> */
-}
 
 // Delete User
 const deleteUser = async (userId) => {
@@ -77,16 +120,40 @@ const deleteUser = async (userId) => {
 }
 
 // Add User
+const fetchTeams = async () => {
+  try {
+    // Fetch Teams
+    const response = await fetch("/api/users/teams")
+    if (!response) {
+      throw new Error("Failed to fetch teams")
+    }
+    const teams = await response.json()
+
+    // Get Team Select
+    const teamSelect = document.querySelector("#addUserTeam")
+
+    // Create Team Select Options
+    teams.forEach((team) => {
+      const option = document.createElement("option")
+      option.value = team.team
+      option.innerText = team.team
+
+      // Append
+      teamSelect.appendChild(option)
+    })
+  } catch (error) {
+    console.error("Error fetching teams:", error)
+  }
+}
+fetchTeams()
+
 document.querySelector("#addUserForm").addEventListener("submit", async (event) => {
   event.preventDefault()
 
-  // Get Values
-  const email = document.querySelector("#addUserEmail").value
-
-  addUser(email)
+  addUser(lastNameElement.value, firstNameElement.value, emailElement.value, teamElement.value)
 })
 
-const addUser = async (email) => {
+const addUser = async (lastName, firstName, email, team) => {
   const errorText = document.querySelector("#newUserMessage")
 
   try {
@@ -96,7 +163,7 @@ const addUser = async (email) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ lastName, firstName, email, team }),
     })
 
     const result = await response.json()
@@ -112,7 +179,10 @@ const addUser = async (email) => {
     errorText.innerText = result.message
     errorText.classList.remove("text-danger")
     errorText.classList.add("text-success")
-    document.querySelector("#addUserEmail").value = ""
+    lastNameElement.value = ""
+    firstNameElement.value = ""
+    emailElement.value = ""
+    teamElement.value = ""
     fetchUsers()
 
     // Create Message

@@ -1,4 +1,5 @@
 const { Pool } = require("pg")
+const queries = require("./database-queries.js")
 require("dotenv").config()
 
 const pool = new Pool({
@@ -13,48 +14,30 @@ const pool = new Pool({
 })
 
 const initializeTables = async () => {
-  const createUsersTableQuery = `
-    CREATE TABLE IF NOT EXISTS users (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) NOT NULL UNIQUE
-    );
-   `
-
-  const createTrackingLogTableQuery = `
-    CREATE TABLE IF NOT EXISTS tracking_log (
-      user_id INTEGER NOT NULL,
-      timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
-    );
-    `
-
-  const createAdminsTableQuery = `
-    CREATE TABLE IF NOT EXISTS admins (
-      id SERIAL PRIMARY KEY,
-      email VARCHAR(255) NOT NULL UNIQUE,
-      password VARCHAR(255),
-      cookies VARCHAR(255)
-    );
-    `
-
-  const addMyMailAsAdmin = `
-    INSERT INTO admins (email)
-    VALUES ($1)
-    ON CONFLICT (email) DO NOTHING
-    `
-
   try {
-    await pool.query(createUsersTableQuery)
+    await pool.query(queries.createOUTableQuery)
+    console.log("OUs Table: Done")
+
+    await pool.query(queries.createTeamsTableQuery)
+    console.log("Teams Table: Done")
+
+    await pool.query(queries.createUsersTableQuery)
     console.log("Users Table: Done")
 
-    await pool.query(createTrackingLogTableQuery)
+    await pool.query(queries.createTrackingLogTableQuery)
     console.log("Tracking Log Table: Done")
 
-    await pool.query(createAdminsTableQuery)
+    await pool.query(queries.createAdminsTableQuery)
     console.log("Admins Table: Done")
 
-    await pool.query(addMyMailAsAdmin, [process.env.ADMIN_ACCESS_EMAIL])
+    await pool.query(queries.addMyMailAsAdmin, [process.env.ADMIN_ACCESS_EMAIL])
     console.log("Self Access: Done")
+
+    await pool.query(queries.addOUs)
+    console.log("Add OUs: Done")
+
+    await pool.query(queries.addTeams)
+    console.log("Add Teams: Done")
   } catch (error) {
     console.error("Error initializing tables:", error)
   }

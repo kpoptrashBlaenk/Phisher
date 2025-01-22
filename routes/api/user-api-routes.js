@@ -5,7 +5,7 @@ const router = express.Router()
 // Get all users
 router.get("/", async (req, res) => {
   try {
-    const query = "SELECT id, email FROM users"
+    const query = "SELECT * FROM users NATURAL JOIN teams NATURAL JOIN ous ORDER BY users.name_last ASC"
     const result = await pool.query(query)
 
     res.json(result.rows)
@@ -38,13 +38,34 @@ router.post("/get", async (req, res) => {
 
 // Add User POST
 router.post("/", async (req, res) => {
-  const { email } = req.body
+  const { lastName, firstName, email, team } = req.body
+  if (!lastName) {
+    return res.status(400).json({ message: "Last name is required" })
+  }
+
+  if (!firstName) {
+    return res.status(400).json({ message: "First name is required" })
+  }
+
   if (!email) {
     return res.status(400).json({ message: "Email is required" })
   }
 
+  if (!team) {
+    return res.status(400).json({ message: "Team is required" })
+  }
+
   try {
-    const result = await pool.query("INSERT INTO users (email) VALUES ($1) RETURNING *", [email])
+    const teamId = await pool.query("SELECT id FROM teams WHERE teams.team = $1", [team])
+
+    if (!teamId.rowCount > 0) {
+      return res.status(400).json({ message: "Team not found" })
+    }
+
+    const result = await pool.query(
+      "INSERT INTO users (name_last, name_first, email, team_id) VALUES ($1, $2, $3, $4) RETURNING *",
+      [lastName, firstName, email, teamId.rows[0].id]
+    )
     res.json({ message: "User added successfully" })
   } catch (error) {
     console.error("Error adding user:", error)
@@ -68,6 +89,19 @@ router.delete("/:id", async (req, res) => {
   } catch (error) {
     console.error("Error deleting user:", error)
     res.status(500).json({ error: "Failed to delete user" })
+  }
+})
+
+// Get all teams
+router.get("/teams", async (req, res) => {
+  try {
+    const query = "SELECT team FROM teams ORDER BY team ASC"
+    const result = await pool.query(query)
+
+    res.json(result.rows)
+  } catch (error) {
+    console.error("Error fetching teams", error)
+    res.status(500).json({ error: "Failed to fetch teams" })
   }
 })
 

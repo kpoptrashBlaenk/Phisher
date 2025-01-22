@@ -31,9 +31,23 @@
             <h6 class="card-header text-center">Ajouter un agent</h6>
             <div class="card-body p-1 pt-2 px-4">
               <form id="addUserForm">
-                <div class="row">
+                <div class="row mt-1">
+                  <label for="addUserLastName" class="col-form-label-sm col-3">Last Name:</label>
+                  <input type="text" class="col-form-control-sm col-9" id="addUserLastName" />
+                </div>
+                <div class="row mt-1">
+                  <label for="addUserFirstName" class="col-form-label-sm col-3">First Name:</label>
+                  <input type="text" class="col-form-control-sm col-9" id="addUserFirstName" />
+                </div>
+                <div class="row mt-1">
                   <label for="addUserEmail" class="col-form-label-sm col-3">Email:</label>
                   <input type="email" class="col-form-control-sm col-9" id="addUserEmail" />
+                </div>
+                <div class="row mt-1">
+                  <label for="addUserTeam" class="col-form-label-sm col-3">Team:</label>
+                  <select class="col-form-label-sm col-9" id="addUserTeam">
+                    <option selected="">Choose a team...</option>
+                  </select>
                 </div>
 
                 <div class="row">
