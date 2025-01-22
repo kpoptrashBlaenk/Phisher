@@ -67,7 +67,7 @@ router.post("/register", async (req, res) => {
     const result = await pool.query(findAdminQuery, [email])
 
     if (result.rowCount > 0) {
-      return res.status(400).send({ message: "User already exists." })
+      return res.status(400).send({ context: "email", message: "User already exists." })
     }
 
     // Register
@@ -80,16 +80,20 @@ router.post("/register", async (req, res) => {
       return res.status(201).send()
     }
 
-    return res.status(500).send("Error adding the admin.")
+    return res.status(500).send({ context: "both", message: "Error adding the admin." })
   } catch (error) {
     console.error("Error during registration:", error)
-    return res.status(500).send("Error adding the admin.")
+    return res.status(500).send({ context: "both", message: "Error adding the admin." })
   }
 })
 
 // Login POST
 router.post("/login", async (req, res) => {
   const { email, password } = req.body
+
+  if (!password || password.length === 0) {
+    return res.status(400).send({ context: "password", message: "No password provided." })
+  }
 
   // Try login
   try {
@@ -102,7 +106,7 @@ router.post("/login", async (req, res) => {
 
     const result = await pool.query(findAdminQuery, [email])
 
-    if (!result.rowCount > 0) {
+    if (!result.rowCount > 0 || !result.rows[0].password) {
       return res.status(400).send({ context: "email", message: "No user with this email." })
     }
 
@@ -120,7 +124,7 @@ router.post("/login", async (req, res) => {
     res.cookie("phisher", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // only https in production (need ssl/tls in prod)
-      maxAge: 1000 * 60 * 60 * 24 * 30 , // 30 days
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
       sameSite: "strict",
     })
 
@@ -129,14 +133,14 @@ router.post("/login", async (req, res) => {
       const result = await pool.query(query, [email, token])
     } catch (error) {
       console.error("Error during cookies saving:", error)
-      return res.status(500).send("Error saving cookies.")
+      return res.status(500).send({ context: "both", message: "Error saving cookies." })
     }
 
     // Login
     return res.status(201).send({ redirect: "/" })
   } catch (error) {
     console.error("Error during login:", error)
-    return res.status(500).send("Error logging in the admin.")
+    return res.status(500).send({ context: "both", message: "Error logging in the admin." })
   }
 })
 

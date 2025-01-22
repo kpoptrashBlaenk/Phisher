@@ -17,7 +17,7 @@ const isAuthenticated = async (req, res, next) => {
   const cookiesResult = await pool.query(cookiesQuery, [req.cookies.phisher])
 
   const hasCookies =
-    req.cookies.phisher && cookiesResult.rows[0].cookies
+    req.cookies.phisher && cookiesResult.rows[0]?.cookies
       ? cookiesResult.rows[0].cookies === req.cookies.phisher
       : false
 

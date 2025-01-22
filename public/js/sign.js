@@ -123,7 +123,7 @@ loginForm.addEventListener("submit", async (event) => {
     // Create Message
   } catch (error) {
     console.error("Error logging in admin:", error)
-    registerError.innerText = "An error occurred while logging in the admin."
-    registerError.classList.remove("opacity-0")
+    loginError.innerText = "An error occurred while logging in the admin."
+    loginError.classList.remove("opacity-0")
   }
 })
