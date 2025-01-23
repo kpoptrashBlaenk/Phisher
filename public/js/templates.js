@@ -10,9 +10,11 @@ const createTemplateList = () => {
       "list-group-item-action",
       "d-flex",
       "justify-content-between",
-      "p-1",
-      index === 1 ? "bg-light" : "bg-primary"
+      "p-1"
     )
+    if (index === 0) {
+      div.classList.add("active")
+    }
 
     // Name Button
     const nameButton = document.createElement("button")
