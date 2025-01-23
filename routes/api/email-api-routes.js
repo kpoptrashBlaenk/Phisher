@@ -2,11 +2,12 @@ require("dotenv").config()
 const express = require("express")
 const axios = require("axios")
 const transporter = require("../../config/email-config")
-const generateEmailTemplate = require("../../templates/email-template")
+const emailTemplateBenefits = require("../../templates/email-template-benefits")
+const emailTemplatePassword = require("../../templates/email-template-password")
 const router = express.Router()
 
 router.post("/", async (req, res) => {
-  const { emails } = req.body
+  const { emails, template } = req.body
 
   if (!emails || emails.length < 1) {
     return res.status(400).json({ message: "No users selected" }) //
@@ -28,11 +29,28 @@ router.post("/", async (req, res) => {
     // Create Emails
     const errors = []
     const emailPromises = users.map(async (user) => {
-      const mailOptions = {
-        from: process.env.SMTP_USER,
-        to: user.email,
-        subject: "Phishing Simulation Text",
-        html: generateEmailTemplate(user),
+      let mailOptions
+
+      switch (template) {
+        case "HR Benefits":
+          mailOptions = {
+            from: process.env.SMTP_USER,
+            to: user.email,
+            subject: "Phishing Simulation Text",
+            html: emailTemplateBenefits(user),
+          }
+          break
+        case "Password Reset":
+          mailOptions = {
+            from: process.env.SMTP_USER,
+            to: user.email,
+            subject: "Phishing Simulation Text",
+            html: emailTemplatePassword(user),
+          }
+          break
+        default:
+          errors.push(`Template not found for ${template}`)
+          break
       }
 
       // Send Emails

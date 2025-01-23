@@ -1,5 +1,5 @@
 const templateListElement = document.querySelector("#templateList")
-const allTemplates = [{ name: "Template 1" }, { name: "Template 2" }]
+const allTemplates = [{ name: "HR Benefits" }, { name: "Password Reset" }]
 
 const changeSelectedTemplate = (parentDiv) => {
   const allDivs = document.querySelectorAll("#templateList .list-group-item")

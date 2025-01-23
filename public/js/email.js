@@ -259,12 +259,12 @@ const showAgents = (team) => {
 getAllUsers()
 
 document.querySelector("#sendEmailsButton").addEventListener("click", async () => {
-  console.log(allSelectedAgents)
+  const selectedTemplate = document.querySelector("#templateList .active button").innerText
 
-  sendEmails(allSelectedAgents)
+  sendEmails(allSelectedAgents, selectedTemplate)
 })
 
-const sendEmails = async (emails) => {
+const sendEmails = async (emails, template) => {
   try {
     // GET Request to send emails
     const response = await fetch("/api/email", {
@@ -272,7 +272,7 @@ const sendEmails = async (emails) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ emails }),
+      body: JSON.stringify({ emails, template }),
     })
 
     const message = await response.text()

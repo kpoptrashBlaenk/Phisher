@@ -1,4 +1,4 @@
-module.exports = function generateEmailTemplate(user) {
+module.exports = function emailTemplateBenefits(user) {
   return `
     <html>
       <body>
