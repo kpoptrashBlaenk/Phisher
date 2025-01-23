@@ -31,7 +31,14 @@ router.post("/get", async (req, res) => {
 
   // Get users that include from emails
   try {
-    const query = "SELECT id, email FROM users WHERE users.email = ANY($1)"
+    const query = `
+    SELECT *
+    FROM users
+    JOIN teams ON users.team_id = teams.id
+    JOIN ous ON teams.ou_id = ous.id
+    WHERE users.email = ANY($1)
+    ORDER BY users.name_last ASC, users.name_first ASC
+    `
 
     const result = await pool.query(query, [emails])
 

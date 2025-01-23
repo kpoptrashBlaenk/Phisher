@@ -29,6 +29,7 @@ router.post("/", async (req, res) => {
     // Create Emails
     const errors = []
     const emailPromises = users.map(async (user) => {
+      console.log(user)
       let mailOptions
 
       switch (template) {
