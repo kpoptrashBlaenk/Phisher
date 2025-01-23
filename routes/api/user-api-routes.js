@@ -5,7 +5,13 @@ const router = express.Router()
 // Get all users
 router.get("/", async (req, res) => {
   try {
-    const query = "SELECT * FROM users NATURAL JOIN teams NATURAL JOIN ous ORDER BY users.name_last ASC"
+    const query = `
+    SELECT * 
+    FROM users 
+    JOIN teams ON users.team_id = teams.id 
+    JOIN ous ON teams.ou_id = ous.id 
+    ORDER BY users.name_last ASC, users.name_first ASC
+    `
     const result = await pool.query(query)
 
     res.json(result.rows)

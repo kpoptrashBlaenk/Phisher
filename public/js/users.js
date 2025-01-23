@@ -5,6 +5,8 @@ const teamElement = document.querySelector("#addUserTeam")
 
 // User List
 const fetchUsers = async () => {
+  let userCounterTotal = 1
+
   try {
     // Fetch Users
     const response = await fetch("/api/users")
@@ -18,9 +20,21 @@ const fetchUsers = async () => {
     userList.innerHTML = ""
 
     // Create User List Items
-    users.forEach((user) => {
+    for (const user of users) {
       const div = document.createElement("div")
       div.classList.add("list-group-item", "align-items-center", "d-flex", "flex-column")
+
+      if (userCounterTotal % 2 === 0) {
+        div.classList.add("bg-secondary-subtle")
+      }
+      userCounterTotal++
+
+      // Fetch Users
+      const responseCounter = await fetch(`/api/tracking/count/${user.id}`)
+      if (!responseCounter) {
+        throw new Error("Failed to fetch counter")
+      }
+      const counter = await responseCounter.json()
 
       // Row 1
       const row1 = document.createElement("div")
@@ -32,11 +46,8 @@ const fetchUsers = async () => {
         "w-100"
       )
 
-      const checkButton = document.createElement("input")
-      checkButton.type = "checkbox"
-
       const userName = document.createElement("span")
-      userName.classList.add("d-block", "text-body-secondary", "fw-bold")
+      userName.classList.add("d-block", "fw-bold")
       userName.innerText = `${user.name_last} ${user.name_first}`
 
       const deleteButton = document.createElement("button")
@@ -49,27 +60,34 @@ const fetchUsers = async () => {
       }
 
       const border = document.createElement("div")
-      border.classList.add("border", "border-bottom", "w-75", "mt-2")
+      border.classList.add("border", "border-bottom", "border-secondary-subtle", "w-75", "mt-2")
 
       // Row 2
       const row2 = document.createElement("div")
       row2.classList.add(
         "d-flex",
-        "align-items-center",
+        "align-items-top",
         "gap-2",
         "justify-content-between",
         "mt-1",
         "w-100"
       )
 
-      const userMail = document.createElement("span")
+      const userEmailCounter = document.createElement("div")
+      userEmailCounter.classList.add("d-flex", "flex-column", "text-start")
+
+      const userMail = document.createElement("small")
       userMail.classList.add("d-block", "text-body-secondary")
       userMail.innerText = user.email
+
+      const userCounter = document.createElement("small")
+      userCounter.classList.add("d-block", "text-body-secondary")
+      userCounter.innerText = `Total: ${counter.count}`
 
       const userTeamOU = document.createElement("div")
       userTeamOU.classList.add("d-flex", "flex-column", "text-end")
 
-      const userOU = document.createElement("span")
+      const userOU = document.createElement("small")
       userOU.classList.add("d-block", "text-body-secondary")
       userOU.innerText = user.ou
 
@@ -78,20 +96,21 @@ const fetchUsers = async () => {
       userTeam.innerText = user.team
 
       // Append
-      row1.appendChild(checkButton)
       row1.appendChild(userName)
       row1.appendChild(deleteButton)
 
+      userEmailCounter.appendChild(userMail)
+      userEmailCounter.appendChild(userCounter)
       userTeamOU.appendChild(userOU)
       userTeamOU.appendChild(userTeam)
-      row2.appendChild(userMail)
+      row2.appendChild(userEmailCounter)
       row2.appendChild(userTeamOU)
 
       div.appendChild(row1)
       div.appendChild(border)
       div.appendChild(row2)
       userList.appendChild(div)
-    })
+    }
   } catch (error) {
     console.error("Error fetching users:", error)
   }
