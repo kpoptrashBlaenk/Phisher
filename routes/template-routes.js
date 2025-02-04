@@ -1,6 +1,6 @@
 const express = require("express")
 const path = require("path")
-const emailTemplatePassword = require("../templates/email-template-password")
+const emailTemplatePassword = require("../templates/password/password")
 
 const router = express.Router()
 

@@ -32,7 +32,15 @@ router.post("/get", async (req, res) => {
   // Get users that include from emails
   try {
     const query = `
-    SELECT *
+    SELECT
+      users.id AS id,
+      users.name_first,
+      users.name_last,
+      users.email,
+      teams.id AS team_id,
+      teams.team AS team_name,
+      ous.id AS ou_id,
+      ous.ou AS ou_name
     FROM users
     JOIN teams ON users.team_id = teams.id
     JOIN ous ON teams.ou_id = ous.id

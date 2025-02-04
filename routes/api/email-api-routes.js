@@ -3,14 +3,14 @@ const express = require("express")
 const axios = require("axios")
 const transporter = require("../../config/email-config")
 const emailTemplateBenefits = require("../../templates/email-template-benefits")
-const emailTemplatePassword = require("../../templates/email-template-password")
+const emailTemplatePassword = require("../../templates/password/password")
 const router = express.Router()
 
 router.post("/", async (req, res) => {
   const { emails, template } = req.body
 
   if (!emails || emails.length < 1) {
-    return res.status(400).json({ message: "No users selected" }) //
+    return res.status(400).json({ message: "No users selected" })
   }
 
   try {
@@ -29,7 +29,6 @@ router.post("/", async (req, res) => {
     // Create Emails
     const errors = []
     const emailPromises = users.map(async (user) => {
-      console.log(user)
       let mailOptions
 
       switch (template) {
@@ -45,7 +44,7 @@ router.post("/", async (req, res) => {
           mailOptions = {
             from: process.env.SMTP_USER,
             to: user.email,
-            subject: "Phishing Simulation Text",
+            subject: "Changez le mot de passe de votre compte SNCF",
             html: emailTemplatePassword(user),
           }
           break

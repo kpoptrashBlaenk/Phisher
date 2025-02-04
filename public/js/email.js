@@ -275,6 +275,8 @@ const sendEmails = async (emails, template) => {
       body: JSON.stringify({ emails, template }),
     })
 
+    console.log(emails)
+
     const message = await response.text()
     // If response => Message
     const messageBox = document.querySelector("#sendEmailsMessage")
