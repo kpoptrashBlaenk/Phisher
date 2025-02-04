@@ -17,9 +17,9 @@ module.exports = function emailTemplatePassword(user) {
   })
 
   emailTemplate = emailTemplate
-    .replace("{{firstName}}", firstName)
-    .replace("{{clickLink}}", clickLink)
-    .replace("{{maxDate}}", maxDate)
+    .replaceAll("{{firstName}}", firstName)
+    .replaceAll("{{clickLink}}", clickLink)
+    .replaceAll("{{maxDate}}", maxDate)
 
   return emailTemplate
 }
