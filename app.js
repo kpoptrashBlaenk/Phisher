@@ -2,6 +2,7 @@ const express = require("express")
 const trackingRoutes = require("./routes/tracking-routes")
 const interfaceRoutes = require("./routes/interface-routes")
 const authenticationRoutes = require("./routes/authentication-routes")
+const templateRoutes = require("./routes/template-routes")
 const apiRoutes = require("./routes/api/api-routes")
 const pool = require("./config/database-config")
 const cookieParser = require("cookie-parser")
@@ -46,6 +47,7 @@ const isAuthenticated = async (req, res, next) => {
 app.use("/track", trackingRoutes)
 app.use("/api", apiRoutes)
 app.use("/authentication", authenticationRoutes)
+app.use("/template", templateRoutes)
 
 app.use("/", isAuthenticated, interfaceRoutes)
 

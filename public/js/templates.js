@@ -1,5 +1,8 @@
 const templateListElement = document.querySelector("#templateList")
-const allTemplates = [{ name: "HR Benefits" }, { name: "Password Reset" }]
+const allTemplates = [
+  { name: "HR Benefits", url: "benefits" },
+  { name: "Password Reset", url: "password" },
+]
 
 const changeSelectedTemplate = (parentDiv) => {
   const allDivs = document.querySelectorAll("#templateList .list-group-item")
@@ -53,6 +56,9 @@ const createTemplateList = () => {
     const goButton = document.createElement("button")
     goButton.classList.add("btn")
     goButton.textContent = "Preview"
+    goButton.addEventListener("click", () => {
+      window.open(`/template/${template.url}`, "_blank").focus()
+    })
 
     // Append
     div.appendChild(nameButton)
