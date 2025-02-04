@@ -2,7 +2,7 @@ require("dotenv").config()
 const express = require("express")
 const axios = require("axios")
 const transporter = require("../../config/email-config")
-const emailTemplateBenefits = require("../../templates/email-template-benefits")
+const emailTemplateJobProposition = require("../../templates/job-proposition/job-proposition")
 const emailTemplatePassword = require("../../templates/password/password")
 const router = express.Router()
 
@@ -32,12 +32,12 @@ router.post("/", async (req, res) => {
       let mailOptions
 
       switch (template) {
-        case "HR Benefits":
+        case "Job Proposition":
           mailOptions = {
             from: process.env.SMTP_USER,
             to: user.email,
-            subject: "Phishing Simulation Text",
-            html: emailTemplateBenefits(user),
+            subject: "Nous avons trouvé de nouvelles propositions pour vous",
+            html: emailTemplateJobProposition(user),
           }
           break
         case "Password Reset":

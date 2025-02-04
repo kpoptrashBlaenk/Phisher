@@ -1,7 +1,7 @@
 const templateListElement = document.querySelector("#templateList")
 const allTemplates = [
-  { name: "HR Benefits", url: "benefits" },
   { name: "Password Reset", url: "password" },
+  { name: "Job Proposition", url: "job_proposition" },
 ]
 
 const changeSelectedTemplate = (parentDiv) => {
