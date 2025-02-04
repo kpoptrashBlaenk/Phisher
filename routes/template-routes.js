@@ -6,7 +6,7 @@ const router = express.Router()
 
 const exampleUser = {
   id: "0",
-  name: "NAME",
+  name_first: "NAME",
 }
 
 // Password Reset Template
