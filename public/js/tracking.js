@@ -24,26 +24,40 @@ const fetchLogs = async () => {
         minute: "2-digit",
       })
 
-      const response = await fetch(`/api/tracking/count/${log.user_id}`)
-      const result = await response.json()
-      const counter = result.count
+      // Div
+      const div = document.createElement("div")
+      div.classList.add("list-group-item")
 
-      // Create Item
-      const label = document.createElement("label")
-      label.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2")
+      // Upper Div
+      const upperDiv = document.createElement("div")
+      upperDiv.classList.add("d-flex", "align-items-center", "gap-2")
 
-      const smallStart = document.createElement("span")
-      smallStart.classList.add("d-block", "text-body-secondary")
-      smallStart.innerText = `${log.email} | Total: ${counter}`
+      const spanStart = document.createElement("span")
+      spanStart.classList.add("d-block", "text-body-secondary")
+      spanStart.innerText = `${log.email} | Total: ${log.count}`
 
       const spanEnd = document.createElement("span")
       spanEnd.classList.add("ms-auto", "text-end")
       spanEnd.innerText = formattedDate
 
+      // Lower Div
+      const lowerDiv = document.createElement("div")
+      lowerDiv.classList.add("d-flex", "align-items-center", "gap-2")
+
+      const small = document.createElement("small")
+      small.classList.add("d-block", "text-body-tertiary")
+      small.innerText = `${log.message} in ${log.page} template.`
+
       // Append
-      label.appendChild(smallStart)
-      label.appendChild(spanEnd)
-      trackList.appendChild(label)
+      upperDiv.appendChild(spanStart)
+      upperDiv.appendChild(spanEnd)
+
+      lowerDiv.appendChild(small)
+
+      div.appendChild(upperDiv)
+      div.appendChild(lowerDiv)
+
+      trackList.appendChild(div)
     })
   } catch (error) {
     console.error("Error fetching tracking log:", error)

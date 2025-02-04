@@ -18,7 +18,7 @@
 - [ ] Email Preview & Test Mail to admin
 - [x] Personalized infos (name, uo, équipe)
 - [ ] Bulk import of users
-- [ ] Better logs (don't know waht to add yet)
+- [x] Better logs (don't know waht to add yet)
 - [ ] Analytics + Graphs (Total emails sent, click rates over time, percentage of users clicked)
 - [ ] Add attachments to the template and track this as well
 - [ ] Add forms within the mails to harvest infos (see if they give sensitive data, hash infos maybe to avoid problems with taking sensitive data from them)

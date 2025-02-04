@@ -17,7 +17,7 @@ router.get("/password", async (req, res) => {
 })
 
 // Job Proposition Template
-router.get("/job_proposition", async (req, res) => {
+router.get("/job-proposition", async (req, res) => {
   res.setHeader("Content-Type", "text/html")
   res.send(emailTemplateJobProposition(exampleUser))
 })

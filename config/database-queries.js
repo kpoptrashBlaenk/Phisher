@@ -13,6 +13,9 @@ const queries = {
       CREATE TABLE IF NOT EXISTS tracking_log (
         user_id INTEGER NOT NULL,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        page VARCHAR(255),
+        message VARCHAR(255),
+        count INTEGER NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
       );
     `,

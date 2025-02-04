@@ -1,5 +1,5 @@
 const express = require("express")
-const trackingRoutes = require("./routes/tracking-routes")
+const trackingRoutes = require("./routes/tracking/tracking-routes")
 const interfaceRoutes = require("./routes/interface-routes")
 const authenticationRoutes = require("./routes/authentication-routes")
 const templateRoutes = require("./routes/template-routes")
