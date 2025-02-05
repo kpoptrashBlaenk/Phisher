@@ -15,7 +15,7 @@
 # Phase 2 (After base needs)
 
 - [x] Better Email Template
-- [ ] Email Preview & Test Mail to admin
+- [x] Email Preview & Test Mail to admin
 - [x] Personalized infos (name, uo, équipe)
 - [ ] Bulk import of users
 - [x] Better logs (don't know waht to add yet)
