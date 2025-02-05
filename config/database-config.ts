@@ -1,10 +1,11 @@
-import pg from "pg"
-import { queries } from "./database-queries.js"
-const { Pool } = pg
 import dotenv from "dotenv"
+import pg from "pg"
+import queries from "./database-queries.js"
+const { Pool } = pg
 
 dotenv.config()
 
+// Database Connection
 const pool = new Pool({
   user: process.env.DB_USERNAME,
   host: process.env.DB_INTERNAL_HOST || process.env.DB_EXTERNAL_HOST,
@@ -16,7 +17,8 @@ const pool = new Pool({
   },
 })
 
-const initializeTables = async () => {
+// Create and fill tables
+async function initializeTables() {
   try {
     await pool.query(queries.createOUTableQuery)
     console.log("OUs Table: Done")

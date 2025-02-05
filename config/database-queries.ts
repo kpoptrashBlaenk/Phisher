@@ -1,4 +1,4 @@
-export const queries = {
+const queries = {
   createUsersTableQuery: `
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
@@ -132,3 +132,5 @@ export const queries = {
   ON CONFLICT (team) DO NOTHING;
     `,
 }
+
+export default queries
