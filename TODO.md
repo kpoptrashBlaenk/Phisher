@@ -22,7 +22,7 @@
 - [ ] Analytics + Graphs (Total emails sent, click rates over time, percentage of users clicked)
 - [ ] Add attachments to the template and track this as well
 - [ ] Add forms within the mails to harvest infos (see if they give sensitive data, hash infos maybe to avoid problems with taking sensitive data from them)
-- [ ] Different types of phishing
+- [x] Different types of phishing
 - [x] Redirection to failure page
 - [ ] Use 2FA to see how far they'd go
 - [ ] Check if people reply to mail
