@@ -4,7 +4,7 @@ import { UsersRow } from "../../types/database"
 import redirection from "../../utils/redirection"
 
 function emailTemplatePassword(user: UsersRow) {
-  const templatePath = redirection("password.html")
+  const templatePath = redirection("templates/password/password.html")
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
   const baseLink = `${

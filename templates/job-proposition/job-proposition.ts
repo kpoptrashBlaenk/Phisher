@@ -5,7 +5,7 @@ import path from "path"
 import redirection from "../../utils/redirection"
 
 function emailTemplateJobProposition(user: UsersRow) {
-  const templatePath = redirection("job-proposition.html")
+  const templatePath = redirection("templates/job-proposition/job-proposition.html")
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
   const baseLink = `${
