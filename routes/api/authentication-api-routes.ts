@@ -56,7 +56,7 @@ router.post("/register", async (req: Request, res: any) => {
       `
     const accessResult = await pool.query<AdminsRow>(findAccessQuery, [email])
 
-    if (accessResult.rowCount !== 0) {
+    if (accessResult.rowCount === 0) {
       return res.status(400).send({ message: "You don't have this right." })
     }
 
