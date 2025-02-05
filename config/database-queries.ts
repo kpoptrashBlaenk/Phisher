@@ -11,6 +11,7 @@ export const queries = {
     `,
   createTrackingLogTableQuery: `
       CREATE TABLE IF NOT EXISTS tracking_log (
+        id SERIAL PRIMARY KEY,
         user_id INTEGER NOT NULL,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         page VARCHAR(255),
