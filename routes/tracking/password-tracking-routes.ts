@@ -1,14 +1,16 @@
-const express = require("express")
-const path = require("path")
+import { Request, Response } from "express"
+import express from "express"
+import path from "path"
 const router = express.Router()
-const { trackingLog } = require("../../utils/logger")
+import { trackingLog } from "../../utils/logger"
+import redirection from "../../utils/redirection"
 
+const redirect = redirection("views/redirection.html")
 const page = "Password Reset"
-const redirection = path.join(__dirname, "../../views/redirection.html")
 
 // Open Image
-router.get("/image", async (req, res) => {
-  const { userId } = req.query
+router.get("/image", async (req: Request, res: Response) => {
+  const userId = Number(req.query.userId as string | undefined)
 
   if (userId) {
     const context = {
@@ -19,15 +21,15 @@ router.get("/image", async (req, res) => {
 
     await trackingLog(context)
 
-    res.sendFile(redirection)
+    res.sendFile(redirect)
   } else {
     res.status(400).send("User ID missing!")
   }
 })
 
 // Open Profile
-router.get("/profile", async (req, res) => {
-  const { userId } = req.query
+router.get("/profile", async (req: Request, res: Response) => {
+  const userId = Number(req.query.userId as string | undefined)
 
   if (userId) {
     const context = {
@@ -38,15 +40,15 @@ router.get("/profile", async (req, res) => {
 
     await trackingLog(context)
 
-    res.sendFile(redirection)
+    res.sendFile(redirect)
   } else {
     res.status(400).send("User ID missing!")
   }
 })
 
 // Open Support
-router.get("/support", async (req, res) => {
-  const { userId } = req.query
+router.get("/support", async (req: Request, res: Response) => {
+  const userId = Number(req.query.userId as string | undefined)
 
   if (userId) {
     const context = {
@@ -57,10 +59,10 @@ router.get("/support", async (req, res) => {
 
     await trackingLog(context)
 
-    res.sendFile(redirection)
+    res.sendFile(redirect)
   } else {
     res.status(400).send("User ID missing!")
   }
 })
 
-module.exports = router
+export default router

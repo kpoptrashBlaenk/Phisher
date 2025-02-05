@@ -1,9 +1,10 @@
-const express = require("express")
-const pool = require("../../config/database-config")
+import express from "express"
+import { Request, Response } from "express"
+import pool from "../../config/database-config"
 const router = express.Router()
 
 // Get all tracking logs
-router.get("/", async (req, res) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const query = `
       SELECT *
@@ -32,9 +33,9 @@ router.get("/count/:id", async (req, res) => {
     const result = await pool.query(query, [id])
     res.json({ count: result.rowCount })
   } catch (error) {
-    console.error(`Error fetching tracking logs for user: ${user.id}`, error)
-    res.status(500).json({ error: `Error fetching tracking logs for user: ${user.id}` })
+    console.error(`Error fetching tracking logs for user: ${id}`, error)
+    res.status(500).json({ error: `Error fetching tracking logs for user: ${id}` })
   }
 })
 
-module.exports = router
+export default router

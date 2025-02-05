@@ -1,12 +1,15 @@
-const express = require("express")
-const passwordValidator = require("password-validator")
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
-const pool = require("../../config/database-config")
+import express from "express"
+import { Request, Response } from "express"
+//@ts-ignore
+import passwordValidator from "password-validator"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
+import pool from "../../config/database-config"
+import { AdminsRow } from "../../types/database"
 const router = express.Router()
 
 // Register POST
-router.post("/register", async (req, res) => {
+router.post("/register", async (req: Request, res: any) => {
   const { email, password } = req.body
 
   // Check both
@@ -51,9 +54,9 @@ router.post("/register", async (req, res) => {
       FROM admins
       WHERE admins.email = $1 AND admins.password IS NULL
       `
-    const accessResult = await pool.query(findAccessQuery, [email])
+    const accessResult = await pool.query<AdminsRow>(findAccessQuery, [email])
 
-    if (!accessResult.rowCount > 0) {
+    if (accessResult.rowCount && !(accessResult.rowCount > 0)) {
       return res.status(400).send({ message: "You don't have this right." })
     }
 
@@ -66,7 +69,7 @@ router.post("/register", async (req, res) => {
 
     const result = await pool.query(findAdminQuery, [email])
 
-    if (result.rowCount > 0) {
+    if (result.rowCount && result.rowCount > 0) {
       return res.status(400).send({ context: "email", message: "User already exists." })
     }
 
@@ -76,7 +79,7 @@ router.post("/register", async (req, res) => {
     const updateAdminQuery = `UPDATE admins SET password = $2 WHERE email = $1 RETURNING *`
     const updateResult = await pool.query(updateAdminQuery, [email, hashedPassword])
 
-    if (updateResult.rowCount > 0) {
+    if (updateResult.rowCount && updateResult.rowCount > 0) {
       return res.status(201).send()
     }
 
@@ -88,7 +91,7 @@ router.post("/register", async (req, res) => {
 })
 
 // Login POST
-router.post("/login", async (req, res) => {
+router.post("/login", async (req: Request, res: any) => {
   const { email, password } = req.body
 
   if (!password || password.length === 0) {
@@ -106,7 +109,7 @@ router.post("/login", async (req, res) => {
 
     const result = await pool.query(findAdminQuery, [email])
 
-    if (!result.rowCount > 0 || !result.rows[0].password) {
+    if (result.rowCount && (!(result.rowCount > 0) || !result.rows[0].password)) {
       return res.status(400).send({ context: "email", message: "No user with this email." })
     }
 
@@ -130,7 +133,7 @@ router.post("/login", async (req, res) => {
 
     try {
       const query = "UPDATE admins SET cookies = $2 WHERE email = $1"
-      const result = await pool.query(query, [email, token])
+      await pool.query(query, [email, token])
     } catch (error) {
       console.error("Error during cookies saving:", error)
       return res.status(500).send({ context: "both", message: "Error saving cookies." })
@@ -144,4 +147,4 @@ router.post("/login", async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

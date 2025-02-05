@@ -1,13 +1,16 @@
-const { Pool } = require("pg")
-const queries = require("./database-queries.js")
-require("dotenv").config()
+import pg from "pg"
+import { queries } from "./database-queries.js"
+const { Pool } = pg
+import dotenv from "dotenv"
+
+dotenv.config()
 
 const pool = new Pool({
   user: process.env.DB_USERNAME,
   host: process.env.DB_INTERNAL_HOST || process.env.DB_EXTERNAL_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  port: Number(process.env.DB_PORT),
   ssl: {
     rejectUnauthorized: false,
   },
@@ -48,4 +51,4 @@ const initializeTables = async () => {
 
 initializeTables()
 
-module.exports = pool
+export default pool

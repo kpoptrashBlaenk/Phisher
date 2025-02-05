@@ -1,8 +1,10 @@
-const fs = require("fs")
-const path = require("path")
+import fs from "fs"
+import path from "path"
+import { UsersRow } from "../../types/database"
+import redirection from "../../utils/redirection"
 
-module.exports = function emailTemplatePassword(user) {
-  const templatePath = path.join(__dirname, "password.html")
+function emailTemplatePassword(user: UsersRow) {
+  const templatePath = redirection("password.html")
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
   const baseLink = `${
@@ -30,3 +32,5 @@ module.exports = function emailTemplatePassword(user) {
 
   return emailTemplate
 }
+
+export default emailTemplatePassword

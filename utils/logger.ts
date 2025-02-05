@@ -1,8 +1,13 @@
-const pool = require("../config/database-config")
-const axios = require("axios")
+import pool from "../config/database-config"
+import axios from "axios"
+import { LogContext } from "../types/database"
 
-const trackingLog = async (context) => {
-  const response = await axios.get(`${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/tracking/count/${context.userId}`)
+export const trackingLog = async (context: LogContext) => {
+  const response = await axios.get<{ count: number }>(
+    `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/tracking/count/${
+      context.userId
+    }`
+  )
   const count = response.data.count
 
   const timestamp = new Date().toISOString()
@@ -16,5 +21,3 @@ const trackingLog = async (context) => {
     console.error("Error logging to database:", error)
   }
 }
-
-module.exports = { trackingLog }

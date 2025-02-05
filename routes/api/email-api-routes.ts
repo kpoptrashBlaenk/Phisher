@@ -1,14 +1,19 @@
-require("dotenv").config()
-const express = require("express")
-const axios = require("axios")
-const transporter = require("../../config/email-config")
-const emailTemplateJobProposition = require("../../templates/job-proposition/job-proposition")
-const emailTemplatePassword = require("../../templates/password/password")
+import express from "express"
+import { Request, Response } from "express"
+import axios from "axios"
+import transporter from "../../config/email-config"
+import emailTemplateJobProposition from "../../templates/job-proposition/job-proposition"
+import emailTemplatePassword from "../../templates/password/password"
 const router = express.Router()
-const pool = require("../../config/database-config")
+import pool from "../../config/database-config"
+import { UsersRow } from "../../types/database"
+import dotenv from "dotenv"
 
-router.post("/", async (req, res) => {
-  const { emails, template } = req.body
+dotenv.config()
+
+router.post("/", async (req: Request, res: any) => {
+  const emails = req.body.emails
+  const template = req.body.template
 
   if (!emails || emails.length < 1) {
     return res.status(400).json({ message: "No users selected" })
@@ -16,7 +21,7 @@ router.post("/", async (req, res) => {
 
   try {
     // Fetch Users
-    const response = await axios.post(
+    const response = await axios.post<UsersRow[]>(
       `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/users/get`,
       { emails: emails }
     )
@@ -28,8 +33,8 @@ router.post("/", async (req, res) => {
     }
 
     // Create Emails
-    const errors = []
-    const emailPromises = users.map(async (user) => {
+    const errors: string[] = []
+    const emailPromises = users.map(async (user: UsersRow) => {
       let mailOptions
 
       switch (template) {
@@ -56,13 +61,15 @@ router.post("/", async (req, res) => {
 
       // Send Emails
       try {
-        await transporter.sendMail(mailOptions)
+        if (mailOptions) {
+          await transporter.sendMail(mailOptions)
+        }
 
-        emailQuery = `INSERT INTO EMAILS (user_id, template) VALUES ($1, $2)`
+        const emailQuery = `INSERT INTO EMAILS (user_id, template) VALUES ($1, $2)`
         await pool.query(emailQuery, [user.id, template])
 
         console.log(`Email sent to ${user.email}`)
-      } catch (error) {
+      } catch (error: any) {
         console.error(`Error sending email to ${user.email}:`, error)
         errors.push(`Error sending email to ${user.email}: ${error.message}`)
       }
@@ -82,4 +89,4 @@ router.post("/", async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

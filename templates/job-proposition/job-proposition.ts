@@ -1,13 +1,16 @@
-const fs = require("fs")
-const path = require("path")
+import { UsersRow } from "../../types/database"
 
-module.exports = function emailTemplateJobProposition(user) {
-  const templatePath = path.join(__dirname, "job-proposition.html")
+import fs from "fs"
+import path from "path"
+import redirection from "../../utils/redirection"
+
+function emailTemplateJobProposition(user: UsersRow) {
+  const templatePath = redirection("job-proposition.html")
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
-  const baseLink = `${process.env.HOST || "http://localhost:3001"}/track/job-proposition/{{clickType}}?userId=${
-    user.id
-  }`
+  const baseLink = `${
+    process.env.HOST || "http://localhost:3001"
+  }/track/job-proposition/{{clickType}}?userId=${user.id}`
 
   const firstName = user.name_first
   const messageLink = baseLink.replace("{{clickType}}", "message")
@@ -22,3 +25,5 @@ module.exports = function emailTemplateJobProposition(user) {
 
   return emailTemplate
 }
+
+export default emailTemplateJobProposition

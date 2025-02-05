@@ -1,9 +1,10 @@
-const express = require("express")
-const pool = require("../../config/database-config")
+import express, { Request, Response } from "express"
+import pool from "../../config/database-config"
+import { UsersRow } from "../../types/database"
 const router = express.Router()
 
 // Get all users
-router.get("/", async (req, res) => {
+router.get("/", async (req: Request, res: Response) => {
   try {
     const query = `
     SELECT * 
@@ -12,7 +13,7 @@ router.get("/", async (req, res) => {
     JOIN ous ON teams.ou_id = ous.id 
     ORDER BY users.name_last ASC, users.name_first ASC
     `
-    const result = await pool.query(query)
+    const result = await pool.query<UsersRow>(query)
 
     res.json(result.rows)
   } catch (error) {
@@ -22,7 +23,7 @@ router.get("/", async (req, res) => {
 })
 
 // Get some users
-router.post("/get", async (req, res) => {
+router.post("/get", async (req: Request, res: any) => {
   const { emails } = req.body
 
   if (!emails || emails.length < 1) {
@@ -48,7 +49,7 @@ router.post("/get", async (req, res) => {
     ORDER BY users.name_last ASC, users.name_first ASC
     `
 
-    const result = await pool.query(query, [emails])
+    const result = await pool.query<UsersRow>(query, [emails])
 
     return res.json(result.rows)
   } catch (error) {
@@ -58,7 +59,7 @@ router.post("/get", async (req, res) => {
 })
 
 // Add User POST
-router.post("/", async (req, res) => {
+router.post("/", async (req: Request, res: any) => {
   const { lastName, firstName, email, team } = req.body
   if (!lastName) {
     return res.status(400).json({ message: "Last name is required" })
@@ -77,14 +78,14 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    const teamId = await pool.query("SELECT id FROM teams WHERE teams.team = $1", [team])
+    const teamId = await pool.query<{id: string}>("SELECT id FROM teams WHERE teams.team = $1", [team])
 
-    if (!teamId.rowCount > 0) {
+    if (teamId.rowCount && !(teamId.rowCount > 0)) {
       return res.status(400).json({ message: "Team not found" })
     }
 
-    const result = await pool.query(
-      "INSERT INTO users (name_last, name_first, email, team_id) VALUES ($1, $2, $3, $4) RETURNING *",
+    await pool.query(
+      "INSERT INTO users (name_last, name_first, email, team_id) VALUES ($1, $2, $3, $4)",
       [lastName, firstName, email, teamId.rows[0].id]
     )
     res.json({ message: "User added successfully" })
@@ -95,14 +96,14 @@ router.post("/", async (req, res) => {
 })
 
 // Delete User POST
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
     const query = "DELETE FROM users WHERE id = $1"
     const result = await pool.query(query, [id])
 
-    if (result.rowCount > 0) {
+    if (result.rowCount && (result.rowCount > 0)) {
       res.status(200).json({ message: "User deleted successfully" })
     } else {
       res.status(404).json({ message: "User not found" })
@@ -114,7 +115,7 @@ router.delete("/:id", async (req, res) => {
 })
 
 // Get all teams
-router.get("/teams", async (req, res) => {
+router.get("/teams", async (req: Request, res: Response) => {
   try {
     const query = "SELECT team FROM teams ORDER BY team ASC"
     const result = await pool.query(query)
@@ -126,4 +127,4 @@ router.get("/teams", async (req, res) => {
   }
 })
 
-module.exports = router
+export default router

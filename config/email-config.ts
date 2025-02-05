@@ -1,9 +1,11 @@
-require("dotenv").config()
-const nodemailer = require("nodemailer")
+import nodemailer from "nodemailer"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: process.env.SMTP_PORT,
+  port: Number(process.env.SMTP_PORT),
   secure: false,
   auth: {
     user: process.env.SMTP_USER,
@@ -14,4 +16,4 @@ const transporter = nodemailer.createTransport({
   },
 })
 
-module.exports = transporter
+export default transporter
