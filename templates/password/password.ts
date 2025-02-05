@@ -1,12 +1,17 @@
+import dotenv from "dotenv"
 import fs from "fs"
-import path from "path"
 import { UsersRow } from "../../types/database"
 import redirection from "../../utils/redirection"
 
+dotenv.config()
+
+// Show the Reset Password email template
 function emailTemplatePassword(user: UsersRow) {
+  // Get template url
   const templatePath = redirection("templates/password/password.html")
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
+  // Variables for replacement
   const baseLink = `${
     process.env.HOST || "http://localhost:3001"
   }/track/password/{{clickType}}?userId=${user.id}`
@@ -23,6 +28,7 @@ function emailTemplatePassword(user: UsersRow) {
     year: "numeric",
   })
 
+  // Replacements in html
   emailTemplate = emailTemplate
     .replaceAll("{{firstName}}", firstName)
     .replaceAll("{{imageLink}}", imageLink)

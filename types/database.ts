@@ -5,21 +5,18 @@ export type AdminsRow = {
   cookies: string
 }
 
-export type LogContext = {
-  userId: number
-  page: string
-  message: string
-}
-
 export type UsersRow = {
   id: string
   name_first: string
   name_last: string
   email: string
-  team_id?: number
-  team_name?: string
-  ou_id?: string
-  ou_name?: string
+  team_id: number
+}
+
+export type LogContext = {
+  userId: number
+  page: string
+  message: string
 }
 
 export type TrackingLogRow = {
