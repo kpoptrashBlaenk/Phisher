@@ -1,19 +1,22 @@
 // Admin List
-const fetchAdmins = async () => {
+async function fetchAdmins() {
   try {
-    // Fetch Admins
+    // Fetch admins using /admins api
     const response = await fetch("/api/admins")
+
     if (!response) {
       throw new Error("Failed to fetch admins")
     }
+
     const admins = await response.json()
 
-    // Get Admins List
+    // Get lsit element
     const adminList = document.querySelector("#adminsList")
     adminList.innerHTML = ""
 
-    // Create Admin List Items
+    // Create admin list items
     admins.forEach((admin) => {
+      // Div
       const div = document.createElement("div")
       div.classList.add(
         "list-group-item",
@@ -23,10 +26,12 @@ const fetchAdmins = async () => {
         "justify-content-between"
       )
 
+      // Span for email
       const adminMail = document.createElement("span")
       adminMail.classList.add("d-block", "text-body-secondary", "fw-bold")
       adminMail.innerText = admin.email
 
+      // Delete button
       const deleteButton = document.createElement("button")
       deleteButton.classList.add("btn", "btn-danger", "btn-sm")
       deleteButton.innerText = "Supprimer"
@@ -45,23 +50,24 @@ const fetchAdmins = async () => {
     console.error("Error fetching admins:", error)
   }
 }
-fetchAdmins()
 
-// Add Admin
+// Add Admin Button Click
 document.querySelector("#addAdminForm").addEventListener("submit", async (event) => {
   event.preventDefault()
 
-  // Get Values
+  // Get values
   const email = document.querySelector("#addAdminEmail").value
 
   addAdmin(email)
 })
 
-const addAdmin = async (email) => {
+// Add Admin
+async function addAdmin(email) {
+  // Get error text element
   const errorText = document.querySelector("#newAdminMessage")
 
   try {
-    // POST Request
+    // Add admin using /admins api
     const response = await fetch("/api/admins", {
       method: "POST",
       headers: {
@@ -72,21 +78,20 @@ const addAdmin = async (email) => {
 
     const result = await response.json()
 
+    // If not ok, error
     if (!response.ok) {
-      console.log(result.message)
       errorText.innerText = result.message
       errorText.classList.add("text-danger")
       errorText.classList.remove("text-success")
       return
     }
 
+    // Success and fetch again
     errorText.innerText = result.message
     errorText.classList.remove("text-danger")
     errorText.classList.add("text-success")
     document.querySelector("#addAdminEmail").value = ""
     fetchAdmins()
-
-    // Create Message
   } catch (error) {
     console.error("Error adding admin:", error)
     errorTextinnerText = "An error occurred while adding the admin."
@@ -94,22 +99,24 @@ const addAdmin = async (email) => {
 }
 
 // Delete Admin
-const deleteAdmin = async (adminId) => {
+async function deleteAdmin(adminId) {
   try {
-    // DELETE Request
+    // Delete admin using /admins:id api
     const response = await fetch(`/api/admins/${adminId}`, {
       method: "DELETE",
     })
 
-    // If response => Fetch Admins
-    if (response.ok) {
-      console.log("Admin deleted")
-      fetchAdmins()
-    } else {
+    // If not ok, error
+    if (!response.ok) {
       const result = await response.json()
       alert(result.message || "Failed to delete admin")
     }
+
+    fetchAdmins()
   } catch (error) {
     console.error("Error deleting admin:", error)
   }
 }
+
+// Fill admin list
+fetchAdmins()

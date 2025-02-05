@@ -1,10 +1,13 @@
 const templateListElement = document.querySelector("#templateList")
+
 const allTemplates = [
   { name: "Password Reset", url: "password" },
   { name: "Job Proposition", url: "job-proposition" },
 ]
 
-const changeSelectedTemplate = (parentDiv) => {
+// Change Selected Template
+function changeSelectedTemplate(parentDiv) {
+  // Get list elements
   const allDivs = document.querySelectorAll("#templateList .list-group-item")
 
   // Set all divs to unselected
@@ -32,11 +35,11 @@ const changeSelectedTemplate = (parentDiv) => {
   goButton.classList.add("btn-primary")
 }
 
-const createTemplateList = () => {
-  let defaultSelected
-
+// Create template list
+function createTemplateList() {
+  // For each template
   allTemplates.forEach((template, index) => {
-    // Parent Div
+    // Div
     const div = document.createElement("div")
     div.classList.add(
       "list-group-item",
@@ -50,21 +53,25 @@ const createTemplateList = () => {
     const nameButton = document.createElement("button")
     nameButton.classList.add("btn", "w-100")
     nameButton.textContent = template.name
+    // Onclick, select template
     nameButton.addEventListener("click", () => changeSelectedTemplate(div))
 
-    // Go Button
-    const goButton = document.createElement("button")
-    goButton.classList.add("btn")
-    goButton.textContent = "Preview"
-    goButton.addEventListener("click", () => {
+    // Preview Button
+    const previewButton = document.createElement("button")
+    previewButton.classList.add("btn")
+    previewButton.textContent = "Preview"
+    // Onclick, open template
+    previewButton.addEventListener("click", () => {
       window.open(`/template/${template.url}`, "_blank").focus()
     })
 
     // Append
     div.appendChild(nameButton)
-    div.appendChild(goButton)
+    div.appendChild(previewButton)
     templateListElement.appendChild(div)
 
+    // Set first template to default
+    let defaultSelected
     if (index === 0) {
       defaultSelected = div
     }

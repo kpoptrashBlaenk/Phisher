@@ -1,15 +1,21 @@
 // Registration
 const registerForm = document.querySelector("#registerForm")
-const registerEmail = document.querySelector("#registerEmail")
-const registerEmailEnd = document.querySelector("#registerEmailEnd")
-const registerPassword = document.querySelector("#registerPassword")
-const registerError = document.querySelector("#registerErrorText")
 
+// Registration Button Click
 registerForm.addEventListener("submit", async (event) => {
   event.preventDefault()
+
+  // Get elements
+  const registerEmail = document.querySelector("#registerEmail")
+  const registerEmailEnd = document.querySelector("#registerEmailEnd")
+  const registerPassword = document.querySelector("#registerPassword")
+  const registerError = document.querySelector("#registerErrorText")
+
+  // Get values
   const email = registerEmail.value + registerEmailEnd.innerText
   const password = registerPassword.value
 
+  // Prepare error messages
   const checkResult = (result) => {
     registerError.innerText = result.message || "Failed to register"
     registerError.classList.remove("opacity-0")
@@ -31,7 +37,7 @@ registerForm.addEventListener("submit", async (event) => {
   }
 
   try {
-    // POST Request register
+    // Register using /authentication/regiser api
     const response = await fetch("/api/authentication/register", {
       method: "POST",
       headers: {
@@ -40,13 +46,14 @@ registerForm.addEventListener("submit", async (event) => {
       body: JSON.stringify({ email, password }),
     })
 
+    // If not ok, error
     if (!response.ok) {
       const result = await response.json()
       checkResult(result)
       return
     }
 
-    // POST Request login
+    // Login using /authentication/login api
     const loginResponse = await fetch("/api/authentication/login", {
       method: "POST",
       headers: {
@@ -57,14 +64,14 @@ registerForm.addEventListener("submit", async (event) => {
 
     const loginResult = await loginResponse.json()
 
+    // If not ok, error
     if (!loginResponse.ok) {
       checkResult(loginResult)
       return
     }
 
+    // If ok, redirect to page returned by api
     window.location.href = loginResult.redirect
-
-    // Create Message
   } catch (error) {
     console.error("Error registering admin:", error)
     registerError.innerText = "An error occurred while registering the admin."
@@ -74,18 +81,23 @@ registerForm.addEventListener("submit", async (event) => {
 
 // Login
 const loginForm = document.querySelector("#loginForm")
-const loginEmail = document.querySelector("#loginEmail")
-const loginEmailEnd = document.querySelector("#loginEmailEnd")
-const loginPassword = document.querySelector("#loginPassword")
-const loginError = document.querySelector("#loginErrorText")
 
+// Login Button Click
 loginForm.addEventListener("submit", async (event) => {
   event.preventDefault()
+
+  // Get elements
+  const loginEmail = document.querySelector("#loginEmail")
+  const loginEmailEnd = document.querySelector("#loginEmailEnd")
+  const loginPassword = document.querySelector("#loginPassword")
+  const loginError = document.querySelector("#loginErrorText")
+
+  // Get values
   const email = loginEmail.value + loginEmailEnd.innerText
   const password = loginPassword.value
 
   try {
-    // POST Request login
+    // Login using /authentication/login api
     const response = await fetch("/api/authentication/login", {
       method: "POST",
       headers: {
@@ -96,6 +108,7 @@ loginForm.addEventListener("submit", async (event) => {
 
     const result = await response.json()
 
+    // If not ok, error
     if (!response.ok) {
       loginError.innerText = result.message || "Failed to login"
       loginError.classList.remove("opacity-0")
@@ -118,9 +131,8 @@ loginForm.addEventListener("submit", async (event) => {
       return
     }
 
+    // If ok, redirect to page given by result
     window.location.href = result.redirect
-
-    // Create Message
   } catch (error) {
     console.error("Error logging in admin:", error)
     loginError.innerText = "An error occurred while logging in the admin."

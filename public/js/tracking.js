@@ -1,14 +1,16 @@
 // Tracking Log List
-const fetchLogs = async () => {
+async function fetchLogs() {
   try {
-    // Fetch tracking logs
+    // Get tracking logs using /tracking api
     const response = await fetch("/api/tracking")
+
     if (!response) {
       throw new Error("Failed to fetch tracking logs")
     }
+
     const logs = await response.json()
 
-    // Get tracking log list
+    // Get tracking log list element and empty it
     const trackList = document.querySelector("#trackingLogList")
     trackList.innerHTML = ""
 
@@ -32,10 +34,12 @@ const fetchLogs = async () => {
       const upperDiv = document.createElement("div")
       upperDiv.classList.add("d-flex", "align-items-center", "gap-2")
 
+      // Span for email and counter
       const spanStart = document.createElement("span")
       spanStart.classList.add("d-block", "text-body-secondary")
       spanStart.innerText = `${log.email} | Total: ${log.count}`
 
+      // Span for date
       const spanEnd = document.createElement("span")
       spanEnd.classList.add("ms-auto", "text-end")
       spanEnd.innerText = formattedDate
@@ -44,6 +48,7 @@ const fetchLogs = async () => {
       const lowerDiv = document.createElement("div")
       lowerDiv.classList.add("d-flex", "align-items-center", "gap-2")
 
+      // Small for message
       const small = document.createElement("small")
       small.classList.add("d-block", "text-body-tertiary")
       small.innerText = `${log.message} in ${log.page} template.`
@@ -63,4 +68,5 @@ const fetchLogs = async () => {
     console.error("Error fetching tracking log:", error)
   }
 }
+
 fetchLogs()
