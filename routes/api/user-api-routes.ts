@@ -7,14 +7,21 @@ const router = express.Router()
 router.get("/", async (req: Request, res: Response) => {
   try {
     const query = `
-    SELECT * 
-    FROM users 
-    JOIN teams ON users.team_id = teams.id 
-    JOIN ous ON teams.ou_id = ous.id 
+    SELECT
+      users.id AS id,
+      users.name_first,
+      users.name_last,
+      users.email,
+      teams.id AS team_id,
+      teams.team,
+      ous.id AS ou_id,
+      ous.ou
+    FROM users
+    JOIN teams ON users.team_id = teams.id
+    JOIN ous ON teams.ou_id = ous.id
     ORDER BY users.name_last ASC, users.name_first ASC
     `
     const result = await pool.query<UsersRow>(query)
-
     res.json(result.rows)
   } catch (error) {
     console.error("Error fetching users", error)
@@ -39,9 +46,9 @@ router.post("/get", async (req: Request, res: any) => {
       users.name_last,
       users.email,
       teams.id AS team_id,
-      teams.team AS team_name,
+      teams.team,
       ous.id AS ou_id,
-      ous.ou AS ou_name
+      ous.ou
     FROM users
     JOIN teams ON users.team_id = teams.id
     JOIN ous ON teams.ou_id = ous.id

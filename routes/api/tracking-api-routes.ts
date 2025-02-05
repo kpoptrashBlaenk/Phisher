@@ -26,11 +26,12 @@ router.get("/count/:id", async (req, res) => {
 
   try {
     const query = `
-    SELECT tracking_log.user_id
+    SELECT *
     FROM tracking_log
     WHERE tracking_log.user_id = $1
     `
     const result = await pool.query(query, [id])
+
     res.json({ count: result.rowCount })
   } catch (error) {
     console.error(`Error fetching tracking logs for user: ${id}`, error)
