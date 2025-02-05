@@ -1,13 +1,12 @@
-import express from "express"
-import trackingRoutes from "./routes/tracking/tracking-routes"
-import interfaceRoutes from "./routes/interface-routes"
-import authenticationRoutes from "./routes/authentication-routes"
-import templateRoutes from "./routes/template-routes"
-import apiRoutes from "./routes/api/api-routes"
-import pool from "./config/database-config"
 import cookieParser from "cookie-parser"
+import express, { NextFunction, Request, Response } from "express"
+import pool from "./config/database-config"
+import apiRoutes from "./routes/api/api-routes"
+import authenticationRoutes from "./routes/authentication-routes"
+import interfaceRoutes from "./routes/interface-routes"
+import templateRoutes from "./routes/template-routes"
+import trackingRoutes from "./routes/tracking/tracking-routes"
 import { AdminsRow } from "./types/database"
-import { Request, Response, NextFunction } from "express"
 
 const app = express()
 
@@ -15,36 +14,44 @@ app.use(express.json()) // To use JSON
 app.use(express.static("public")) // To use static files from public
 app.use(cookieParser()) // To handle cookies
 
+// Check if user is authenticated then redirect
 const isAuthenticated = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const cookiesQuery = "SELECT * FROM admins WHERE admins.cookies = $1"
+    // Get admin with the saved cookies
+    const cookiesQuery = "SELECT id, email, password, cookies FROM admins WHERE admins.cookies = $1"
     const cookiesResult = await pool.query<AdminsRow>(cookiesQuery, [req.cookies.phisher])
 
+    // Check if cookies are equal to admins cookies
     const hasCookies =
       req.cookies.phisher && cookiesResult.rows[0]?.cookies
         ? cookiesResult.rows[0].cookies === req.cookies.phisher
         : false
 
-    if (req.path !== "/authentication/sign") {
+    console.log(req.path)
+
+    // If not loggin page (sign)
+    if (req.path !== "/authentication/sign" && req.path !== "/sign") {
+      // If has cookies, continue
       if (hasCookies) {
         return next()
       }
 
-      // Skip redirect if api (/api/authentication... always becomes /authentication for some reason)
+      // If searching for api (or authentication because of a bug that makes api/auth become auth), continue
       if (req.path.startsWith("/api") || req.path.startsWith("/authentication")) {
         return next()
       }
 
+      // Default, go to login page
       return res.redirect("/authentication/sign")
     }
 
-    if (req.path === "/authentication/sign") {
-      if (hasCookies) {
-        return res.redirect("/")
-      }
+    // If has cookies
+    if (hasCookies) {
+      return res.redirect("/")
     }
 
-    next()
+    // Fallback, go to login page
+    return res.redirect("/authentication/sign")
   } catch (error) {
     console.error("Authentication error", error)
     // instead of return because this must return promise and not void
@@ -52,14 +59,14 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction):
   }
 }
 
+// Routes
 app.use("/track", trackingRoutes)
-app.use("/api", apiRoutes)
-app.use("/authentication", authenticationRoutes)
-app.use("/template", templateRoutes)
-
+app.use("/authentication", isAuthenticated, authenticationRoutes)
 app.use("/", isAuthenticated, interfaceRoutes)
+app.use("/api", isAuthenticated, apiRoutes)
+app.use("/template", isAuthenticated, templateRoutes)
 
-// Redirect to the main menu if route not found
+// If route not found, homepage
 app.use((req: Request, res: Response) => {
   res.redirect("/")
 })

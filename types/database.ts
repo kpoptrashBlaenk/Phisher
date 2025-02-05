@@ -2,9 +2,7 @@ export type AdminsRow = {
   id: number
   email: string
   password: string
-  cookies: {
-    phisher?: string
-  }
+  cookies: string
 }
 
 export type LogContext = {
