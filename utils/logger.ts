@@ -8,7 +8,7 @@ export const trackingLog = async (context: LogContext) => {
       context.userId
     }`
   )
-  const count = response.data.count
+  const count = response.data.count + 1
 
   const timestamp = new Date().toISOString()
   const query =
