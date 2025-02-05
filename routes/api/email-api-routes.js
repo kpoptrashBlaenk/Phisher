@@ -5,6 +5,7 @@ const transporter = require("../../config/email-config")
 const emailTemplateJobProposition = require("../../templates/job-proposition/job-proposition")
 const emailTemplatePassword = require("../../templates/password/password")
 const router = express.Router()
+const pool = require("../../config/database-config")
 
 router.post("/", async (req, res) => {
   const { emails, template } = req.body
@@ -56,6 +57,10 @@ router.post("/", async (req, res) => {
       // Send Emails
       try {
         await transporter.sendMail(mailOptions)
+
+        emailQuery = `INSERT INTO EMAILS (user_id, template) VALUES ($1, $2)`
+        await pool.query(emailQuery, [user.id, template])
+
         console.log(`Email sent to ${user.email}`)
       } catch (error) {
         console.error(`Error sending email to ${user.email}:`, error)

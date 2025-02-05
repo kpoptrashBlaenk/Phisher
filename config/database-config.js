@@ -30,6 +30,9 @@ const initializeTables = async () => {
     await pool.query(queries.createAdminsTableQuery)
     console.log("Admins Table: Done")
 
+    await pool.query(queries.createSentEmailsTableQuery)
+    console.log("Emails Table: Done")
+
     await pool.query(queries.addMyMailAsAdmin, [process.env.ADMIN_ACCESS_EMAIL])
     console.log("Self Access: Done")
 

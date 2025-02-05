@@ -41,6 +41,14 @@ const queries = {
         FOREIGN KEY (ou_id) REFERENCES ous (id) ON DELETE CASCADE
       );
     `,
+  createSentEmailsTableQuery: `
+      CREATE TABLE IF NOT EXISTS emails (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL,
+        template VARCHAR(255) NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+      );
+    `,
   addMyMailAsAdmin: `
       INSERT INTO admins (email)
       VALUES ($1)
