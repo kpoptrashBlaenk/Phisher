@@ -28,7 +28,7 @@ router.post("/", async (req: Request, res: any) => {
     const findQuery = "SELECT * FROM admins WHERE admins.email = $1"
     const findResult = await pool.query<AdminsRow>(findQuery, [email])
 
-    if (findResult.rowCount && findResult.rowCount > 0) {
+    if (findResult.rowCount !== 0) {
       return res.status(400).json({ message: "Admin already exists" })
     }
 

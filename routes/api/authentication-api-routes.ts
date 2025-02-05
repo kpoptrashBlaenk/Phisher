@@ -56,7 +56,7 @@ router.post("/register", async (req: Request, res: any) => {
       `
     const accessResult = await pool.query<AdminsRow>(findAccessQuery, [email])
 
-    if (accessResult.rowCount && !(accessResult.rowCount > 0)) {
+    if (accessResult.rowCount !== 0) {
       return res.status(400).send({ message: "You don't have this right." })
     }
 
@@ -69,7 +69,7 @@ router.post("/register", async (req: Request, res: any) => {
 
     const result = await pool.query(findAdminQuery, [email])
 
-    if (result.rowCount && result.rowCount > 0) {
+    if (result.rowCount !== 0) {
       return res.status(400).send({ context: "email", message: "User already exists." })
     }
 
@@ -79,7 +79,7 @@ router.post("/register", async (req: Request, res: any) => {
     const updateAdminQuery = `UPDATE admins SET password = $2 WHERE email = $1 RETURNING *`
     const updateResult = await pool.query(updateAdminQuery, [email, hashedPassword])
 
-    if (updateResult.rowCount && updateResult.rowCount > 0) {
+    if (updateResult.rowCount !== 0) {
       return res.status(201).send()
     }
 
@@ -107,9 +107,9 @@ router.post("/login", async (req: Request, res: any) => {
         WHERE admins.email = $1
         `
 
-    const result = await pool.query(findAdminQuery, [email])
+    const result = await pool.query<AdminsRow>(findAdminQuery, [email])
 
-    if (result.rowCount && (!(result.rowCount > 0) || !result.rows[0].password)) {
+    if (result.rowCount === 0 || !result.rows[0]?.password) {
       return res.status(400).send({ context: "email", message: "No user with this email." })
     }
 

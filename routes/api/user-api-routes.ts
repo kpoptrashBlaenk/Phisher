@@ -78,9 +78,11 @@ router.post("/", async (req: Request, res: any) => {
   }
 
   try {
-    const teamId = await pool.query<{id: string}>("SELECT id FROM teams WHERE teams.team = $1", [team])
+    const teamId = await pool.query<{ id: string }>("SELECT id FROM teams WHERE teams.team = $1", [
+      team,
+    ])
 
-    if (teamId.rowCount && !(teamId.rowCount > 0)) {
+    if (teamId.rowCount === 0) {
       return res.status(400).json({ message: "Team not found" })
     }
 
@@ -103,7 +105,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
     const query = "DELETE FROM users WHERE id = $1"
     const result = await pool.query(query, [id])
 
-    if (result.rowCount && (result.rowCount > 0)) {
+    if (result.rowCount !== 0) {
       res.status(200).json({ message: "User deleted successfully" })
     } else {
       res.status(404).json({ message: "User not found" })

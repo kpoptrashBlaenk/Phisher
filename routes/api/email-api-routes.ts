@@ -78,7 +78,7 @@ router.post("/", async (req: Request, res: any) => {
     // After all Emails sent => Show which failed
     await Promise.all(emailPromises)
 
-    if (errors.length > 0) {
+    if (errors.length !== 0) {
       res.status(500).send(`Some emails failed to send. Errors: ${errors.join(", ")}`)
     } else {
       res.send(`${users.length} Emails sent to users!`)
