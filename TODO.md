@@ -23,6 +23,6 @@
 - [ ] Add attachments to the template and track this as well
 - [ ] Add forms within the mails to harvest infos (see if they give sensitive data, hash infos maybe to avoid problems with taking sensitive data from them)
 - [ ] Different types of phishing
-- [ ] Redirection to failure page
+- [x] Redirection to failure page
 - [ ] Use 2FA to see how far they'd go
 - [ ] Check if people reply to mail
