@@ -70,13 +70,13 @@ router.post("/", async (req: Request, res: any) => {
           await transporter.sendMail(mailOptions)
         }
 
-        const query = `
+        const insertEmailsQuery = `
         INSERT INTO emails(user_id, template)
         VALUES ($1, $2)
         `
 
         // Save sent email to emails
-        await pool.query(query, [user.id, template])
+        await pool.query(insertEmailsQuery, [user.id, template])
 
         console.log(`Email sent to ${user.email}`)
       } catch (error: any) {

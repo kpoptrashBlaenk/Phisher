@@ -6,7 +6,7 @@ const router = express.Router()
 // GET / -> All Users with Teams and OUs
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const query = `
+    const selectUsersTeamsOUsQuery = `
     SELECT
       users.id AS id,
       users.name_first,
@@ -22,9 +22,9 @@ router.get("/", async (req: Request, res: Response) => {
     ORDER BY users.name_last ASC, users.name_first ASC
     `
 
-    const result = await pool.query<UsersTeamOURow>(query)
+    const selectUsersTeamsOUsResult = await pool.query<UsersTeamOURow>(selectUsersTeamsOUsQuery)
 
-    res.json(result.rows)
+    res.json(selectUsersTeamsOUsResult.rows)
   } catch (error) {
     console.error("Error fetching users", error)
     res.status(500).json({ error: "Failed to fetch users" })
@@ -41,7 +41,7 @@ router.post("/get", async (req: Request, res: any) => {
   }
 
   try {
-    const query = `
+    const selectUsersTeamsOUsByEmailQuery = `
     SELECT
       users.id AS id,
       users.name_first,
@@ -59,9 +59,12 @@ router.post("/get", async (req: Request, res: any) => {
     `
 
     // Get users by email
-    const result = await pool.query<UsersRow>(query, [emails])
+    const selectUsersTeamsOUsByEmailResult = await pool.query<UsersRow>(
+      selectUsersTeamsOUsByEmailQuery,
+      [emails]
+    )
 
-    return res.json(result.rows)
+    return res.json(selectUsersTeamsOUsByEmailResult.rows)
   } catch (error) {
     console.error("Error fetching users", error)
     return res.status(500).json({ error: "Failed to fetch users" })
@@ -93,25 +96,30 @@ router.post("/", async (req: Request, res: any) => {
   }
 
   try {
-    const findTeamQuery = `
+    const selectTeamsByTeamQuery = `
     SELECT *
     FROM teams
     WHERE teams.team = $1`
 
-    const teams = await pool.query<Teams>(findTeamQuery, [team])
+    const selectTeamsByTeamQueryResult = await pool.query<Teams>(selectTeamsByTeamQuery, [team])
 
     // Check if team exist
-    if (teams.rowCount === 0) {
+    if (selectTeamsByTeamQueryResult.rowCount === 0) {
       return res.status(400).json({ message: "Team not found" })
     }
 
-    const insertUserQuery = `
+    const insertUsersQuery = `
     INSERT INTO users (name_last, name_first, email, team_id)
     VALUES ($1, $2, $3, $4)
     `
 
     // Add new user
-    await pool.query(insertUserQuery, [lastName, firstName, email, teams.rows[0].id])
+    await pool.query(insertUsersQuery, [
+      lastName,
+      firstName,
+      email,
+      selectTeamsByTeamQueryResult.rows[0].id,
+    ])
 
     res.json({ message: "User added successfully" })
   } catch (error) {
@@ -125,13 +133,13 @@ router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const query = `
+    const deleteUsersQuery = `
     DELETE FROM users
     WHERE id = $1
     `
 
     // Delete user
-    await pool.query(query, [id])
+    await pool.query(deleteUsersQuery, [id])
 
     res.status(200).json({ message: "User deleted successfully" })
   } catch (error) {
@@ -143,15 +151,15 @@ router.delete("/:id", async (req: Request, res: Response) => {
 // GET /teams -> Get all Teams
 router.get("/teams", async (req: Request, res: Response) => {
   try {
-    const query = `
-    SELECT team
+    const selectTeamsQuery = `
+    SELECT *
     FROM teams
     ORDER BY team ASC`
 
     // Get all teams
-    const result = await pool.query(query)
+    const selectTeamsResult = await pool.query(selectTeamsQuery)
 
-    res.json(result.rows)
+    res.json(selectTeamsResult.rows)
   } catch (error) {
     console.error("Error fetching teams", error)
     res.status(500).json({ error: "Failed to fetch teams" })

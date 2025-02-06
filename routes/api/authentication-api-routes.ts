@@ -49,40 +49,47 @@ router.post("/register", async (req: Request, res: any) => {
   }
 
   try {
-    const findAccessQuery = `
+    const selectAdminsByEmailAndNoPasswordQuery = `
       SELECT *
       FROM admins
       WHERE admins.email = $1 AND admins.password IS NULL
       `
-    const accessResult = await pool.query<AdminsRow>(findAccessQuery, [email])
+    const selectAdminsByEmailAndNoPasswordResult = await pool.query<AdminsRow>(
+      selectAdminsByEmailAndNoPasswordQuery,
+      [email]
+    )
 
     // Check if admins access
-    if (accessResult.rowCount === 0) {
+    if (selectAdminsByEmailAndNoPasswordResult.rowCount === 0) {
       return res.status(400).send({ message: "You don't have this right." })
     }
 
-    const findAdminQuery = `
+    const selectAdminsByEmailAndPasswordQuery = `
         SELECT  *
         FROM admins
         WHERE admins.email = $1 AND admins.password IS NOT NULL
         `
 
-    const adminResult = await pool.query(findAdminQuery, [email])
+    const selectAdminsByEmailAndPasswordResult = await pool.query(
+      selectAdminsByEmailAndPasswordQuery,
+      [email]
+    )
 
     // Check already account
-    if (adminResult.rowCount !== 0) {
+    if (selectAdminsByEmailAndPasswordResult.rowCount !== 0) {
       return res.status(400).send({ context: "email", message: "Admin already exists." })
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const updateAdminQuery = `
+    const updateAdminsQuery = `
     UPDATE admins
     SET password = $2
     WHERE email = $1
     `
-    await pool.query(updateAdminQuery, [email, hashedPassword])
+
+    await pool.query(updateAdminsQuery, [email, hashedPassword])
 
     res.status(200).json({ message: "Admin added successfully" })
   } catch (error) {
@@ -101,21 +108,21 @@ router.post("/login", async (req: Request, res: any) => {
   }
 
   try {
-    const findAdminQuery = `
+    const selectAdminsByEmailQuery = `
         SELECT  *
         FROM admins
         WHERE admins.email = $1
         `
 
-    const result = await pool.query<AdminsRow>(findAdminQuery, [email])
+    const selectAdminsByEmailResult = await pool.query<AdminsRow>(selectAdminsByEmailQuery, [email])
 
     // Check if admin exists
-    if (result.rowCount === 0 || !result.rows[0]?.password) {
+    if (selectAdminsByEmailResult.rowCount === 0 || !selectAdminsByEmailResult.rows[0]?.password) {
       return res.status(400).send({ context: "email", message: "No user with this email." })
     }
 
     // Check if password matches
-    const passwordMatch = await bcrypt.compare(password, result.rows[0].password)
+    const passwordMatch = await bcrypt.compare(password, selectAdminsByEmailResult.rows[0].password)
     if (!passwordMatch) {
       return res.status(400).send({ context: "password", message: "The password is wrong." })
     }
@@ -133,14 +140,14 @@ router.post("/login", async (req: Request, res: any) => {
     })
 
     try {
-      const query = `
+      const updateAdminsQuery = `
       UPDATE admins
       SET cookies = $2
       WHERE email = $1
       `
 
       // Update admin with cookies
-      await pool.query(query, [email, token])
+      await pool.query(updateAdminsQuery, [email, token])
     } catch (error) {
       console.error("Error during cookies saving:", error)
       return res.status(500).send({ context: "both", message: "Error saving cookies." })

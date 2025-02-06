@@ -1,21 +1,24 @@
 import express, { Request, Response } from "express"
 import pool from "../../config/database-config"
+import { UsersTrackingLogRow } from "../../types/database"
 
 const router = express.Router()
 
 // GET / -> All Tracking Logs
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const query = `
+    const selectTrackingLogUsersQuery = `
       SELECT *
       FROM tracking_log
       JOIN users ON tracking_log.user_id = users.id
       ORDER BY tracking_log.timestamp DESC
       `
 
-    const result = await pool.query(query)
+    const selectTrackingLogUsersResult = await pool.query<UsersTrackingLogRow>(
+      selectTrackingLogUsersQuery
+    )
 
-    res.json(result.rows)
+    res.json(selectTrackingLogUsersResult.rows)
   } catch (error) {
     console.error("Error fetching tracking logs", error)
     res.status(500).json({ error: "Failed to fetch tracking logs" })
@@ -27,14 +30,14 @@ router.get("/count/:id", async (req, res) => {
   const { id } = req.params
 
   try {
-    const query = `
+    const selectTrackingLogByUserIdQuery = `
     SELECT *
     FROM tracking_log
     WHERE tracking_log.user_id = $1
     `
-    const result = await pool.query(query, [id])
+    const selectTrackingLogByUserIdResult = await pool.query(selectTrackingLogByUserIdQuery, [id])
 
-    res.json({ count: result.rowCount })
+    res.json({ count: selectTrackingLogByUserIdResult.rowCount })
   } catch (error) {
     console.error(`Error fetching tracking logs for user: ${id}`, error)
     res.status(500).json({ error: `Error fetching tracking logs for user: ${id}` })

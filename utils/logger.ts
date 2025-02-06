@@ -17,12 +17,12 @@ async function trackingLog(context: LogContext) {
 
   try {
     // Insert log
-    const query = `
+    const insertTrackingLogQuery = `
     INSERT INTO tracking_log (user_id, timestamp, page, message, count)
     VALUES ($1, $2, $3, $4, $5)
     `
 
-    await pool.query(query, [context.userId, timestamp, context.page, context.message, count])
+    await pool.query(insertTrackingLogQuery, [context.userId, timestamp, context.page, context.message, count])
 
     console.log(`Logged to database: User ID: ${context.userId} clicked at ${timestamp}`)
   } catch (error) {

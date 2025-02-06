@@ -7,14 +7,14 @@ const router = express.Router()
 // GET / -> All Admins
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const query = `
+    const selectAdminsQuery = `
     SELECT *
     FROM admins
     `
 
-    const result = await pool.query<AdminsRow>(query)
+    const selectAdminsResult = await pool.query<AdminsRow>(selectAdminsQuery)
 
-    res.json(result.rows)
+    res.json(selectAdminsResult.rows)
   } catch (error) {
     console.error("Error fetching admins", error)
     res.status(500).json({ error: "Failed to fetch admins" })
@@ -31,25 +31,25 @@ router.post("/", async (req: Request, res: any) => {
   }
 
   try {
-    const selectQuery = `
+    const selectAdminsByEmailQuery = `
     SELECT *
     FROM admins
     WHERE admins.email = $1
     `
 
-    const selectResult = await pool.query<AdminsRow>(selectQuery, [email])
+    const selectAdminsByEmailResult = await pool.query<AdminsRow>(selectAdminsByEmailQuery, [email])
 
     // Check if admin already exists
-    if (selectResult.rowCount !== 0) {
+    if (selectAdminsByEmailResult.rowCount !== 0) {
       return res.status(400).json({ message: "Admin already exists" })
     }
 
-    const insertQuery = `
+    const insertAdminsQuery = `
     INSERT INTO admins (email)
     VALUES ($1)
     `
 
-    await pool.query(insertQuery, [email])
+    await pool.query(insertAdminsQuery, [email])
 
     res.json({ message: "Admin access added successfully" })
   } catch (error) {
@@ -63,12 +63,12 @@ router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const query = `
+    const deleteAdminsQuery = `
     DELETE FROM admins
     WHERE id = $1
     `
 
-    await pool.query(query, [id])
+    await pool.query(deleteAdminsQuery, [id])
 
     res.status(200).json({ message: "Admin deleted successfully" })
   } catch (error) {
