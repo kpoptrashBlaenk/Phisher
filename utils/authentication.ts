@@ -28,7 +28,7 @@ async function isAuthenticated(req: Request, res: Response, next: NextFunction):
       }
 
       // If searching for api (or authentication because of a bug that makes api/auth become auth), continue
-      if (req.path.startsWith("/api") || req.path.startsWith("/authentication") || req.path.startsWith("/users")) {
+      if (req.path.startsWith("/api") || req.path.startsWith("/authentication") || req.path.startsWith("/users") || req.path.startsWith("/track")) {
         return next()
       }
 
