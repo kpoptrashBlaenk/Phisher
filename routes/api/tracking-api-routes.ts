@@ -14,9 +14,7 @@ router.get("/", async (req: Request, res: Response) => {
       ORDER BY tracking_log.timestamp DESC
       `
 
-    const selectTrackingLogUsersResult = await pool.query<UsersTrackingLogRow>(
-      selectTrackingLogUsersQuery
-    )
+    const selectTrackingLogUsersResult = await pool.query<UsersTrackingLogRow>(selectTrackingLogUsersQuery)
 
     res.json(selectTrackingLogUsersResult.rows)
   } catch (error) {

@@ -46,13 +46,7 @@ async function fetchUsers() {
 
       // Upper Div
       const row1 = document.createElement("div")
-      row1.classList.add(
-        "d-flex",
-        "align-items-center",
-        "gap-2",
-        "justify-content-between",
-        "w-100"
-      )
+      row1.classList.add("d-flex", "align-items-center", "gap-2", "justify-content-between", "w-100")
 
       // Span for name
       const userName = document.createElement("span")
@@ -75,14 +69,7 @@ async function fetchUsers() {
 
       // Lower Div
       const row2 = document.createElement("div")
-      row2.classList.add(
-        "d-flex",
-        "align-items-top",
-        "gap-2",
-        "justify-content-between",
-        "mt-1",
-        "w-100"
-      )
+      row2.classList.add("d-flex", "align-items-top", "gap-2", "justify-content-between", "mt-1", "w-100")
 
       // Left Div of lower div
       const userEmailCounter = document.createElement("div")

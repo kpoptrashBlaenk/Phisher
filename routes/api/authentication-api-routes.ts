@@ -43,9 +43,7 @@ router.post("/register", async (req: Request, res: any) => {
 
   // Validate password
   if (!schema.validate(password)) {
-    return res
-      .status(400)
-      .send({ context: "password", message: "The password is not strong enough." })
+    return res.status(400).send({ context: "password", message: "The password is not strong enough." })
   }
 
   try {
@@ -54,10 +52,9 @@ router.post("/register", async (req: Request, res: any) => {
       FROM admins
       WHERE admins.email = $1 AND admins.password IS NULL
       `
-    const selectAdminsByEmailAndNoPasswordResult = await pool.query<AdminsRow>(
-      selectAdminsByEmailAndNoPasswordQuery,
-      [email]
-    )
+    const selectAdminsByEmailAndNoPasswordResult = await pool.query<AdminsRow>(selectAdminsByEmailAndNoPasswordQuery, [
+      email,
+    ])
 
     // Check if admins access
     if (selectAdminsByEmailAndNoPasswordResult.rowCount === 0) {
@@ -70,10 +67,7 @@ router.post("/register", async (req: Request, res: any) => {
         WHERE admins.email = $1 AND admins.password IS NOT NULL
         `
 
-    const selectAdminsByEmailAndPasswordResult = await pool.query(
-      selectAdminsByEmailAndPasswordQuery,
-      [email]
-    )
+    const selectAdminsByEmailAndPasswordResult = await pool.query(selectAdminsByEmailAndPasswordQuery, [email])
 
     // Check already account
     if (selectAdminsByEmailAndPasswordResult.rowCount !== 0) {
@@ -128,8 +122,7 @@ router.post("/login", async (req: Request, res: any) => {
     }
 
     // Create cookies
-    const secretKey =
-      "nxX23sKMGYjZfdb9aTcpVZuv86suwTwmJEBt1i5l4eNqpDBd1dbgolI2O4LGLz9mOiQA6QcABAItCqIqDMn93g=="
+    const secretKey = "nxX23sKMGYjZfdb9aTcpVZuv86suwTwmJEBt1i5l4eNqpDBd1dbgolI2O4LGLz9mOiQA6QcABAItCqIqDMn93g=="
     const token = jwt.sign({ email }, secretKey, { expiresIn: "30d" })
 
     res.cookie("phisher", token, {

@@ -59,10 +59,7 @@ router.post("/get", async (req: Request, res: any) => {
     `
 
     // Get users by email
-    const selectUsersTeamsOUsByEmailResult = await pool.query<UsersRow>(
-      selectUsersTeamsOUsByEmailQuery,
-      [emails]
-    )
+    const selectUsersTeamsOUsByEmailResult = await pool.query<UsersRow>(selectUsersTeamsOUsByEmailQuery, [emails])
 
     return res.json(selectUsersTeamsOUsByEmailResult.rows)
   } catch (error) {
@@ -114,12 +111,7 @@ router.post("/", async (req: Request, res: any) => {
     `
 
     // Add new user
-    await pool.query(insertUsersQuery, [
-      lastName,
-      firstName,
-      email,
-      selectTeamsByTeamQueryResult.rows[0].id,
-    ])
+    await pool.query(insertUsersQuery, [lastName, firstName, email, selectTeamsByTeamQueryResult.rows[0].id])
 
     res.json({ message: "User added successfully" })
   } catch (error) {

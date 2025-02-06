@@ -24,9 +24,7 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction):
     WHERE admins.cookies = $1
     `
 
-    const selectAdminByCoookieResult = await pool.query<AdminsRow>(selectAdminByCoookieQuery, [
-      req.cookies.phisher,
-    ])
+    const selectAdminByCoookieResult = await pool.query<AdminsRow>(selectAdminByCoookieQuery, [req.cookies.phisher])
 
     // Check if cookies are equal to admins cookies
     const hasCookies =

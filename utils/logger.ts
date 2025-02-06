@@ -6,9 +6,7 @@ import { LogContext } from "../types/database"
 async function trackingLog(context: LogContext) {
   // Count how many times this person logged
   const response = await axios.get<{ count: number }>(
-    `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/tracking/count/${
-      context.userId
-    }`
+    `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/tracking/count/${context.userId}`
   )
   const count = response.data.count + 1
 

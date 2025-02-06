@@ -41,7 +41,7 @@ router.get("/profile", async (req: Request, res: Response) => {
 
     return res.sendFile(redirect)
   }
-  
+
   res.status(400).send("User ID missing!")
 })
 

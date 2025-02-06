@@ -18,13 +18,7 @@ async function fetchAdmins() {
     admins.forEach((admin) => {
       // Div
       const div = document.createElement("div")
-      div.classList.add(
-        "list-group-item",
-        "d-flex",
-        "align-items-center",
-        "gap-2",
-        "justify-content-between"
-      )
+      div.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2", "justify-content-between")
 
       // Span for email
       const adminMail = document.createElement("span")

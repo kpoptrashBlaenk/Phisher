@@ -41,13 +41,7 @@ function createTemplateList() {
   allTemplates.forEach((template, index) => {
     // Div
     const div = document.createElement("div")
-    div.classList.add(
-      "list-group-item",
-      "list-group-item-action",
-      "d-flex",
-      "justify-content-between",
-      "p-1"
-    )
+    div.classList.add("list-group-item", "list-group-item-action", "d-flex", "justify-content-between", "p-1")
 
     // Name Button
     const nameButton = document.createElement("button")
