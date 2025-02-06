@@ -105,6 +105,19 @@ router.post("/", async (req: Request, res: any) => {
       return res.status(400).json({ message: "Team not found" })
     }
 
+    const selectUsersByEmailQuery = `
+    SELECT *
+    FROM users
+    WHERE users.email = $1
+    `
+
+    const selectUsersByEmailResult = await pool.query<UsersRow>(selectUsersByEmailQuery, [email])
+
+    // Check if user already
+    if (selectUsersByEmailResult.rowCount !== 0) {
+      return res.status(400).json({ message: "User already exists" })
+    }
+
     const insertUsersQuery = `
     INSERT INTO users (name_last, name_first, email, team_id)
     VALUES ($1, $2, $3, $4)

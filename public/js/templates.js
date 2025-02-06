@@ -37,6 +37,8 @@ function changeSelectedTemplate(parentDiv) {
 
 // Create template list
 function createTemplateList() {
+  let defaultSelected
+
   // For each template
   allTemplates.forEach((template, index) => {
     // Div
@@ -65,7 +67,6 @@ function createTemplateList() {
     templateListElement.appendChild(div)
 
     // Set first template to default
-    let defaultSelected
     if (index === 0) {
       defaultSelected = div
     }
