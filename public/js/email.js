@@ -56,7 +56,7 @@ async function getAllUsers() {
 }
 
 // Select or deselct agent
-async function selectedAgent(agent, selected) {
+function selectedAgent(agent, selected) {
   // If selected, add agent
   if (selected) {
     allSelectedAgents.push(agent)
@@ -68,7 +68,7 @@ async function selectedAgent(agent, selected) {
 }
 
 // Select or deselct agents of team
-async function selectedTeam(team, selected) {
+function selectedTeam(team, selected) {
   // If selected, add all agents of team
   if (selected) {
     allAgents[currentOU][team].forEach((agent) => {
@@ -88,7 +88,7 @@ async function selectedTeam(team, selected) {
 }
 
 // Select or deselct agents of ou
-async function selectedOU(ou, selected) {
+function selectedOU(ou, selected) {
   // For each team of ou, select agents of team
   Object.entries(allAgents[ou]).forEach((team) => {
     team = team[0]
@@ -100,12 +100,12 @@ async function selectedOU(ou, selected) {
 }
 
 // If agent is selected
-async function checkAllOfAgent(agent) {
+function checkAllOfAgent(agent) {
   return allSelectedAgents.includes(agent) ? true : false
 }
 
 // If all agents of team are selected
-async function checkAllOfTeam(team) {
+function checkAllOfTeam(team) {
   let allSelected = true
 
   allAgents[currentOU][team].forEach((agent) => {
@@ -118,7 +118,7 @@ async function checkAllOfTeam(team) {
 }
 
 // If all agents of ou are selected
-async function checkAllOfOU(ou) {
+function checkAllOfOU(ou) {
   let allSelected = true
   currentOU = ou
 
@@ -135,7 +135,7 @@ async function checkAllOfOU(ou) {
 }
 
 // update Breadcrumb All / OU / Team
-async function updateBreadcrumb() {
+function updateBreadcrumb() {
   // Empty breadcrumb
   emailBreadcrumb.innerHTML = ""
 
@@ -196,7 +196,7 @@ async function updateBreadcrumb() {
 }
 
 // Show OUs in List
-async function showUOs() {
+function showUOs() {
   // Empty list
   emailsList.innerHTML = ""
 
@@ -343,9 +343,10 @@ async function sendEmails(emails, template) {
 
     // If not ok, error
     if (!response.ok) {
-      messageBox.innerText = `Failed to send some emails: ${message}`
+      messageBox.innerText = message
       messageBox.classList.remove("text-success")
       messageBox.classList.add("text-danger")
+      return
     }
 
     // Success then reset selected agents then show ous

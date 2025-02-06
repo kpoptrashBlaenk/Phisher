@@ -16,6 +16,7 @@ app.use(cookieParser()) // To handle cookies
 
 // Check if user is authenticated then redirect
 const isAuthenticated = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  console.log(req.path)
   try {
     // Get admin with the saved cookies
     const selectAdminByCoookieQuery = `
@@ -40,7 +41,7 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction):
       }
 
       // If searching for api (or authentication because of a bug that makes api/auth become auth), continue
-      if (req.path.startsWith("/api") || req.path.startsWith("/authentication")) {
+      if (req.path.startsWith("/api") || req.path.startsWith("/authentication") || req.path.startsWith("/users")) {
         return next()
       }
 

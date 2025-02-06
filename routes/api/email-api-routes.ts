@@ -16,8 +16,8 @@ router.post("/", async (req: Request, res: any) => {
   const { emails, template } = req.body
 
   // Check if emails
-  if (emails?.length !== 0) {
-    return res.status(400).json({ message: "No users selected" })
+  if (emails?.length === 0) {
+    return res.status(500).send("No users selected")
   }
 
   try {

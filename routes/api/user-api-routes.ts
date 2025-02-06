@@ -36,7 +36,7 @@ router.post("/get", async (req: Request, res: any) => {
   const { emails } = req.body
 
   // Check if email provided
-  if (emails?.length !== 0) {
+  if (emails?.length === 0) {
     return res.status(400).json({ message: "No emails provided" })
   }
 
