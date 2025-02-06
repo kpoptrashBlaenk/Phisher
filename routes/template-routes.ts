@@ -1,14 +1,17 @@
 import express, { Request, Response } from "express"
-import emailTemplatePassword from "../templates/password/password"
 import emailTemplateJobProposition from "../templates/job-proposition/job-proposition"
+import emailTemplatePassword from "../templates/password/password"
+import { UsersRow } from "../types/database"
 
 const router = express.Router()
 
-const exampleUser = {
+// For viewing the template
+const exampleUser: UsersRow = {
   id: "0",
-  name_first: "Name",
-  name_last: "Name",
-  email: "example@email.com"
+  name_first: "Example First Name",
+  name_last: "Example Last Name",
+  email: "example@email.com",
+  team_id: 0,
 }
 
 // Password Reset Template

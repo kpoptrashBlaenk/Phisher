@@ -1,9 +1,8 @@
-import { Request, Response } from "express"
-import express from "express"
-import path from "path"
-const router = express.Router()
-import { trackingLog } from "../../utils/logger"
+import express, { Request, Response } from "express"
+import trackingLog from "../../utils/logger"
 import redirection from "../../utils/redirection"
+
+const router = express.Router()
 
 const redirect = redirection("views/redirection.html")
 const page = "Password Reset"
@@ -22,9 +21,9 @@ router.get("/image", async (req: Request, res: Response) => {
     await trackingLog(context)
 
     res.sendFile(redirect)
-  } else {
-    res.status(400).send("User ID missing!")
   }
+
+  res.status(400).send("User ID missing!")
 })
 
 // Open Profile
@@ -41,9 +40,9 @@ router.get("/profile", async (req: Request, res: Response) => {
     await trackingLog(context)
 
     res.sendFile(redirect)
-  } else {
-    res.status(400).send("User ID missing!")
   }
+
+  res.status(400).send("User ID missing!")
 })
 
 // Open Support
@@ -60,9 +59,9 @@ router.get("/support", async (req: Request, res: Response) => {
     await trackingLog(context)
 
     res.sendFile(redirect)
-  } else {
-    res.status(400).send("User ID missing!")
   }
+
+  res.status(400).send("User ID missing!")
 })
 
 export default router

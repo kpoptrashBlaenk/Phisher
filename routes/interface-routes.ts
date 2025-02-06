@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express"
-import path from "path"
 import redirection from "../utils/redirection"
 
 const router = express.Router()

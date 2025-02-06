@@ -1,9 +1,8 @@
-import express from "express"
-import { Request, Response } from "express"
-import path from "path"
-const router = express.Router()
-import { trackingLog } from "../../utils/logger"
+import express, { Request, Response } from "express"
+import trackingLog from "../../utils/logger"
 import redirection from "../../utils/redirection"
+
+const router = express.Router()
 
 const page = "Job Proposition"
 const redirect = redirection("views/sign.html")
@@ -21,10 +20,10 @@ router.get("/message", async (req: Request, res: Response) => {
 
     await trackingLog(context)
 
-    res.sendFile(redirect)
-  } else {
-    res.status(400).send("User ID missing!")
+    return res.sendFile(redirect)
   }
+
+  res.status(400).send("User ID missing!")
 })
 
 // Open Profile
@@ -40,10 +39,10 @@ router.get("/profile", async (req: Request, res: Response) => {
 
     await trackingLog(context)
 
-    res.sendFile(redirect)
-  } else {
-    res.status(400).send("User ID missing!")
+    return res.sendFile(redirect)
   }
+  
+  res.status(400).send("User ID missing!")
 })
 
 export default router

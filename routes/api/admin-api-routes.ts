@@ -1,14 +1,18 @@
-import express from "express"
-import { Request, Response } from "express"
+import express, { Request, Response } from "express"
 import pool from "../../config/database-config"
 import { AdminsRow } from "../../types/database"
+
 const router = express.Router()
 
-// Get all admins
+// GET / -> All Admins
 router.get("/", async (req: Request, res: Response) => {
   try {
-    const query = "SELECT id, email FROM admins"
-    const result = await pool.query(query)
+    const query = `
+    SELECT *
+    FROM admins
+    `
+
+    const result = await pool.query<AdminsRow>(query)
 
     res.json(result.rows)
   } catch (error) {
@@ -17,23 +21,35 @@ router.get("/", async (req: Request, res: Response) => {
   }
 })
 
-// Add Admin POST
+// POST / -> Add Admin
 router.post("/", async (req: Request, res: any) => {
   const { email } = req.body
+
+  // Check if email provided
   if (!email) {
     return res.status(400).json({ message: "Email is required" })
   }
 
   try {
-    const findQuery = "SELECT * FROM admins WHERE admins.email = $1"
-    const findResult = await pool.query<AdminsRow>(findQuery, [email])
+    const selectQuery = `
+    SELECT *
+    FROM admins
+    WHERE admins.email = $1
+    `
 
-    if (findResult.rowCount !== 0) {
+    const selectResult = await pool.query<AdminsRow>(selectQuery, [email])
+
+    // Check if admin already exists
+    if (selectResult.rowCount !== 0) {
       return res.status(400).json({ message: "Admin already exists" })
     }
 
-    const query = "INSERT INTO admins (email) VALUES ($1) RETURNING *"
-    await pool.query(query, [email])
+    const insertQuery = `
+    INSERT INTO admins (email)
+    VALUES ($1)
+    `
+
+    await pool.query(insertQuery, [email])
 
     res.json({ message: "Admin access added successfully" })
   } catch (error) {
@@ -42,15 +58,18 @@ router.post("/", async (req: Request, res: any) => {
   }
 })
 
-// Delete Admin POST
+// DELETE /:id -> Delete admin
 router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const query = "DELETE FROM admins WHERE id = $1"
+    const query = `
+    DELETE FROM admins
+    WHERE id = $1
+    `
+
     await pool.query(query, [id])
 
-    // Access of admin gets deleted, thus the admin gets cascaded, not done yet tho
     res.status(200).json({ message: "Admin deleted successfully" })
   } catch (error) {
     console.error("Error deleting admin:", error)

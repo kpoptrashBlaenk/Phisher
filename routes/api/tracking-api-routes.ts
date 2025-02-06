@@ -1,9 +1,9 @@
-import express from "express"
-import { Request, Response } from "express"
+import express, { Request, Response } from "express"
 import pool from "../../config/database-config"
+
 const router = express.Router()
 
-// Get all tracking logs
+// GET / -> All Tracking Logs
 router.get("/", async (req: Request, res: Response) => {
   try {
     const query = `
@@ -12,7 +12,9 @@ router.get("/", async (req: Request, res: Response) => {
       JOIN users ON tracking_log.user_id = users.id
       ORDER BY tracking_log.timestamp DESC
       `
+
     const result = await pool.query(query)
+
     res.json(result.rows)
   } catch (error) {
     console.error("Error fetching tracking logs", error)
@@ -20,7 +22,7 @@ router.get("/", async (req: Request, res: Response) => {
   }
 })
 
-// Get counter of this user
+// GET /count/:id -> Count logs of this user
 router.get("/count/:id", async (req, res) => {
   const { id } = req.params
 

@@ -18,7 +18,12 @@ app.use(cookieParser()) // To handle cookies
 const isAuthenticated = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     // Get admin with the saved cookies
-    const cookiesQuery = "SELECT id, email, password, cookies FROM admins WHERE admins.cookies = $1"
+    const cookiesQuery = `
+    SELECT *
+    FROM admins
+    WHERE admins.cookies = $1
+    `
+
     const cookiesResult = await pool.query<AdminsRow>(cookiesQuery, [req.cookies.phisher])
 
     // Check if cookies are equal to admins cookies

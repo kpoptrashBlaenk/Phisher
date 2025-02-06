@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express"
 import pool from "../../config/database-config"
-import { UsersRow } from "../../types/database"
+import { Teams, UsersRow, UsersTeamOURow } from "../../types/database"
 const router = express.Router()
 
-// Get all users
+// GET / -> All Users with Teams and OUs
 router.get("/", async (req: Request, res: Response) => {
   try {
     const query = `
@@ -21,7 +21,9 @@ router.get("/", async (req: Request, res: Response) => {
     JOIN ous ON teams.ou_id = ous.id
     ORDER BY users.name_last ASC, users.name_first ASC
     `
-    const result = await pool.query<UsersRow>(query)
+
+    const result = await pool.query<UsersTeamOURow>(query)
+
     res.json(result.rows)
   } catch (error) {
     console.error("Error fetching users", error)
@@ -29,15 +31,15 @@ router.get("/", async (req: Request, res: Response) => {
   }
 })
 
-// Get some users
+// POST /get -> Get certain users
 router.post("/get", async (req: Request, res: any) => {
   const { emails } = req.body
 
-  if (!emails || emails.length < 1) {
+  // Check if email provided
+  if (emails?.length !== 0) {
     return res.status(400).json({ message: "No emails provided" })
   }
 
-  // Get users that include from emails
   try {
     const query = `
     SELECT
@@ -56,6 +58,7 @@ router.post("/get", async (req: Request, res: any) => {
     ORDER BY users.name_last ASC, users.name_first ASC
     `
 
+    // Get users by email
     const result = await pool.query<UsersRow>(query, [emails])
 
     return res.json(result.rows)
@@ -65,38 +68,51 @@ router.post("/get", async (req: Request, res: any) => {
   }
 })
 
-// Add User POST
+// POST / -> Add User
 router.post("/", async (req: Request, res: any) => {
   const { lastName, firstName, email, team } = req.body
+
+  // Check if last name provided
   if (!lastName) {
     return res.status(400).json({ message: "Last name is required" })
   }
 
+  // Check if first name provided
   if (!firstName) {
     return res.status(400).json({ message: "First name is required" })
   }
 
+  // Check if email provided
   if (!email) {
     return res.status(400).json({ message: "Email is required" })
   }
 
+  // Check if team provided
   if (!team) {
     return res.status(400).json({ message: "Team is required" })
   }
 
   try {
-    const teamId = await pool.query<{ id: string }>("SELECT id FROM teams WHERE teams.team = $1", [
-      team,
-    ])
+    const findTeamQuery = `
+    SELECT *
+    FROM teams
+    WHERE teams.team = $1`
 
-    if (teamId.rowCount === 0) {
+    const teams = await pool.query<Teams>(findTeamQuery, [team])
+
+    // Check if team exist
+    if (teams.rowCount === 0) {
       return res.status(400).json({ message: "Team not found" })
     }
 
-    await pool.query(
-      "INSERT INTO users (name_last, name_first, email, team_id) VALUES ($1, $2, $3, $4)",
-      [lastName, firstName, email, teamId.rows[0].id]
-    )
+    const insertUserQuery = `
+    INSERT INTO users (name_last, name_first, email, team_id)
+    VALUES ($1, $2, $3, $4)
+    `
+
+    // Add new user
+    await pool.query(insertUserQuery, [lastName, firstName, email, teams.rows[0].id])
+
     res.json({ message: "User added successfully" })
   } catch (error) {
     console.error("Error adding user:", error)
@@ -104,29 +120,35 @@ router.post("/", async (req: Request, res: any) => {
   }
 })
 
-// Delete User POST
+// DELETE /:id -> Delete User with Id
 router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
-    const query = "DELETE FROM users WHERE id = $1"
-    const result = await pool.query(query, [id])
+    const query = `
+    DELETE FROM users
+    WHERE id = $1
+    `
 
-    if (result.rowCount !== 0) {
-      res.status(200).json({ message: "User deleted successfully" })
-    } else {
-      res.status(404).json({ message: "User not found" })
-    }
+    // Delete user
+    await pool.query(query, [id])
+
+    res.status(200).json({ message: "User deleted successfully" })
   } catch (error) {
     console.error("Error deleting user:", error)
     res.status(500).json({ error: "Failed to delete user" })
   }
 })
 
-// Get all teams
+// GET /teams -> Get all Teams
 router.get("/teams", async (req: Request, res: Response) => {
   try {
-    const query = "SELECT team FROM teams ORDER BY team ASC"
+    const query = `
+    SELECT team
+    FROM teams
+    ORDER BY team ASC`
+
+    // Get all teams
     const result = await pool.query(query)
 
     res.json(result.rows)

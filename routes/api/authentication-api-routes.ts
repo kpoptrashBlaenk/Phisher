@@ -1,37 +1,38 @@
-import express from "express"
-import { Request, Response } from "express"
-//@ts-ignore
-import passwordValidator from "password-validator"
+import express, { Request } from "express"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+//@ts-ignore because password validator is for older esmodules
+import passwordValidator from "password-validator"
 import pool from "../../config/database-config"
 import { AdminsRow } from "../../types/database"
 const router = express.Router()
 
-// Register POST
+// POST /register -> Update Admin
 router.post("/register", async (req: Request, res: any) => {
   const { email, password } = req.body
 
-  // Check both
+  // Check if both
   if (!email && !password) {
     return res.status(400).send({ context: "both", message: "Email and password are required." })
   }
 
-  // Check email
+  // Check if email
   if (!email) {
     return res.status(400).send({ context: "email", message: "Email is required." })
   }
 
+  // Check email format
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   if (!emailRegex.test(email)) {
     return res.status(400).send({ context: "email", message: "Invalid email format." })
   }
 
-  // Check password
+  // Check if password
   if (!password) {
     return res.status(400).send({ context: "password", message: "Password is required." })
   }
 
+  // Password validator
   const schema = new passwordValidator()
   schema.is().min(8)
   schema.is().max(20)
@@ -40,15 +41,14 @@ router.post("/register", async (req: Request, res: any) => {
   schema.has().digits()
   schema.has().not().spaces()
 
+  // Validate password
   if (!schema.validate(password)) {
     return res
       .status(400)
       .send({ context: "password", message: "The password is not strong enough." })
   }
 
-  // Try register
   try {
-    // Check if admins access
     const findAccessQuery = `
       SELECT *
       FROM admins
@@ -56,51 +56,51 @@ router.post("/register", async (req: Request, res: any) => {
       `
     const accessResult = await pool.query<AdminsRow>(findAccessQuery, [email])
 
+    // Check if admins access
     if (accessResult.rowCount === 0) {
       return res.status(400).send({ message: "You don't have this right." })
     }
 
-    // Check already account
     const findAdminQuery = `
         SELECT  *
         FROM admins
         WHERE admins.email = $1 AND admins.password IS NOT NULL
         `
 
-    const result = await pool.query(findAdminQuery, [email])
+    const adminResult = await pool.query(findAdminQuery, [email])
 
-    if (result.rowCount !== 0) {
-      return res.status(400).send({ context: "email", message: "User already exists." })
+    // Check already account
+    if (adminResult.rowCount !== 0) {
+      return res.status(400).send({ context: "email", message: "Admin already exists." })
     }
 
-    // Register
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const updateAdminQuery = `UPDATE admins SET password = $2 WHERE email = $1 RETURNING *`
-    const updateResult = await pool.query(updateAdminQuery, [email, hashedPassword])
+    const updateAdminQuery = `
+    UPDATE admins
+    SET password = $2
+    WHERE email = $1
+    `
+    await pool.query(updateAdminQuery, [email, hashedPassword])
 
-    if (updateResult.rowCount !== 0) {
-      return res.status(201).send()
-    }
-
-    return res.status(500).send({ context: "both", message: "Error adding the admin." })
+    res.status(200).json({ message: "Admin added successfully" })
   } catch (error) {
     console.error("Error during registration:", error)
     return res.status(500).send({ context: "both", message: "Error adding the admin." })
   }
 })
 
-// Login POST
+// POST /login -> Login Admin
 router.post("/login", async (req: Request, res: any) => {
   const { email, password } = req.body
 
-  if (!password || password.length === 0) {
+  // Check if password
+  if (password && password.length === 0) {
     return res.status(400).send({ context: "password", message: "No password provided." })
   }
 
-  // Try login
   try {
-    // Check for email
     const findAdminQuery = `
         SELECT  *
         FROM admins
@@ -109,30 +109,37 @@ router.post("/login", async (req: Request, res: any) => {
 
     const result = await pool.query<AdminsRow>(findAdminQuery, [email])
 
+    // Check if admin exists
     if (result.rowCount === 0 || !result.rows[0]?.password) {
       return res.status(400).send({ context: "email", message: "No user with this email." })
     }
 
-    // Check for password
+    // Check if password matches
     const passwordMatch = await bcrypt.compare(password, result.rows[0].password)
     if (!passwordMatch) {
       return res.status(400).send({ context: "password", message: "The password is wrong." })
     }
 
-    // Cookies
+    // Create cookies
     const secretKey =
       "nxX23sKMGYjZfdb9aTcpVZuv86suwTwmJEBt1i5l4eNqpDBd1dbgolI2O4LGLz9mOiQA6QcABAItCqIqDMn93g=="
     const token = jwt.sign({ email }, secretKey, { expiresIn: "30d" })
 
     res.cookie("phisher", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // only https in production (need ssl/tls in prod)
+      secure: false,
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
       sameSite: "strict",
     })
 
     try {
-      const query = "UPDATE admins SET cookies = $2 WHERE email = $1"
+      const query = `
+      UPDATE admins
+      SET cookies = $2
+      WHERE email = $1
+      `
+
+      // Update admin with cookies
       await pool.query(query, [email, token])
     } catch (error) {
       console.error("Error during cookies saving:", error)
@@ -140,7 +147,7 @@ router.post("/login", async (req: Request, res: any) => {
     }
 
     // Login
-    return res.status(201).send({ redirect: "/" })
+    return res.status(200).send({ redirect: "/" })
   } catch (error) {
     console.error("Error during login:", error)
     return res.status(500).send({ context: "both", message: "Error logging in the admin." })

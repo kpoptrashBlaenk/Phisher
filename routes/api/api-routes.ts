@@ -1,12 +1,13 @@
 import express from "express"
-import userApiRoutes from "./user-api-routes"
-import trackingApiRoutes from "./tracking-api-routes"
-import authenticationApiRoutes from "./authentication-api-routes"
 import adminApiRoutes from "./admin-api-routes"
+import authenticationApiRoutes from "./authentication-api-routes"
 import emailApiRoutes from "./email-api-routes"
+import trackingApiRoutes from "./tracking-api-routes"
+import userApiRoutes from "./user-api-routes"
+
 const router = express.Router()
 
-// User routes
+// Api routes
 router.use("/users", userApiRoutes)
 router.use("/tracking", trackingApiRoutes)
 router.use("/authentication", authenticationApiRoutes)
