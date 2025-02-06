@@ -32,8 +32,6 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction):
         ? selectAdminByCoookieResult.rows[0].cookies === req.cookies.phisher
         : false
 
-    console.log(req.path)
-
     // If not logging page (sign)
     if (req.path !== "/authentication/sign" && req.path !== "/sign") {
       // If has cookies, continue
@@ -56,7 +54,7 @@ const isAuthenticated = async (req: Request, res: Response, next: NextFunction):
     }
 
     // Fallback, go to login page
-    return res.redirect("/authentication/sign")
+    next()
   } catch (error) {
     console.error("Authentication error", error)
     // instead of return because this must return promise and not void
