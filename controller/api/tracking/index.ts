@@ -2,11 +2,12 @@ import express, { Request, Response } from "express"
 import { getTrackingLogs, getTrackingLogsById } from "./get"
 import redirection from "../../../utils/redirection"
 import { addTrackingLog } from "./add"
+import authOnly from "../../../middleware/auth"
 
 const router = express.Router()
 
 // GET /get -> All Tracking Logs
-router.get("/get", async (req: Request, res: Response) => {
+router.get("/get", authOnly, async (req: Request, res: Response) => {
   try {
     // Get tracking logs
     const trackingLogs = await getTrackingLogs()
@@ -19,7 +20,7 @@ router.get("/get", async (req: Request, res: Response) => {
 })
 
 // GET /count/:id -> Count logs of this user
-router.get("/count/:id", async (req, res) => {
+router.get("/count/:id", authOnly, async (req, res) => {
   const { id } = req.params
 
   try {

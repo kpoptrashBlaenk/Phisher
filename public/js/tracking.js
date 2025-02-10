@@ -52,7 +52,7 @@ async function fetchLogs() {
       // Small for message
       const small = document.createElement("small")
       small.classList.add("d-block", "text-body-tertiary")
-      small.innerText = `${log.message} in ${log.page} template.`
+      small.innerText = `Opened ${log.message} in ${log.page} template.`
 
       // Append
       upperDiv.appendChild(spanStart)
