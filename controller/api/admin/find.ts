@@ -41,3 +41,13 @@ export async function findAdminById(id: string): Promise<QueryResult<AdminsRow>>
 
   return await dbQuery(query, params)
 }
+
+export async function findAdminByCookies(cookies: string): Promise<QueryResult<AdminsRow>> {
+  const query = `SELECT *
+    FROM admins
+    WHERE admins.cookies = $1`
+
+  const params = [cookies]
+
+  return await dbQuery(query, params)
+}
