@@ -71,7 +71,7 @@ router.post("/", async (req: Request, res: Response) => {
         }
       } catch (error: any) {
         console.error(`Error sending email to ${user.email}:`, error)
-        errors.push(`Error sending email to ${user.email}: ${error.message}`)
+        errors.push(`Faield to send email to ${user.email}.`)
       }
     }) // End of map
 
@@ -80,13 +80,13 @@ router.post("/", async (req: Request, res: Response) => {
 
     // If errors, show
     if (errors.length !== 0) {
-      return res.status(500).send(`Some emails failed to send. Errors: ${errors.join(",\n")}`)
+      return res.status(500).send(errors.join(",\n"))
     }
 
     // Success
-    res.send(`${users.rowCount} Emails sent to users!`)
+    res.send(`${users.rowCount} emails sent.`)
   } catch (error) {
     console.error("Error sending emails:", error)
-    res.status(500).send("Failed sending emails.")
+    res.status(500).send("Failed to send emails.")
   }
 })
