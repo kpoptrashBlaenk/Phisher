@@ -5,7 +5,7 @@ import authenticationRoutes from "./controller/authentication/authentication-rou
 import interfaceRoutes from "./controller/main/index"
 import templateRoutes from "./controller/template/index"
 import trackingRoutes from "./controller/api/tracking/tracking-routes"
-import isAuthenticated from "./utils/authentication"
+import isAuthenticated from "./middleware/middleware"
 
 const app = express()
 
