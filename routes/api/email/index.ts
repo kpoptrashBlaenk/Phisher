@@ -17,7 +17,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   // Check if emails
   if (emails?.length === 0) {
-    return res.status(500).send("No users selected.")
+    return res.status(400).send("No users selected.")
   }
 
   try {
@@ -26,7 +26,7 @@ router.post("/", async (req: Request, res: Response) => {
 
     // Check if users
     if (users.rowCount === 0) {
-      return res.send("No users to send emails to.")
+      return res.status(404).send("No users to send emails to.")
     }
 
     // Prepare errors
