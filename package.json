@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npm install",
     "start": "tsx server.ts",
-    "db": "db-connection.bat"
+    "db": "db-connection.bat",
+    "migrate": "tsx config/migration.ts"
   },
   "keywords": [],
   "author": "",
