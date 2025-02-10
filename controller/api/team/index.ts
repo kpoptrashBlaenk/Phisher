@@ -3,8 +3,8 @@ import { getTeams } from "./get"
 
 const router = express.Router()
 
-// GET /teams -> Get all Teams
-router.get("/teams", async (req: Request, res: Response) => {
+// GET /get -> Get all Teams
+router.get("/get", async (req: Request, res: Response) => {
   try {
     // Get teams
     const teams = await getTeams()

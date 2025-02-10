@@ -6,8 +6,8 @@ import getAdmins from "./get"
 
 const router = express.Router()
 
-// GET / -> All Admins
-router.get("/", async (req: Request, res: Response) => {
+// GET /get -> All Admins
+router.get("/get", async (req: Request, res: Response) => {
   try {
     // Get admins
     const admins = await getAdmins()
@@ -19,8 +19,8 @@ router.get("/", async (req: Request, res: Response) => {
   }
 })
 
-// POST / -> Add Admin
-router.post("/", async (req: Request, res: Response) => {
+// POST /add -> Add Admin
+router.post("/add", async (req: Request, res: Response) => {
   const { email } = req.body
 
   // Check if email provided
@@ -47,8 +47,8 @@ router.post("/", async (req: Request, res: Response) => {
   }
 })
 
-// DELETE /:id -> Delete admin
-router.delete("/:id", async (req: Request, res: Response) => {
+// DELETE /delete/:id -> Delete admin
+router.delete("/delete/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   // Check if id provided

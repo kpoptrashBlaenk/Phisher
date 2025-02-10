@@ -5,8 +5,8 @@ import { addTrackingLog } from "./add"
 
 const router = express.Router()
 
-// GET / -> All Tracking Logs
-router.get("/", async (req: Request, res: Response) => {
+// GET /get -> All Tracking Logs
+router.get("/get", async (req: Request, res: Response) => {
   try {
     // Get tracking logs
     const trackingLogs = await getTrackingLogs()
@@ -32,7 +32,7 @@ router.get("/count/:id", async (req, res) => {
   }
 })
 
-// GET /page/:message/:id
+// GET /page/:message/:id -> Add tracking log
 router.get("/:page/:message/:id", async (req, res) => {
   const { page, message, id } = req.params
   const redirect = redirection("views/redirection.html")

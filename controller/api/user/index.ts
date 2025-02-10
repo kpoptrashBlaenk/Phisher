@@ -1,15 +1,14 @@
 import express, { Request, Response } from "express"
-import { getUsersByMail } from "../../../utils/users"
 import { findTeam } from "../team/find"
 import { addUser } from "./add"
 import { deleteUser } from "./delete"
 import { findUserByEmail } from "./find"
-import { getUsers } from "./get"
+import { getUsers, getUsersByEmail } from "./get"
 
 const router = express.Router()
 
-// GET / -> All Users with Teams and OUs
-router.get("/", async (req: Request, res: Response) => {
+// GET /get -> All Users with Teams and OUs
+router.get("/get", async (req: Request, res: Response) => {
   try {
     // Get users
     const users = await getUsers()
@@ -32,7 +31,7 @@ router.post("/get", async (req: Request, res: any) => {
 
   try {
     // Get users by email
-    const users = await getUsersByMail(emails)
+    const users = await getUsersByEmail(emails)
 
     return res.status(200).json(users)
   } catch (error) {
@@ -41,8 +40,8 @@ router.post("/get", async (req: Request, res: any) => {
   }
 })
 
-// POST / -> Add User
-router.post("/", async (req: Request, res: any) => {
+// POST /add -> Add User
+router.post("/add", async (req: Request, res: any) => {
   const { lastName, firstName, email, team } = req.body
 
   // Check if last name provided
@@ -91,8 +90,8 @@ router.post("/", async (req: Request, res: any) => {
   }
 })
 
-// DELETE /:id -> Delete User with Id
-router.delete("/:id", async (req: Request, res: Response) => {
+// DELETE /delete/:id -> Delete User with Id
+router.delete("/delete/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {

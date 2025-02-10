@@ -11,8 +11,8 @@ const router = express.Router()
 
 dotenv.config()
 
-// POST / -> Send Mails
-router.post("/", async (req: Request, res: Response) => {
+// POST /send -> Send Mails
+router.post("/send", async (req: Request, res: Response) => {
   const { emails, template } = req.body
 
   // Check if emails
