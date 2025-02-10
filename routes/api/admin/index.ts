@@ -20,7 +20,7 @@ router.get("/", async (req: Request, res: Response) => {
 })
 
 // POST / -> Add Admin
-router.post("/", async (req: Request, res: any) => {
+router.post("/", async (req: Request, res: Response) => {
   const { email } = req.body
 
   // Check if email provided
@@ -51,6 +51,11 @@ router.post("/", async (req: Request, res: any) => {
 router.delete("/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
+  // Check if id provided
+  if (!id) {
+    return res.status(422).json("Id is required")
+  }
+
   try {
     // Find admin
     const admin = await findAdminById(id)
@@ -63,7 +68,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
     // Delete admin
     await deleteAdmin(id)
 
-    res.status(200).json("Admin deleted successfully")
+    res.status(204).json("Admin deleted successfully")
   } catch (error) {
     console.error("Error deleting admin:", error)
     res.status(500).json("Failed to delete admin")

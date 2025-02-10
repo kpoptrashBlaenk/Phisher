@@ -4,7 +4,7 @@ import dbQuery from "../../../utils/query-helper"
 
 async function getAdmins(): Promise<QueryResult<AdminsRow>> {
   const query = `SELECT *
-  FROM admins`
+    FROM admins`
 
   return await dbQuery(query, [])
 }
