@@ -1,31 +1,31 @@
 import dotenv from "dotenv"
-import express, { Request } from "express"
-import pool from "../../config/database-config"
-import transporter from "../../config/email-config"
-import emailTemplateJobProposition from "../../templates/job-proposition/job-proposition"
-import emailTemplatePassword from "../../templates/password/password"
-import { UsersRow } from "../../types/database"
-import { getUsersByMail } from "../../utils/users"
+import express, { Request, Response } from "express"
+import transporter from "../../../config/email-config"
+import emailTemplateJobProposition from "../../../templates/job-proposition/job-proposition"
+import emailTemplatePassword from "../../../templates/password/password"
+import { UsersRow } from "../../../types/database"
+import { getUsersByEmail } from "../user/get"
+import { addEmail } from "./add"
 
 const router = express.Router()
 
 dotenv.config()
 
 // POST / -> Send Mails
-router.post("/", async (req: Request, res: any) => {
+router.post("/", async (req: Request, res: Response) => {
   const { emails, template } = req.body
 
   // Check if emails
   if (emails?.length === 0) {
-    return res.status(500).send("No users selected")
+    return res.status(500).send("No users selected.")
   }
 
   try {
     // Get users from emails
-    const users = await getUsersByMail(emails)
+    const users = await getUsersByEmail(emails)
 
     // Check if users
-    if (users.length === 0) {
+    if (users.rowCount === 0) {
       return res.send("No users to send emails to.")
     }
 
@@ -33,7 +33,7 @@ router.post("/", async (req: Request, res: any) => {
     const errors: string[] = []
 
     // For each user, create email
-    const emailPromises = users.map(async (user: UsersRow) => {
+    const emailPromises = users.rows.map(async (user: UsersRow) => {
       let mailOptions
 
       // Switch case for mailOptions
@@ -63,37 +63,30 @@ router.post("/", async (req: Request, res: any) => {
         // If template found, send email
         if (mailOptions) {
           await transporter.sendMail(mailOptions)
+
+          // Add email
+          await addEmail(user.id, template)
+
+          console.log(`Email sent to ${user.email}`)
         }
-
-        const insertEmailsQuery = `
-        INSERT INTO emails(user_id, template)
-        VALUES ($1, $2)
-        `
-
-        // Save sent email to emails
-        await pool.query(insertEmailsQuery, [user.id, template])
-
-        console.log(`Email sent to ${user.email}`)
       } catch (error: any) {
         console.error(`Error sending email to ${user.email}:`, error)
         errors.push(`Error sending email to ${user.email}: ${error.message}`)
       }
-    })
+    }) // End of map
 
     // Wait for emails to be sent
     await Promise.all(emailPromises)
 
     // If errors, show
     if (errors.length !== 0) {
-      return res.status(500).send(`Some emails failed to send. Errors: ${errors.join(", ")}`)
+      return res.status(500).send(`Some emails failed to send. Errors: ${errors.join(",\n")}`)
     }
 
     // Success
-    res.send(`${users.length} Emails sent to users!`)
+    res.send(`${users.rowCount} Emails sent to users!`)
   } catch (error) {
-    console.error("Error fetching users or sending emails:", error)
-    res.status(500).send("An error occurred while sending emails.")
+    console.error("Error sending emails:", error)
+    res.status(500).send("Failed sending emails.")
   }
 })
-
-export default router

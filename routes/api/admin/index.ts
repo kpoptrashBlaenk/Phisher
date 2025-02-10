@@ -15,7 +15,7 @@ router.get("/", async (req: Request, res: Response) => {
     res.json(admins.rows)
   } catch (error) {
     console.error("Error getting admins:", error)
-    res.status(500).json("Failed to get admins")
+    res.status(500).json("Failed to get admins.")
   }
 })
 
@@ -25,7 +25,7 @@ router.post("/", async (req: Request, res: Response) => {
 
   // Check if email provided
   if (!email) {
-    return res.status(422).json("Email is required")
+    return res.status(422).json("Email is required.")
   }
 
   try {
@@ -34,16 +34,16 @@ router.post("/", async (req: Request, res: Response) => {
 
     // Check if admin already exists
     if (admin.rowCount !== 0) {
-      return res.status(409).json("Admin already exists")
+      return res.status(409).json("Admin already exists.")
     }
 
     // Add admin
     await addAdmin(email)
 
-    res.status(201).json("Admin successfully added")
+    res.status(201).json("Admin successfully added.")
   } catch (error) {
     console.error("Error adding admin:", error)
-    res.status(500).json("Failed to add admin")
+    res.status(500).json("Failed to add admin.")
   }
 })
 
@@ -53,7 +53,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
   // Check if id provided
   if (!id) {
-    return res.status(422).json("Id is required")
+    return res.status(422).json("Id is required.")
   }
 
   try {
@@ -62,16 +62,16 @@ router.delete("/:id", async (req: Request, res: Response) => {
 
     // Check if admin exists
     if (admin.rowCount === 0) {
-      return res.status(404).json("Admin doesn't exists")
+      return res.status(404).json("Admin doesn't exists.")
     }
 
     // Delete admin
     await deleteAdmin(id)
 
-    res.status(204).json("Admin deleted successfully")
+    res.status(204).json("Admin deleted successfully.")
   } catch (error) {
     console.error("Error deleting admin:", error)
-    res.status(500).json("Failed to delete admin")
+    res.status(500).json("Failed to delete admin.")
   }
 })
 

@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express"
+import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 //@ts-ignore because password validator is for older esmodules
 import passwordValidator from "password-validator"
 import { findAdminByEmail, findAdminByEmailNoPassword, findAdminByEmailWithPassword } from "../admin/find"
-import bcrypt from "bcrypt"
 import { updateAdminCookies, updateAdminPassword } from "../admin/update"
-import jwt from "jsonwebtoken"
 
 const router = express.Router()
 
