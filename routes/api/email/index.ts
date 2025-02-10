@@ -90,3 +90,5 @@ router.post("/", async (req: Request, res: Response) => {
     res.status(500).send("Failed to send emails.")
   }
 })
+
+export default router
