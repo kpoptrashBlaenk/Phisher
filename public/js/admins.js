@@ -96,7 +96,7 @@ async function addAdmin(email) {
 async function deleteAdmin(adminId) {
   try {
     // Delete admin using /admins:id api
-    const response = await fetch(`/api/admin/${adminId}`, {
+    const response = await fetch(`/api/admin/delete/${adminId}`, {
       method: "DELETE",
     })
 

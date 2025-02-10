@@ -68,7 +68,7 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
     // Delete admin
     await deleteAdmin(id)
 
-    return res.status(204).json("Admin deleted successfully.")
+    return res.status(200).json("Admin deleted successfully.")
   } catch (error) {
     console.error("Error deleting admin:", error)
     return res.status(500).json("Failed to delete admin.")
