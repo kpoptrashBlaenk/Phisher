@@ -12,7 +12,7 @@ function emailTemplateJobProposition(user: UsersRow) {
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
   // Variables for replacement
-  const baseLink = `${process.env.HOST || `http://localhost:${process.env.PORT}`}/track/job-proposition/{{clickType}}/${
+  const baseLink = `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/tracking/job-proposition/{{clickType}}/${
     user.id
   }`
 

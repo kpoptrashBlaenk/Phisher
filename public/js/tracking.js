@@ -2,20 +2,21 @@
 async function fetchLogs() {
   try {
     // Get tracking logs using /tracking api
-    const response = await fetch("/api/tracking")
+    const response = await fetch("/api/tracking/get")
 
-    if (!response) {
-      throw new Error("Failed to fetch tracking logs")
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error(result)
+      return
     }
-
-    const logs = await response.json()
 
     // Get tracking log list element and empty it
     const trackList = document.querySelector("#trackingLogList")
     trackList.innerHTML = ""
 
     // Create tracking log list items
-    logs.forEach(async (log) => {
+    result.forEach(async (log) => {
       // Format Date
       const date = new Date(log.timestamp)
       const formattedDate = date.toLocaleString("fr-FR", {
