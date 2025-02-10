@@ -2,20 +2,20 @@
 async function fetchAdmins() {
   try {
     // Fetch admins using /admins api
-    const response = await fetch("/api/admins")
+    const response = await fetch("/api/admin/get")
 
-    if (!response) {
-      throw new Error("Failed to fetch admins")
+    const result = await response.json()
+
+    if (!response.ok) {
+      return
     }
-
-    const admins = await response.json()
 
     // Get lsit element
     const adminList = document.querySelector("#adminsList")
     adminList.innerHTML = ""
 
     // Create admin list items
-    admins.forEach((admin) => {
+    result.forEach((admin) => {
       // Div
       const div = document.createElement("div")
       div.classList.add("list-group-item", "d-flex", "align-items-center", "gap-2", "justify-content-between")
@@ -62,7 +62,7 @@ async function addAdmin(email) {
 
   try {
     // Add admin using /admins api
-    const response = await fetch("/api/admins", {
+    const response = await fetch("/api/admin/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -74,14 +74,14 @@ async function addAdmin(email) {
 
     // If not ok, error
     if (!response.ok) {
-      errorText.innerText = result.message
+      errorText.innerText = result
       errorText.classList.add("text-danger")
       errorText.classList.remove("text-success")
       return
     }
 
     // Success and fetch again
-    errorText.innerText = result.message
+    errorText.innerText = result
     errorText.classList.remove("text-danger")
     errorText.classList.add("text-success")
     document.querySelector("#addAdminEmail").value = ""
@@ -96,14 +96,15 @@ async function addAdmin(email) {
 async function deleteAdmin(adminId) {
   try {
     // Delete admin using /admins:id api
-    const response = await fetch(`/api/admins/${adminId}`, {
+    const response = await fetch(`/api/admin/${adminId}`, {
       method: "DELETE",
     })
 
+    const result = await response.json()
+
     // If not ok, error
     if (!response.ok) {
-      const result = await response.json()
-      alert(result.message || "Failed to delete admin")
+      alert(result)
     }
 
     fetchAdmins()

@@ -12,7 +12,7 @@ router.get("/get", async (req: Request, res: Response) => {
     // Get admins
     const admins = await getAdmins()
 
-    res.json(admins.rows)
+    return res.json(admins.rows)
   } catch (error) {
     console.error("Error getting admins:", error)
     return res.status(500).json("Failed to get admins.")
