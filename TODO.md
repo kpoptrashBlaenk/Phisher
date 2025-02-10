@@ -17,16 +17,17 @@
 - [x] Better Email Template
 - [x] Email Preview & Test Mail to admin
 - [x] Personalized infos (name, uo, équipe)
-- [ ] Bulk import of users
+- [x] Different types of phishing
+- [x] Redirection to failure page
 - [x] Better logs (don't know waht to add yet)
+
+- [ ] Bulk import of users
 - [ ] Analytics + Graphs (Total emails sent, click rates over time, percentage of users clicked)
 - [ ] Add attachments to the template and track this as well
 - [ ] Add forms within the mails to harvest infos (see if they give sensitive data, hash infos maybe to avoid problems with taking sensitive data from them)
-- [x] Different types of phishing
-- [x] Redirection to failure page
 - [ ] Use 2FA to see how far they'd go
 - [ ] Check if people reply to mail
 
 
 
-# TESTING TESTING TESTING AND CREATE AN MVC MODEL ORGANIZATION BECAUSE /TRACK IS NOT WORKING BECAUSE AXIOS REFUSES TO SEND COOKIES
+# TESTING TESTING TESTING
