@@ -19,3 +19,5 @@ async function authOnly(req: Request, res: Response, next: NextFunction): Promis
     console.error("Authentication error", error)
   }
 }
+
+export default authOnly

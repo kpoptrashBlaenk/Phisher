@@ -19,3 +19,5 @@ async function guestOnly(req: Request, res: Response, next: NextFunction): Promi
     console.error("Authentication error", error)
   }
 }
+
+export default guestOnly
