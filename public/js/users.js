@@ -11,20 +11,21 @@ async function fetchUsers() {
 
   try {
     // Get all users using /users api
-    const response = await fetch("/api/users")
+    const response = await fetch("/api/user/get")
 
-    if (!response) {
-      throw new Error("Failed to fetch users")
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error(result)
+      return
     }
-
-    const users = await response.json()
 
     // Get users list element and empty it
     const userList = document.querySelector("#usersList")
     userList.innerHTML = ""
 
     // For each user create user list item
-    for (const user of users) {
+    for (const user of result) {
       // Div
       const div = document.createElement("div")
       div.classList.add("list-group-item", "align-items-center", "d-flex", "flex-column")
@@ -36,13 +37,14 @@ async function fetchUsers() {
       userCounterTotal++
 
       // Get this users counter using /tracking/count:id api
-      const responseCounter = await fetch(`/api/tracking/count/${user.id}`)
+      const response = await fetch(`/api/tracking/count/${user.id}`)
 
-      if (!responseCounter) {
-        throw new Error("Failed to fetch counter")
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.error(result)
+        return
       }
-
-      const counter = await responseCounter.json()
 
       // Upper Div
       const row1 = document.createElement("div")
@@ -83,7 +85,7 @@ async function fetchUsers() {
       // Small for counter
       const userCounter = document.createElement("small")
       userCounter.classList.add("d-block", "text-body-secondary")
-      userCounter.innerText = `Total: ${counter.count}`
+      userCounter.innerText = `Total: ${result.count}`
 
       // Right Div of lower div
       const userTeamOU = document.createElement("div")
@@ -124,18 +126,15 @@ async function fetchUsers() {
 async function deleteUser(userId) {
   try {
     // Delete user using /users:id api
-    const response = await fetch(`/api/users/${userId}`, {
+    const response = await fetch(`/api/user/delete/${userId}`, {
       method: "DELETE",
     })
 
-    if (!response) {
-      throw new Error("Failed to delete user")
-    }
+    const result = await response.json()
 
-    // If not ok, error
     if (!response.ok) {
-      const result = await response.json()
-      alert(result.message || "Failed to delete user")
+      console.error(result)
+      return
     }
 
     fetchUsers()
@@ -148,19 +147,20 @@ async function deleteUser(userId) {
 async function fetchTeams() {
   try {
     // Get all teams using /users/teams api
-    const response = await fetch("/api/users/teams")
+    const response = await fetch("/api/team/get")
 
-    if (!response) {
-      throw new Error("Failed to fetch teams")
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error(result)
+      return
     }
-
-    const teams = await response.json()
 
     // Get team dropdown element
     const teamSelect = document.querySelector("#addUserTeam")
 
     // For each team create option for dropdown
-    teams.forEach((team) => {
+    result.forEach((team) => {
       // Option
       const option = document.createElement("option")
       option.value = team.team
@@ -188,7 +188,7 @@ async function addUser(lastName, firstName, email, team) {
 
   try {
     // Add user using /users api
-    const response = await fetch("/api/users", {
+    const response = await fetch("/api/user/add", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -200,14 +200,14 @@ async function addUser(lastName, firstName, email, team) {
 
     // If not ok, error
     if (!response.ok) {
-      errorText.innerText = result.message
+      errorText.innerText = result
       errorText.classList.add("text-danger")
       errorText.classList.remove("text-success")
       return
     }
 
     // Success
-    errorText.innerText = result.message
+    errorText.innerText = result
     errorText.classList.remove("text-danger")
     errorText.classList.add("text-success")
     lastNameElement.value = ""
@@ -216,7 +216,6 @@ async function addUser(lastName, firstName, email, team) {
     teamElement.value = ""
     fetchUsers()
   } catch (error) {
-    console.error("Error adding user:", error)
     errorTextinnerText = "An error occurred while adding the user."
   }
 }
