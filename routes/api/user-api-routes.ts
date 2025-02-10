@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express"
 import pool from "../../config/database-config"
 import { Teams, UsersRow, UsersTeamOURow } from "../../types/database"
+import { getUsersByMail } from "../../utils/users"
 const router = express.Router()
 
 // GET / -> All Users with Teams and OUs
@@ -41,27 +42,10 @@ router.post("/get", async (req: Request, res: any) => {
   }
 
   try {
-    const selectUsersTeamsOUsByEmailQuery = `
-    SELECT
-      users.id AS id,
-      users.name_first,
-      users.name_last,
-      users.email,
-      teams.id AS team_id,
-      teams.team,
-      ous.id AS ou_id,
-      ous.ou
-    FROM users
-    JOIN teams ON users.team_id = teams.id
-    JOIN ous ON teams.ou_id = ous.id
-    WHERE users.email = ANY($1)
-    ORDER BY users.name_last ASC, users.name_first ASC
-    `
-
     // Get users by email
-    const selectUsersTeamsOUsByEmailResult = await pool.query<UsersRow>(selectUsersTeamsOUsByEmailQuery, [emails])
+    const users = await getUsersByMail(emails)
 
-    return res.json(selectUsersTeamsOUsByEmailResult.rows)
+    return res.json(users)
   } catch (error) {
     console.error("Error fetching users", error)
     return res.status(500).json({ error: "Failed to fetch users" })

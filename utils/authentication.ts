@@ -4,6 +4,8 @@ import { AdminsRow } from "../types/database"
 
 // Check if user is authenticated then redirect
 async function isAuthenticated(req: Request, res: Response, next: NextFunction): Promise<void> {
+  console.log(req.path)
+  console.log(req.cookies.phisher)
   try {
     // Get admin with the saved cookies
     const selectAdminByCoookieQuery = `

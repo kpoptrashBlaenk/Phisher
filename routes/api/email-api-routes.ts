@@ -1,4 +1,3 @@
-import axios from "axios"
 import dotenv from "dotenv"
 import express, { Request } from "express"
 import pool from "../../config/database-config"
@@ -6,6 +5,7 @@ import transporter from "../../config/email-config"
 import emailTemplateJobProposition from "../../templates/job-proposition/job-proposition"
 import emailTemplatePassword from "../../templates/password/password"
 import { UsersRow } from "../../types/database"
+import { getUsersByMail } from "../../utils/users"
 
 const router = express.Router()
 
@@ -22,12 +22,7 @@ router.post("/", async (req: Request, res: any) => {
 
   try {
     // Get users from emails
-    const response = await axios.post<UsersRow[]>(
-      `${process.env.HOST || `http://localhost:${process.env.PORT}`}/api/users/get`,
-      { emails: emails }
-    )
-
-    const users = response.data
+    const users = await getUsersByMail(emails)
 
     // Check if users
     if (users.length === 0) {
