@@ -20,13 +20,13 @@ export type UsersRow = {
   team_id: number
 }
 
-export type Teams = {
+export type TeamsRow = {
   id: string
   ou_id: string
   team: string
 }
 
-export type OUs = {
+export type OUsRow = {
   id: string
   ou: string
 }

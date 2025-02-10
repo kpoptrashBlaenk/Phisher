@@ -29,3 +29,5 @@ router.get("/count/:id", async (req, res) => {
     res.status(500).json("Failed to get tracking log count.")
   }
 })
+
+export default router
