@@ -70,10 +70,10 @@ router.post("/register", async (req: Request, res: Response) => {
     // Update password
     await updateAdminPassword(email, hashedPassword)
 
-    return res.status(204).json({ message: "Admin added successfully" })
+    return res.status(200).json({ context: "both", message: "Admin added successfully" })
   } catch (error) {
     console.error("Error during registration:", error)
-    return res.status(500).send({ context: "both", message: "Error registering the admin." })
+    return res.status(500).json({ context: "both", message: "Error registering the admin." })
   }
 })
 
@@ -83,12 +83,12 @@ router.post("/login", async (req: Request, res: Response) => {
 
   // Check if email
   if (email && email.length === 0) {
-    return res.status(422).send({ context: "email", message: "No email provided." })
+    return res.status(422).json({ context: "email", message: "No email provided." })
   }
 
   // Check if password
   if (password && password.length === 0) {
-    return res.status(422).send({ context: "password", message: "No password provided." })
+    return res.status(422).json({ context: "password", message: "No password provided." })
   }
 
   try {
@@ -97,13 +97,13 @@ router.post("/login", async (req: Request, res: Response) => {
 
     // Check if admin exists
     if (admin.rowCount === 0 || !admin.rows[0]?.password) {
-      return res.status(404).send({ context: "email", message: "No user with this email." })
+      return res.status(404).json({ context: "email", message: "No user with this email." })
     }
 
     // Check if password matches
     const passwordMatch = await bcrypt.compare(password, admin.rows[0].password)
     if (!passwordMatch) {
-      return res.status(400).send({ context: "password", message: "Wrong password." })
+      return res.status(400).json({ context: "password", message: "Wrong password." })
     }
 
     // Create cookies
@@ -120,10 +120,10 @@ router.post("/login", async (req: Request, res: Response) => {
     // Update cookies
     await updateAdminCookies(email, token)
 
-    return res.status(204).send({ redirect: "/" })
+    return res.status(200).json({ redirect: "/" })
   } catch (error) {
     console.error("Error during login:", error)
-    return res.status(500).send({ context: "both", message: "Error logging in the admin." })
+    return res.status(500).json({ context: "both", message: "Error logging in the admin." })
   }
 })
 

@@ -28,7 +28,7 @@ app.use("/api/admin", authOnly, adminApiRoutes)
 app.use("/api/email", authOnly, emailApiRoutes)
 app.use("/api/team", authOnly, teamApiRoutes)
 app.use("/api/user", authOnly, userApiRoutes)
-app.use("/main", authOnly, mainRoutes)
+app.use("/", authOnly, mainRoutes)
 app.use("/template", authOnly, templateRoutes)
 
 // If route not found, homepage
