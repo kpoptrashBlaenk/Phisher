@@ -22,18 +22,19 @@ let currentTeam = ""
 async function getAllUsers() {
   try {
     // Fetch users using /users api
-    const response = await fetch("/api/users")
+    const response = await fetch("/api/user/get")
 
-    if (!response) {
-      throw new Error("Failed to fetch users")
+    const result = await response.json()
+
+    if (!response.ok) {
+      console.error(result)
+      return
     }
-
-    const users = await response.json()
 
     const allUsers = {}
 
     // form of {ou: {team: [email]}}
-    users.forEach(({ email, team, ou }) => {
+    result.forEach(({ email, team, ou }) => {
       // Create empty if not exists
       if (!allUsers[ou]) {
         allUsers[ou] = {}
@@ -240,7 +241,7 @@ function showUOs() {
 }
 
 // Show Teams in List
-async function showTeams(ou) {
+function showTeams(ou) {
   // Empty list
   emailsList.innerHTML = ""
 
@@ -283,7 +284,7 @@ async function showTeams(ou) {
 }
 
 // Show Agents in List
-async function showAgents(team) {
+function showAgents(team) {
   // Empty list
   emailsList.innerHTML = ""
 
@@ -331,7 +332,7 @@ async function sendEmails(emails, template) {
 
   try {
     // Send mails using /email api
-    const response = await fetch("/api/email", {
+    const response = await fetch("/api/email/send", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -339,18 +340,18 @@ async function sendEmails(emails, template) {
       body: JSON.stringify({ emails, template }),
     })
 
-    const message = await response.text()
+    const result = await response.text()
 
     // If not ok, error
     if (!response.ok) {
-      messageBox.innerText = message
+      messageBox.innerText = result
       messageBox.classList.remove("text-success")
       messageBox.classList.add("text-danger")
       return
     }
 
     // Success then reset selected agents then show ous
-    messageBox.innerText = message
+    messageBox.innerText = result
     messageBox.classList.add("text-success")
     messageBox.classList.remove("text-danger")
     allSelectedAgents = []
@@ -358,7 +359,6 @@ async function sendEmails(emails, template) {
 
     // Error Message
   } catch (error) {
-    console.error("Error sending emails")
     messageBox.innerText = "An error occurred while sending the emails."
     messageBox.classList.add("text-danger")
   }

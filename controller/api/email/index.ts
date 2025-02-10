@@ -84,7 +84,7 @@ router.post("/send", async (req: Request, res: Response) => {
     }
 
     // Success
-    res.send(`${users.rowCount} emails sent.`)
+    res.status(200).send(`${users.rowCount} emails sent.`)
   } catch (error) {
     console.error("Error sending emails:", error)
     return res.status(500).send("Failed to send emails.")

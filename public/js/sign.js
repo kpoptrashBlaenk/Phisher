@@ -46,9 +46,10 @@ registerForm.addEventListener("submit", async (event) => {
       body: JSON.stringify({ email, password }),
     })
 
+    const result = await response.json()
+
     // If not ok, error
     if (!response.ok) {
-      const result = await response.json()
       checkResult(result)
       return
     }
