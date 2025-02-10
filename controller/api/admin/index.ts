@@ -15,7 +15,7 @@ router.get("/", async (req: Request, res: Response) => {
     res.json(admins.rows)
   } catch (error) {
     console.error("Error getting admins:", error)
-    res.status(500).json("Failed to get admins.")
+    return res.status(500).json("Failed to get admins.")
   }
 })
 
@@ -40,10 +40,10 @@ router.post("/", async (req: Request, res: Response) => {
     // Add admin
     await addAdmin(email)
 
-    res.status(201).json("Admin successfully added.")
+    return res.status(201).json("Admin successfully added.")
   } catch (error) {
     console.error("Error adding admin:", error)
-    res.status(500).json("Failed to add admin.")
+    return res.status(500).json("Failed to add admin.")
   }
 })
 
@@ -68,10 +68,10 @@ router.delete("/:id", async (req: Request, res: Response) => {
     // Delete admin
     await deleteAdmin(id)
 
-    res.status(204).json("Admin deleted successfully.")
+    return res.status(204).json("Admin deleted successfully.")
   } catch (error) {
     console.error("Error deleting admin:", error)
-    res.status(500).json("Failed to delete admin.")
+    return res.status(500).json("Failed to delete admin.")
   }
 })
 

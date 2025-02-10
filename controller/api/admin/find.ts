@@ -1,5 +1,5 @@
 import { QueryResult } from "pg"
-import { AdminsRow } from "../../../types/database"
+import { AdminsRow } from "../../../types/types"
 import dbQuery from "../../../utils/query-helper"
 
 export async function findAdminByEmail(email: string): Promise<QueryResult<AdminsRow>> {

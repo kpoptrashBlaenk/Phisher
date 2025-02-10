@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import fs from "fs"
-import { UsersRow } from "../../types/database"
+import { UsersRow } from "../../types/types"
 import redirection from "../../utils/redirection"
 
 dotenv.config()

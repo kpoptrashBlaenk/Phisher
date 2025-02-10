@@ -14,10 +14,10 @@ router.get("/", async (req: Request, res: Response) => {
     // Get users
     const users = await getUsers()
 
-    res.status(500).json(users.rows)
+    return res.status(500).json(users.rows)
   } catch (error) {
     console.error("Error fetching users", error)
-    res.status(500).json({ error: "Failed to get users" })
+    return res.status(500).json({ error: "Failed to get users" })
   }
 })
 
@@ -84,10 +84,10 @@ router.post("/", async (req: Request, res: any) => {
 
     await addUser(lastName, firstName, email, foundTeam.rows[0].id)
 
-    res.status(201).json("User succesfully added.")
+    return res.status(201).json("User succesfully added.")
   } catch (error) {
     console.error("Error adding user:", error)
-    res.status(500).json("Failed to add user.")
+    return res.status(500).json("Failed to add user.")
   }
 })
 
@@ -99,10 +99,10 @@ router.delete("/:id", async (req: Request, res: Response) => {
     // Delete user
     await deleteUser(id)
 
-    res.status(204).json("User successfully deleted.")
+    return res.status(204).json("User successfully deleted.")
   } catch (error) {
     console.error("Error deleting user:", error)
-    res.status(500).json("Failed to delete user.")
+    return res.status(500).json("Failed to delete user.")
   }
 })
 

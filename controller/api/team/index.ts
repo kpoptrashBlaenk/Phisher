@@ -9,10 +9,10 @@ router.get("/teams", async (req: Request, res: Response) => {
     // Get teams
     const teams = await getTeams()
 
-    res.status(200).json(teams.rows)
+    return res.status(200).json(teams.rows)
   } catch (error) {
     console.error("Error fetching teams", error)
-    res.status(500).json("Failed to get teams.")
+    return res.status(500).json("Failed to get teams.")
   }
 })
 

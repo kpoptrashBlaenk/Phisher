@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express"
 import pool from "../config/database-config"
-import { AdminsRow } from "../types/database"
+import { AdminsRow } from "../types/types"
 
 // Check if user is authenticated then redirect
 async function isAuthenticated(req: Request, res: Response, next: NextFunction): Promise<void> {

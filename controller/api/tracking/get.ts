@@ -1,6 +1,6 @@
 import { QueryResult } from "pg"
 import dbQuery from "../../../utils/query-helper"
-import { UsersTrackingLogRow } from "../../../types/database"
+import { UsersTrackingLogRow } from "../../../types/types"
 
 export async function getTrackingLogs(): Promise<QueryResult<UsersTrackingLogRow>> {
   const query = `SELECT *

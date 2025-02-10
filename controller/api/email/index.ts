@@ -3,7 +3,7 @@ import express, { Request, Response } from "express"
 import transporter from "../../../config/email-config"
 import emailTemplateJobProposition from "../../../templates/job-proposition/job-proposition"
 import emailTemplatePassword from "../../../templates/password/password"
-import { UsersRow } from "../../../types/database"
+import { UsersRow } from "../../../types/types"
 import { getUsersByEmail } from "../user/get"
 import { addEmail } from "./add"
 
@@ -87,7 +87,7 @@ router.post("/", async (req: Request, res: Response) => {
     res.send(`${users.rowCount} emails sent.`)
   } catch (error) {
     console.error("Error sending emails:", error)
-    res.status(500).send("Failed to send emails.")
+    return res.status(500).send("Failed to send emails.")
   }
 })
 

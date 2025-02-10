@@ -1,5 +1,5 @@
 import { QueryResult } from "pg"
-import { UsersRow } from "../../../types/database"
+import { UsersRow } from "../../../types/types"
 import dbQuery from "../../../utils/query-helper"
 
 export async function getUsers(): Promise<QueryResult<UsersRow>> {

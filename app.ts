@@ -1,10 +1,10 @@
 import cookieParser from "cookie-parser"
 import express, { Request, Response } from "express"
 import apiRoutes from "./routes/api/api-routes"
-import authenticationRoutes from "./routes/authentication-routes"
-import interfaceRoutes from "./routes/interface-routes"
-import templateRoutes from "./routes/template-routes"
-import trackingRoutes from "./routes/tracking/tracking-routes"
+import authenticationRoutes from "./controller/authentication/authentication-routes"
+import interfaceRoutes from "./controller/main/index"
+import templateRoutes from "./controller/template/index"
+import trackingRoutes from "./controller/api/tracking/tracking-routes"
 import isAuthenticated from "./utils/authentication"
 
 const app = express()

@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express"
-import emailTemplateJobProposition from "../templates/job-proposition/job-proposition"
-import emailTemplatePassword from "../templates/password/password"
-import { UsersRow } from "../types/database"
+import emailTemplateJobProposition from "../../templates/job-proposition/job-proposition"
+import emailTemplatePassword from "../../templates/password/password"
+import { UsersRow } from "../../types/types"
 
 const router = express.Router()
 

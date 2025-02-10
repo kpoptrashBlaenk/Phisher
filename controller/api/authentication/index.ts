@@ -70,7 +70,7 @@ router.post("/register", async (req: Request, res: Response) => {
     // Update password
     await updateAdminPassword(email, hashedPassword)
 
-    res.status(204).json({ message: "Admin added successfully" })
+    return res.status(204).json({ message: "Admin added successfully" })
   } catch (error) {
     console.error("Error during registration:", error)
     return res.status(500).send({ context: "both", message: "Error registering the admin." })

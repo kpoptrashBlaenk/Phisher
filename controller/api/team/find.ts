@@ -1,5 +1,5 @@
 import { QueryResult } from "pg"
-import { TeamsRow } from "../../../types/database"
+import { TeamsRow } from "../../../types/types"
 import dbQuery from "../../../utils/query-helper"
 
 export async function findTeam(team: string): Promise<QueryResult<TeamsRow>> {
