@@ -5,7 +5,6 @@ import { AdminsRow } from "../types/database"
 // Check if user is authenticated then redirect
 async function isAuthenticated(req: Request, res: Response, next: NextFunction): Promise<void> {
   console.log(req.path)
-  console.log(req.cookies.phisher)
   try {
     // Get admin with the saved cookies
     const selectAdminByCoookieQuery = `
@@ -22,15 +21,19 @@ async function isAuthenticated(req: Request, res: Response, next: NextFunction):
         ? selectAdminByCoookieResult.rows[0].cookies === req.cookies.phisher
         : false
 
-    // If not logging page (sign)
+    // If not login page
     if (req.path !== "/authentication/sign" && req.path !== "/sign") {
       // If has cookies, continue
       if (hasCookies) {
         return next()
       }
 
-      // If searching for api (or authentication because of a bug that makes api/auth become auth), continue
-      if (req.path.startsWith("/api") || req.path.startsWith("/authentication") || req.path.startsWith("/users") || req.path.startsWith("/track")) {
+      // If searching for authentication api or track, continue
+      if (
+        req.path.startsWith("/api/authentication") ||
+        req.path.startsWith("/authentication") ||
+        req.path.startsWith("/track")
+      ) {
         return next()
       }
 
