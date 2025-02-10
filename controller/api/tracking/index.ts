@@ -32,8 +32,8 @@ router.get("/count/:id", async (req, res) => {
   }
 })
 
-// GET /click/page/:message/:id
-router.get("/click/:page/:message/:id", async (req, res) => {
+// GET /page/:message/:id
+router.get("/:page/:message/:id", async (req, res) => {
   const { page, message, id } = req.params
   const redirect = redirection("views/redirection.html")
 

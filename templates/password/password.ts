@@ -12,7 +12,7 @@ function emailTemplatePassword(user: UsersRow) {
   let emailTemplate = fs.readFileSync(templatePath, "utf8")
 
   // Variables for replacement
-  const baseLink = `${process.env.HOST || "http://localhost:3001"}/track/password/{{clickType}}?userId=${user.id}`
+  const baseLink = `${process.env.HOST || "http://localhost:3001"}/track/password/{{clickType}}/${user.id}`
   const today = new Date()
   const oneWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
 
