@@ -11,3 +11,13 @@ export async function findUserByEmail(email: string): Promise<QueryResult<UsersR
 
   return await dbQuery(query, params)
 }
+
+export async function findUserById(id: string): Promise<QueryResult<UsersRow>> {
+  const query = `SELECT *
+  FROM users
+  WHERE users.id = $1`
+
+  const params = [id]
+
+  return await dbQuery(query, params)
+}

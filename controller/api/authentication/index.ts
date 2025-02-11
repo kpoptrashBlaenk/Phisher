@@ -1,9 +1,9 @@
-import express, { Request, Response } from "express"
 import bcrypt from "bcrypt"
+import express, { Request, Response } from "express"
 import jwt from "jsonwebtoken"
 //@ts-ignore because password validator is for older esmodules
 import passwordValidator from "password-validator"
-import { findAdminByEmail, findAdminByEmailNoPassword, findAdminByEmailWithPassword } from "../admin/find"
+import { findAdminByEmailNoPassword, findAdminByEmailWithPassword } from "../admin/find"
 import { updateAdminCookies, updateAdminPassword } from "../admin/update"
 
 const router = express.Router()
@@ -92,11 +92,11 @@ router.post("/login", async (req: Request, res: Response) => {
   }
 
   try {
-    // Find admin by email
-    const admin = await findAdminByEmail(email)
+    // Find admin with password
+    const admin = await findAdminByEmailWithPassword(email)
 
-    // Check if admin exists
-    if (admin.rowCount === 0 || !admin.rows[0]?.password) {
+    // Check account exists already
+    if (admin.rowCount !== 0) {
       return res.status(404).json({ context: "email", message: "No user with this email." })
     }
 

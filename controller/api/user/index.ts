@@ -2,8 +2,8 @@ import express, { Request, Response } from "express"
 import { findTeam } from "../team/find"
 import { addUser } from "./add"
 import { deleteUser } from "./delete"
-import { findUserByEmail } from "./find"
-import { getUsers, getUsersByEmail } from "./get"
+import { findUserByEmail, findUserById } from "./find"
+import { getUsers } from "./get"
 
 const router = express.Router()
 
@@ -16,27 +16,7 @@ router.get("/get", async (req: Request, res: Response) => {
     return res.status(200).json(users.rows)
   } catch (error) {
     console.error("Error fetching users", error)
-    return res.status(500).json({ error: "Failed to get users" })
-  }
-})
-
-// POST /get -> Get certain users
-router.post("/get", async (req: Request, res: any) => {
-  const { emails } = req.body
-
-  // Check if email provided
-  if (emails?.length === 0) {
-    return res.status(400).json("No emails provided.")
-  }
-
-  try {
-    // Get users by email
-    const users = await getUsersByEmail(emails)
-
-    return res.status(200).json(users)
-  } catch (error) {
-    console.error("Error fetching users", error)
-    return res.status(500).json("Failed to get users.")
+    return res.status(500).json("Failed to get users")
   }
 })
 
@@ -95,6 +75,14 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
   const { id } = req.params
 
   try {
+    // Find user
+    const user = await findUserById(id)
+
+    // Check if user exists already
+    if (user.rowCount === 0) {
+      return res.status(409).json("User not found")
+    }
+
     // Delete user
     await deleteUser(id)
 

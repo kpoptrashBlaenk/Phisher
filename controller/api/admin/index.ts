@@ -14,7 +14,7 @@ router.get("/get", async (req: Request, res: Response) => {
 
     return res.json(admins.rows)
   } catch (error) {
-    console.error("Error getting admins:", error)
+    console.error("Error fetching admins:", error)
     return res.status(500).json("Failed to get admins.")
   }
 })
