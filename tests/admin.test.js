@@ -53,18 +53,6 @@ describe("Add admin", () => {
   })
 })
 
-// Already exists
-describe("Add admin", () => {
-  it("should return error 409 'Admin already exists'", async () => {
-    const res = await request(`http://localhost:${process.env.PORT}`)
-      .post("/api/admin/add")
-      .send({ email: process.env.ADMIN_ACCESS_EMAIL })
-      .set("Cookie", global.authCookies)
-
-    expect(res.statusCode).toBe(409)
-  })
-})
-
 // Success
 describe("Add admin", () => {
   it("should return 201 'Admin successfully added'", async () => {
@@ -74,6 +62,18 @@ describe("Add admin", () => {
       .set("Cookie", global.authCookies)
 
     expect(res.statusCode).toBe(201)
+  })
+})
+
+// Already exists
+describe("Add admin", () => {
+  it("should return error 409 'Admin already exists'", async () => {
+    const res = await request(`http://localhost:${process.env.PORT}`)
+      .post("/api/admin/add")
+      .send({ email: defaultEmail })
+      .set("Cookie", global.authCookies)
+
+    expect(res.statusCode).toBe(409)
   })
 })
 

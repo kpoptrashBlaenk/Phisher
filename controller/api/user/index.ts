@@ -44,6 +44,11 @@ router.post("/add", async (req: Request, res: any) => {
     return res.status(422).json("Team is required.")
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    return res.status(422).send("Invalid email format.")
+  }
+
   try {
     // Find team
     const foundTeam = await findTeam(team)
@@ -70,6 +75,30 @@ router.post("/add", async (req: Request, res: any) => {
   }
 })
 
+// POST /find -> Find user by email (this exists purely for testing purposes)
+router.post("/find", async (req: Request, res: Response) => {
+  const { email } = req.body
+
+  // Check if email provided
+  if (!email) {
+    return res.status(422).json("Email is required.")
+  }
+
+  try {
+    // Find user
+    const user = await findUserByEmail(email)
+
+    if (user.rowCount === 0) {
+      return res.status(404).json("User not found.")
+    }
+
+    return res.status(200).json(user.rows[0])
+  } catch (error) {
+    console.error("Error finding user:", error)
+    return res.status(500).json("Failed to find user.")
+  }
+})
+
 // DELETE /delete/:id -> Delete User with Id
 router.delete("/delete/:id", async (req: Request, res: Response) => {
   const { id } = req.params
@@ -78,9 +107,9 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
     // Find user
     const user = await findUserById(id)
 
-    // Check if user exists already
+    // Check if user exists
     if (user.rowCount === 0) {
-      return res.status(409).json("User not found")
+      return res.status(404).json("User not found")
     }
 
     // Delete user
