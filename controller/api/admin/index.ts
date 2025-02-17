@@ -12,10 +12,34 @@ router.get("/get", async (req: Request, res: Response) => {
     // Get admins
     const admins = await getAdmins()
 
-    return res.json(admins.rows)
+    return res.status(200).json(admins.rows)
   } catch (error) {
     console.error("Error fetching admins:", error)
     return res.status(500).json("Failed to get admins.")
+  }
+})
+
+// POST /find -> Find admin by email (this exists purely for testing purposes)
+router.post("/find", async (req: Request, res: Response) => {
+  const { email } = req.body
+
+  // Check if email provided
+  if (!email) {
+    return res.status(422).json("Email is required.")
+  }
+
+  try {
+    // Find admin
+    const admin = await findAdminByEmail(email)
+
+    if (admin.rowCount === 0) {
+      return res.status(404).json("Admin not found.")
+    }
+
+    return res.status(200).json(admin.rows[0])
+  } catch (error) {
+    console.error("Error finding admin:", error)
+    return res.status(500).json("Failed to find admin.")
   }
 })
 
@@ -26,6 +50,11 @@ router.post("/add", async (req: Request, res: Response) => {
   // Check if email provided
   if (!email) {
     return res.status(422).json("Email is required.")
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  if (!emailRegex.test(email)) {
+    return res.status(422).send("Invalid email format.")
   }
 
   try {
@@ -62,7 +91,7 @@ router.delete("/delete/:id", async (req: Request, res: Response) => {
 
     // Check if admin exists
     if (admin.rowCount === 0) {
-      return res.status(404).json("Admin doesn't exists.")
+      return res.status(404).json("Admin not found.")
     }
 
     // Delete admin
