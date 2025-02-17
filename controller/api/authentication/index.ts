@@ -82,12 +82,13 @@ router.post("/login", async (req: Request, res: Response) => {
   const { email, password } = req.body
 
   // Check if email
-  if (email && email.length === 0) {
+  // Empty length is usually 15
+  if (email.length <= 15) {
     return res.status(422).json({ context: "email", message: "No email provided." })
   }
 
   // Check if password
-  if (password && password.length === 0) {
+  if (password.length === 0) {
     return res.status(422).json({ context: "password", message: "No password provided." })
   }
 
@@ -95,8 +96,8 @@ router.post("/login", async (req: Request, res: Response) => {
     // Find admin with password
     const admin = await findAdminByEmailWithPassword(email)
 
-    // Check account exists already
-    if (admin.rowCount !== 0) {
+    // Check account exists
+    if (admin.rowCount === 0) {
       return res.status(404).json({ context: "email", message: "No user with this email." })
     }
 
