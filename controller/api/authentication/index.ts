@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"
 import passwordValidator from "password-validator"
 import { findAdminByEmailNoPassword, findAdminByEmailWithPassword } from "../admin/find"
 import { updateAdminCookies, updateAdminPassword } from "../admin/update"
+import getAdmins from "../admin/get"
 
 const router = express.Router()
 
@@ -48,20 +49,20 @@ router.post("/register", async (req: Request, res: Response) => {
   }
 
   try {
-    // Find admin with no password
-    const validAdmin = await findAdminByEmailNoPassword(email)
-
-    // Check if admins access
-    if (validAdmin.rowCount === 0) {
-      return res.status(403).send({ context: "both", message: "You don't access rights to register an admin." })
-    }
-
     // Find admin with password
     const admin = await findAdminByEmailWithPassword(email)
 
     // Check account exists already
     if (admin.rowCount !== 0) {
       return res.status(409).send({ context: "both", message: "Admin already exists." })
+    }
+
+    // Find admin with no password
+    const validAdmin = await findAdminByEmailNoPassword(email)
+
+    // Check if admins access
+    if (validAdmin.rowCount === 0) {
+      return res.status(403).send({ context: "both", message: "You don't access rights to register an admin." })
     }
 
     // Hash password
@@ -83,12 +84,12 @@ router.post("/login", async (req: Request, res: Response) => {
 
   // Check if email
   // Empty length is usually 15
-  if (email.length <= 15) {
+  if (!email) {
     return res.status(422).json({ context: "email", message: "No email provided." })
   }
 
   // Check if password
-  if (password.length === 0) {
+  if (!password || password.length === 0) {
     return res.status(422).json({ context: "password", message: "No password provided." })
   }
 
