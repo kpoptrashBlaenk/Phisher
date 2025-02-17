@@ -33,7 +33,7 @@ router.get("/count/:id", authOnly, async (req, res) => {
   }
 })
 
-// GET /page/:message/:id -> Add tracking log
+// GET /:page/:message/:id -> Add tracking log
 router.get("/:page/:message/:id", async (req, res) => {
   const { page, message, id } = req.params
   const redirect = redirection("views/redirection.html")
@@ -43,9 +43,10 @@ router.get("/:page/:message/:id", async (req, res) => {
     const counter = await getTrackingLogsById(id)
 
     // Check if found
-    if (!counter.rowCount) {
-      console.error("Error getting tracking log")
-      return res.status(404).sendFile(redirect)
+    console.log(counter.rowCount)
+    if (!counter.rowCount && counter.rowCount !== 0) {
+      console.error("Error getting tracking log count")
+      counter.rowCount = 0
     }
     const count = counter.rowCount + 1
 
