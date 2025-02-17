@@ -7,13 +7,16 @@
     "build": "npm install",
     "start": "tsx server.ts",
     "db": "db-connection.bat",
-    "migrate": "tsx config/migration.ts"
+    "migrate": "tsx config/migration.ts",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/jest": "^29.5.14",
+    "@types/supertest": "^6.0.2",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "cookie-parser": "^1.4.7",
@@ -38,6 +41,8 @@
     "@types/node": "^22.13.1",
     "@types/nodemailer": "^6.4.16",
     "@types/pg": "^8.11.11",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   }
