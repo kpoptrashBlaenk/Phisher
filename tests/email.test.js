@@ -9,8 +9,6 @@ const defaultTemplate = "Password Reset"
 
 let id
 
-console.log(global.authCookies)
-
 // Before All
 beforeAll(async () => {
   // Add User

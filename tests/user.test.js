@@ -7,8 +7,6 @@ const defaultEmail = "foo@bar.com"
 const defaultTeam = "DIRECTION EIC LORCA"
 let addedId
 
-console.log(global.authCookies)
-
 // ##### /USER/GET #####
 
 // Success

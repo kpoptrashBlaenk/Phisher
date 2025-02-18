@@ -8,8 +8,6 @@ let addedId
 
 // ##### /ADMIN/GET #####
 
-console.log(global.authCookies)
-
 // Success
 describe("Get all admins", () => {
   it("should return a json with all the admins", async () => {
