@@ -5,11 +5,12 @@ _This is totally not a phishing simulator that sends phishing emails to chosen p
 ## **Table of Contents**
 
 1. [Features](#features)
-2. [Installation](#installation)
-3. [Database Schema](#database-schema)
-4. [Routes Schema](#routes-schema)
-5. [Run and Test](#run-and-test)
-6. [Technologies Used](#technologies-used)
+2. [Gmail SMTP Server](#gmail-smtp-server)
+3. [Installation](#installation)
+4. [Database Schema](#database-schema)
+5. [Routes Schema](#routes-schema)
+6. [Run and Test](#run-and-test)
+7. [Technologies Used](#technologies-used)
 
 ---
 
@@ -19,6 +20,16 @@ _This is totally not a phishing simulator that sends phishing emails to chosen p
 - Send emails to employes and track their behaviour!
 - Choose one out of multiple templates to send!
 - Access to a log of all the actions!
+
+## **Gmail SMTP Server**
+
+1. Create gmail account
+
+2. Activate 2-Factor Security
+
+3. Add App Password
+
+4. Use App Password in SMTP in .env in next step
 
 ## **Installation**
 
@@ -46,6 +57,8 @@ _This is totally not a phishing simulator that sends phishing emails to chosen p
    ```cmd
    npm run migrate
    ```
+
+![Database Schema](./config/database.png)
 
 ## **Database Schema**
 
