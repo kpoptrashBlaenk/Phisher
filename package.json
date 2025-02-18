@@ -4,7 +4,6 @@
   "main": "server.ts",
   "type": "module",
   "scripts": {
-    "build": "npm install",
     "start": "tsx server.ts",
     "db": "db-connection.bat",
     "migrate": "tsx config/migration.ts",
@@ -15,8 +14,6 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@types/jest": "^29.5.14",
-    "@types/supertest": "^6.0.2",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "cookie-parser": "^1.4.7",
