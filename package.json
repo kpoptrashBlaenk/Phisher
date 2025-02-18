@@ -8,7 +8,7 @@
     "start": "tsx server.ts",
     "db": "db-connection.bat",
     "migrate": "tsx config/migration.ts",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "keywords": [],
   "author": "",
