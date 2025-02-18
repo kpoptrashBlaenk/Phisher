@@ -8,6 +8,8 @@ const defaultTeam = "DIRECTION EIC LORCA"
 
 let id
 
+console.log(global.authCookies)
+
 // Before All
 beforeAll(async () => {
   // Add User

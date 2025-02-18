@@ -7,6 +7,8 @@ const defaultEmail = "foo@bar.com"
 const defaultPassword = "FooBar123!"
 let id
 
+console.log(global.authCookies)
+
 // Before All
 beforeAll(async () => {
   // Add Admin

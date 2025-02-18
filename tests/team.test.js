@@ -1,5 +1,7 @@
 const request = require("supertest")
 
+console.log(global.authCookies)
+
 describe("Get all teams", () => {
   it("should return a json with all the teams", async () => {
     const res = await request(`http://localhost:${process.env.PORT}`)
