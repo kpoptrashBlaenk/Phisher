@@ -27,7 +27,3 @@
 - [ ] Add forms within the mails to harvest infos (see if they give sensitive data, hash infos maybe to avoid problems with taking sensitive data from them)
 - [ ] Use 2FA to see how far they'd go
 - [ ] Check if people reply to mail
-
-
-
-# TESTING TESTING TESTING
