@@ -7,12 +7,11 @@ registerForm.addEventListener("submit", async (event) => {
 
   // Get elements
   const registerEmail = document.querySelector("#registerEmail")
-  const registerEmailEnd = document.querySelector("#registerEmailEnd")
   const registerPassword = document.querySelector("#registerPassword")
   const registerError = document.querySelector("#registerErrorText")
 
   // Get values
-  const email = registerEmail.value + registerEmailEnd.innerText
+  const email = registerEmail.value
   const password = registerPassword.value
 
   // Prepare error messages
@@ -89,12 +88,11 @@ loginForm.addEventListener("submit", async (event) => {
 
   // Get elements
   const loginEmail = document.querySelector("#loginEmail")
-  const loginEmailEnd = document.querySelector("#loginEmailEnd")
   const loginPassword = document.querySelector("#loginPassword")
   const loginError = document.querySelector("#loginErrorText")
 
   // Get values
-  const email = loginEmail.value + loginEmailEnd.innerText
+  const email = loginEmail.value
   const password = loginPassword.value
 
   try {
