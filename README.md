@@ -58,8 +58,6 @@ _This is totally not a phishing simulator that sends phishing emails to chosen p
    npm run migrate
    ```
 
-![Database Schema](./config/database.png)
-
 ## **Database Schema**
 
 ![Database Schema](./config/database.png)
