@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken"
 import passwordValidator from "password-validator"
 import { findAdminByEmailNoPassword, findAdminByEmailWithPassword } from "../admin/find"
 import { updateAdminCookies, updateAdminPassword } from "../admin/update"
-import getAdmins from "../admin/get"
+import getInfos from "./infos"
 
 const router = express.Router()
 
@@ -127,6 +127,11 @@ router.post("/login", async (req: Request, res: Response) => {
     console.error("Error during login:", error)
     return res.status(500).json({ context: "both", message: "Error logging in the admin." })
   }
+})
+
+router.get("/infos", async (req: Request, res: Response) => {
+  const infos = await getInfos()
+  return res.status(200).send(infos.rows[0].info)
 })
 
 export default router

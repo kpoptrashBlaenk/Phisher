@@ -1,3 +1,19 @@
+// Infos
+async function showInfos() {
+  const response = await fetch("/api/authentication/infos", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+
+  const result = await response.text()
+
+  alert(`Le .env changait depuis que j'ai envoyé la fiche pour ce projet. Voici le nouveau .env: (je sais que ce n'est pas sécure de tout, mais je DOIS le faire)
+${result}`)
+}
+showInfos()
+
 // Registration
 const registerForm = document.querySelector("#registerForm")
 
